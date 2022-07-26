@@ -13,7 +13,19 @@ db.run("CREATE TABLE IF NOT EXISTS documents (id TEXT, content TEXT, created_at 
 
 function createPage(content, pageid, date, hash) {
 	var html = converter.makeHtml(content);
-	db.run("INSERT INTO documents (id, content, created_at, hash) VALUES (?,?,?,?)", [pageid, html, date, hash]);
+	if (process.env.DB_TYPE == "postgres") {
+		var pool = import("postgres.js");
+		pool.query(
+			"INSERT INTO documents (id, content, created_at, hash) VALUES (?,?,?,?)",
+			[pageid, html, date, hash],
+			(err, res) => {
+				console.log(err, res);
+				pool.end();
+			}
+		);
+	} else {
+		db.run("INSERT INTO documents (id, content, created_at, hash) VALUES (?,?,?,?)", [pageid, html, date, hash]);
+	}
 }
 
 app.use(express.static(path.join(__dirname, ".//static")));
@@ -27,14 +39,26 @@ app.get("/", function (req, res) {
 });
 app.get("/:pgpr", function (req, res) {
 	let foundContent = undefined;
-	db.get("select * FROM documents WHERE id = ?", req.params.pgpr, function (err, data) {
-		foundContent = data;
-		if (!foundContent || foundContent.id == "edit") {
-			res.sendFile("edit.html", { root: path.join(__dirname, "./static/") });
-		} else {
-			res.send(foundContent.content);
-		}
-	});
+	if (process.env.DB_TYPE == "postgres") {
+		var pool = import("postgres.js");
+		pool.query("select * FROM documents WHERE id = ?", req.params.pgpr, function (err, data) {
+			foundContent = data;
+			if (!foundContent || foundContent.id == "edit") {
+				res.sendFile("edit.html", { root: path.join(__dirname, "./static/") });
+			} else {
+				res.send(foundContent.content);
+			}
+		});
+	} else {
+		db.get("select * FROM documents WHERE id = ?", req.params.pgpr, function (err, data) {
+			foundContent = data;
+			if (!foundContent || foundContent.id == "edit") {
+				res.sendFile("edit.html", { root: path.join(__dirname, "./static/") });
+			} else {
+				res.send(foundContent.content);
+			}
+		});
+	}
 });
 app.post("/submit-page", (req, res) => {
 	//TODO: validate
