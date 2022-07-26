@@ -1,0 +1,19 @@
+{
+    "name": "frogz",
+    "author": "taislin",
+    "version": "1.0.0",
+    "description": "Hosting service for simple webpages, with markdown.",
+    "homepage": "",
+    "files": [],
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/taislin/frogz.git"
+    },
+    "license": "MIT",
+    "dependencies": {
+        "bcrypt": "^5.0.1",
+        "express": "^4.18.1",
+        "showdown": "^2.1.0",
+        "sqlite3": "^5.0.10"
+    }
+}
