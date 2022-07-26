@@ -42,7 +42,7 @@ app.get("/:pgpr", function (req, res) {
 	let foundContent = undefined;
 	if (process.env.DB_TYPE == "postgres") {
 		var pool = require("./postgres.js");
-		pool.query("SELECT * FROM documents WHERE id = ?", req.params.pgpr, (err, data) => {
+		pool.query("SELECT * FROM documents WHERE id = $1", [req.params.pgpr], (err, data) => {
 			foundContent = data;
 			console.log(data);
 			if (!foundContent || foundContent.id == "edit") {
@@ -52,7 +52,7 @@ app.get("/:pgpr", function (req, res) {
 			}
 		});
 	} else {
-		db.get("SELECT * FROM documents WHERE id = $1", [req.params.pgpr], function (err, data) {
+		db.get("SELECT * FROM documents WHERE id = ?", req.params.pgpr, function (err, data) {
 			foundContent = data;
 			if (!foundContent || foundContent.id == "edit") {
 				res.sendFile("edit.html", { root: path.join(__dirname, "./static/") });
