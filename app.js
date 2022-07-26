@@ -18,9 +18,8 @@ function createPage(content, pageid, date, hash) {
 		pool.query(
 			"INSERT INTO documents (id, content, created_at, hash) VALUES (?,?,?,?)",
 			[pageid, html, date, hash],
-			(err, res) => {
-				console.log(err, res);
-				pool.end();
+			(err, data) => {
+				console.log(err, data);
 			}
 		);
 	} else {
@@ -41,7 +40,7 @@ app.get("/:pgpr", function (req, res) {
 	let foundContent = undefined;
 	if (process.env.DB_TYPE == "postgres") {
 		var pool = require("./postgres.js");
-		pool.query("select * FROM documents WHERE id = ?", req.params.pgpr, function (err, data) {
+		pool.query("select * FROM documents WHERE id = ?", req.params.pgpr, (err, data) => {
 			foundContent = data;
 			if (!foundContent || foundContent.id == "edit") {
 				res.sendFile("edit.html", { root: path.join(__dirname, "./static/") });
