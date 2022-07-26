@@ -71,7 +71,6 @@ app.post("/submit-page", (req, res) => {
 		} else {
 			createPage(req.body.content, req.body.pageid, new Date().getTime(), bhash);
 		}
-		res.send("Success!");
 		res.redirect("/");
 	});
 });
