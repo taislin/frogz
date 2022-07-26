@@ -16,7 +16,7 @@ function createPage(content, pageid, date, hash) {
 	if (process.env.DB_TYPE == "postgres") {
 		var pool = require("./postgres.js");
 		pool.query(
-			"INSERT INTO documents (id, content, created_at, hash) VALUES (?,?,?,?)",
+			"INSERT INTO documents (id, content, created_at, hash) VALUES ($1,$2,$3,$4)",
 			[pageid, html, date, hash],
 			(err, data) => {
 				console.log(err, data);
@@ -49,7 +49,7 @@ app.get("/:pgpr", function (req, res) {
 			}
 		});
 	} else {
-		db.get("select * FROM documents WHERE id = ?", req.params.pgpr, function (err, data) {
+		db.get("select * FROM documents WHERE id = $1", [req.params.pgpr], function (err, data) {
 			foundContent = data;
 			if (!foundContent || foundContent.id == "edit") {
 				res.sendFile("edit.html", { root: path.join(__dirname, "./static/") });
