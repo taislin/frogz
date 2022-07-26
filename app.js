@@ -53,6 +53,7 @@ app.get("/:pgpr", function (req, res) {
 	} else {
 		db.get("SELECT * FROM documents WHERE id = $1", [req.params.pgpr], function (err, data) {
 			foundContent = data;
+			console.log(data);
 			if (!foundContent || foundContent.id == "edit") {
 				res.sendFile("edit.html", { root: path.join(__dirname, "./static/") });
 			} else {
