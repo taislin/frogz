@@ -44,7 +44,6 @@ app.get("/:pgpr", function (req, res) {
 		var pool = require("./postgres.js");
 		pool.query("SELECT * FROM documents WHERE id = $1", [req.params.pgpr], (err, data) => {
 			foundContent = data;
-			console.log(data);
 			if (!foundContent || foundContent.id == "edit") {
 				res.sendFile("edit.html", { root: path.join(__dirname, "./static/") });
 			} else {
