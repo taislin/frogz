@@ -8,8 +8,12 @@ var converter = new showdown.Converter();
 const db = new sqlite3.Database("frogz.db");
 const app = express();
 const port = process.env.PORT || 3000;
-
-db.run("CREATE TABLE IF NOT EXISTS documents (id TEXT, content TEXT, created_at REAL, hash TEXT);");
+if (process.env.DB_TYPE == "postgres") {
+	var pool = require("./postgres.js");
+	pool.query("CREATE TABLE IF NOT EXISTS documents (id TEXT, content TEXT, created_at REAL, hash TEXT);");
+} else {
+	db.run("CREATE TABLE IF NOT EXISTS documents (id TEXT, content TEXT, created_at REAL, hash TEXT);");
+}
 
 function createPage(content, pageid, date, hash) {
 	var html = converter.makeHtml(content);
