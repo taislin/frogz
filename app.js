@@ -14,7 +14,7 @@ db.run("CREATE TABLE IF NOT EXISTS documents (id TEXT, content TEXT, created_at 
 function createPage(content, pageid, date, hash) {
 	var html = converter.makeHtml(content);
 	if (process.env.DB_TYPE == "postgres") {
-		var pool = import("postgres.js");
+		var pool = require("./postgres.js");
 		pool.query(
 			"INSERT INTO documents (id, content, created_at, hash) VALUES (?,?,?,?)",
 			[pageid, html, date, hash],
@@ -40,7 +40,7 @@ app.get("/", function (req, res) {
 app.get("/:pgpr", function (req, res) {
 	let foundContent = undefined;
 	if (process.env.DB_TYPE == "postgres") {
-		var pool = import("postgres.js");
+		var pool = require("./postgres.js");
 		pool.query("select * FROM documents WHERE id = ?", req.params.pgpr, function (err, data) {
 			foundContent = data;
 			if (!foundContent || foundContent.id == "edit") {
