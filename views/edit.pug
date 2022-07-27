@@ -1,0 +1,23 @@
+doctype html
+html
+  head
+    meta(charset='utf-8')
+    title Frogz - Create a Page
+    link(rel='stylesheet', type='text/css', href='/edit.css')
+    link(rel='icon', type='image/png', href='/favicon.png')
+    script(src='/edit.js', type='text/javascript')
+  body
+    form(action='/submit-page' method='post')
+    p
+      label(for='pageid') Page Name (URL)
+      br
+      input(type='text' name='pageid' value=pageid)
+      br
+      label(for='content') Your password for editing in the future (do not lose this!)
+      br
+      input(type='password' name='password')
+      br
+      label(for='content') Content (markdown supported)
+      textarea(name='content' autofocus='')
+    p
+      input(type='submit' value='save')
