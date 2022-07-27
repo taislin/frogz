@@ -8,6 +8,7 @@ require("dotenv").config();
 var converter = new showdown.Converter();
 const db = new sqlite3.Database("frogz.db");
 const app = express();
+
 const port = process.env.PORT || 3000;
 if (process.env.DB_TYPE == "postgres") {
 	var pool = require("./postgres.js");
@@ -30,6 +31,7 @@ function createPage(content, pageid, date, hash) {
 	}
 }
 
+app.set("view engine", "pug");
 app.use(express.static(path.join(__dirname, ".//static")));
 app.use(
 	express.urlencoded({
@@ -48,7 +50,7 @@ app.get("/:pgpr", function (req, res) {
 			if (!foundContent || foundContent.id == "edit") {
 				res.sendFile("edit.html", { root: path.join(__dirname, "./static/") });
 			} else {
-				res.send(foundContent.content);
+				res.render("page", { content: foundContent.content });
 			}
 		});
 	} else {
@@ -57,7 +59,7 @@ app.get("/:pgpr", function (req, res) {
 			if (!foundContent || foundContent.id == "edit") {
 				res.sendFile("edit.html", { root: path.join(__dirname, "./static/") });
 			} else {
-				res.send(foundContent.content);
+				res.render("page", { content: foundContent.content });
 			}
 		});
 	}
