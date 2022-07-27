@@ -3,6 +3,7 @@ const sqlite3 = require("sqlite3").verbose();
 const express = require("express");
 const path = require("path");
 const bcrypt = require("bcrypt");
+require("dotenv").config();
 
 var converter = new showdown.Converter();
 const db = new sqlite3.Database("frogz.db");
@@ -43,8 +44,7 @@ app.get("/:pgpr", function (req, res) {
 	if (process.env.DB_TYPE == "postgres") {
 		var pool = require("./postgres.js");
 		pool.query("SELECT * FROM documents WHERE id = $1", [req.params.pgpr], (err, data) => {
-			foundContent = data;
-			console.log(foundContent);
+			foundContent = data.rows[0];
 			if (!foundContent || foundContent.id == "edit") {
 				res.sendFile("edit.html", { root: path.join(__dirname, "./static/") });
 			} else {
@@ -87,5 +87,5 @@ app.listen(port, () => {
    |_|    |_|  \\_\\\\____/ \\_____/_____|
   
   `);
-	console.log(`STATUS: App running on port ${port}`);
+	console.log(`STATUS: App running on port ${port}.`);
 });
