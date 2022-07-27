@@ -3,6 +3,7 @@ const sqlite3 = require("sqlite3").verbose();
 const express = require("express");
 const path = require("path");
 const bcrypt = require("bcrypt");
+const validator = require("validator");
 require("dotenv").config();
 
 var converter = new showdown.Converter();
@@ -42,7 +43,7 @@ app.get("/", function (req, res) {
 	res.sendFile("index.html", { root: path.join(__dirname, "./static/") });
 });
 app.get("/new", function (req, res) {
-	res.render("edit", { pageid: "" });
+	res.render("edit", { errors: "", pageid: "" });
 });
 app.get("/:pgpr", function (req, res) {
 	let foundContent = undefined;
@@ -51,7 +52,7 @@ app.get("/:pgpr", function (req, res) {
 		pool.query("SELECT * FROM documents WHERE id = $1", [req.params.pgpr], (err, data) => {
 			foundContent = data.rows[0];
 			if (!foundContent || foundContent.id == "edit") {
-				res.render("edit", { pageid: req.params.pgpr });
+				res.render("edit", { errors: "", pageid: req.params.pgpr });
 			} else {
 				res.render("page", { content: foundContent.content });
 			}
@@ -60,7 +61,7 @@ app.get("/:pgpr", function (req, res) {
 		db.get("SELECT * FROM documents WHERE id = ?", req.params.pgpr, function (err, data) {
 			foundContent = data;
 			if (!foundContent || foundContent.id == "edit") {
-				res.render("edit", { pageid: req.params.pgpr });
+				res.render("edit", { errors: "", pageid: req.params.pgpr });
 			} else {
 				res.render("page", { content: foundContent.content });
 			}
@@ -68,17 +69,43 @@ app.get("/:pgpr", function (req, res) {
 	}
 });
 app.post("/submit-page", (req, res) => {
-	//TODO: validate
-	let bhash = "";
-	bcrypt.hash(req.body.password, 10, function (err, hash) {
-		bhash = hash;
-		if (err) {
-			console.error(err);
-		} else {
-			createPage(req.body.content, req.body.pageid, new Date().getTime(), bhash);
-		}
-		res.redirect(`/${req.body.pageid}`);
-	});
+	//validate
+	let pageid = req.body.pageid;
+	let content = req.body.content;
+	let password = req.body.password;
+	let errormsg = "<b>Errors:</b><br>";
+	if (!validator.isAlphanumeric(pageid)) {
+		errormsg += "The page name (url) must be alphanumeric.<br>";
+	}
+	if (!validator.isLength(pageid, { min: 1, max: 100 })) {
+		errormsg += "The page name (url) cannot be empty and needs to be under 100 characters.<br>";
+	}
+	if (!validator.isLength(password, { min: 0, max: 50 })) {
+		errormsg += "The Password needs to be under 50 characters!<br>";
+	}
+	if (!validator.isLength(content, { min: 1, max: 10000 })) {
+		errormsg += "The Content cannot be empty and needs to be under 10,000 characters!<br>";
+	}
+
+	if (errormsg != "<b>Errors:</b><br>") {
+		res.render("edit", {
+			_content: req.body.content,
+			pageid: req.body.pageid,
+			password: req.body.password,
+			errors: errormsg,
+		});
+	} else {
+		let bhash = "";
+		bcrypt.hash(req.body.password, 10, function (err, hash) {
+			bhash = hash;
+			if (err) {
+				console.error(err);
+			} else {
+				createPage(req.body.content, req.body.pageid, new Date().getTime(), bhash);
+			}
+			res.redirect(`/${req.body.pageid}`);
+		});
+	}
 });
 
 app.listen(port, () => {

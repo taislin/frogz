@@ -17,7 +17,8 @@
         "pg": "^8.7.3",
         "pug": "^3.0.2",
         "showdown": "^2.1.0",
-        "sqlite3": "^5.0.10"
+        "sqlite3": "^5.0.10",
+        "validator": "^13.7.0"
     },
     "engines": {
         "node": "16.x"
