@@ -4,6 +4,8 @@ body {
 	padding: 1em;
 	font-family: sans-serif;
 	font-size: 16px;
+	background-color: black;
+	color: darkgray;
 }
 
 textarea {
@@ -15,8 +17,14 @@ textarea {
 	border: 1px solid #ccc;
 	border-radius: 8px;
 	padding: 8px;
-
+	background-color: black;
+	color: white;
 	font-size: 16px;
+}
+
+input {
+	background-color: black;
+	color: white;
 }
 
 button,
@@ -26,5 +34,11 @@ input[type="submit"] {
 	border: 1px solid #ccc;
 	border-radius: 8px;
 	padding: 8px;
-	background: #eee;
+	background: rgb(66, 66, 66);
+}
+
+button,
+input[type="submit"]:hover {
+	border: 1px solid rgb(255, 255, 255);
+	background: rgb(127, 127, 127);
 }
