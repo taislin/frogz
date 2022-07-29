@@ -11,36 +11,36 @@ const db = new sqlite3.Database("frogz.db");
 const app = express();
 
 const port = process.env.PORT || 3000;
+
+const querystring =
+	"CREATE TABLE IF NOT EXISTS documents (id TEXT, content TEXT, created_at INTEGER, edited_at INTEGER, hash TEXT);";
 if (process.env.DB_TYPE == "postgres") {
 	let pool = require("./postgres.js");
-	pool.query(
-		"CREATE TABLE IF NOT EXISTS documents (id TEXT, content TEXT, created_at REAL, edited_at REAL, hash TEXT);"
-	);
+	pool.query(querystring);
 } else {
-	db.run("CREATE TABLE IF NOT EXISTS documents (id TEXT, content TEXT, created_at REAL, edited_at REAL, hash TEXT);");
+	db.run(querystring);
 }
 //functions
 function createPage(content, pageid, date, hash) {
-	let html = converter.makeHtml(content);
 	if (process.env.DB_TYPE == "postgres") {
 		let pool = require("./postgres.js");
 		pool.query("INSERT INTO documents (id, content, created_at, edited_at, hash) VALUES ($1,$2,$3,$3,$4)", [
 			pageid,
-			html,
+			content,
 			date,
 			hash,
 		]);
 	} else {
 		db.run("INSERT INTO documents (id, content, created_at, edited_at, hash) VALUES (?,?,?,?,?)", [
 			pageid,
-			html,
+			content,
 			date,
 			date,
 			hash,
 		]);
 	}
 }
-function save_page(req, res) {
+function savePage(req, res) {
 	let bhash = "";
 	bcrypt.hash(req.body.password, 10, function (err, hash) {
 		bhash = hash;
@@ -51,6 +51,17 @@ function save_page(req, res) {
 		}
 		res.redirect(`/${req.body.pageid}`);
 	});
+}
+function editPage(req, res) {
+	let date = new Date().getTime();
+
+	if (process.env.DB_TYPE == "postgres") {
+		let pool = require("./postgres.js");
+		pool.query("UPDATE documents SET content=$1, edited_at=$2 WHERE id=$3", [req.body.content, date, req.body.pageid]);
+	} else {
+		db.run("UPDATE documents SET content=?, edited_at=? WHERE id=?", [req.body.content, date, req.body.pageid]);
+	}
+	res.redirect(`/${req.body.pageid}`);
 }
 function get_timestamps(created_at, edited_at) {
 	let powered_by = "<a id='powered_by' href='/'>FROGZ</a>";
@@ -90,38 +101,63 @@ app.use(
 		extended: true,
 	})
 );
-app.get("/", function (req, res) {
+app.get("/", function (_req, res) {
 	res.sendFile("index.html", { root: path.join(__dirname, "./static/") });
 });
-app.get("/new", function (req, res) {
-	res.render("edit", { errors: "", pageid: "" });
+app.get("/new", function (_req, res) {
+	res.render("new", { errors: "", pageid: "" });
+});
+app.get("/edit", function (_req, res) {
+	res.render("new", { errors: "", pageid: "" });
 });
 app.get("/:pgpr", function (req, res) {
 	let foundContent = undefined;
 	if (process.env.DB_TYPE == "postgres") {
 		let pool = require("./postgres.js");
-		pool.query("SELECT * FROM documents WHERE id = $1", [req.params.pgpr], (err, data) => {
+		pool.query("SELECT * FROM documents WHERE id = $1", [req.params.pgpr], (_err, data) => {
 			foundContent = data.rows[0];
+			let convContent = converter.makeHtml(foundContent.content);
 			if (!foundContent || foundContent.id == "edit") {
-				res.render("edit", { errors: "", pageid: req.params.pgpr });
+				res.render("new", { errors: "", pageid: req.params.pgpr });
 			} else {
 				let timestamps = get_timestamps(foundContent.created_at, foundContent.edited_at);
-				res.render("page", { content: foundContent.content, times: timestamps });
+				res.render("page", { content: convContent, times: timestamps });
 			}
 		});
 	} else {
-		db.get("SELECT * FROM documents WHERE id = ?", req.params.pgpr, function (err, data) {
+		db.get("SELECT * FROM documents WHERE id = ?", req.params.pgpr, function (_err, data) {
 			foundContent = data;
+			let convContent = converter.makeHtml(foundContent.content);
 			if (!foundContent || foundContent.id == "edit") {
-				res.render("edit", { errors: "", pageid: req.params.pgpr });
+				res.render("new", { errors: "", pageid: req.params.pgpr });
 			} else {
 				let timestamps = get_timestamps(foundContent.created_at, foundContent.edited_at);
-				res.render("page", { content: foundContent.content, times: timestamps });
+				res.render("page", { content: convContent, times: timestamps });
 			}
 		});
 	}
 });
-app.post("/submit-page", (req, res) => {
+app.get("/:pgpr/edit", function (req, res) {
+	let foundContent = undefined;
+	if (process.env.DB_TYPE == "postgres") {
+		let pool = require("./postgres.js");
+		pool.query("SELECT * FROM documents WHERE id = $1", [req.params.pgpr], (_err, data) => {
+			foundContent = data.rows[0];
+			if (foundContent) {
+				res.render("edit", { errors: "", pageid: req.params.pgpr, _content: foundContent.content });
+			}
+		});
+	} else {
+		db.get("SELECT * FROM documents WHERE id = ?", req.params.pgpr, function (_err, data) {
+			foundContent = data;
+			if (foundContent) {
+				res.render("edit", { errors: "", pageid: req.params.pgpr, _content: foundContent.content });
+			}
+		});
+	}
+});
+
+app.post("/submit", (req, res) => {
 	//validate
 	let errormsg = "<strong>Errors:</strong><br>";
 	if (!validator.isAlphanumeric(req.body.pageid)) {
@@ -130,6 +166,60 @@ app.post("/submit-page", (req, res) => {
 	if (!validator.isLength(req.body.pageid, { min: 1, max: 100 })) {
 		errormsg += "The page name (url) cannot be empty and needs to be under 100 characters.<br>";
 	}
+	if (!validator.isLength(req.body.password, { min: 0, max: 50 })) {
+		errormsg += "The Password needs to be under 50 characters!<br>";
+	}
+	if (!validator.isLength(req.body.content, { min: 1, max: 10000 })) {
+		errormsg += "The Content cannot be empty and needs to be under 10,000 characters!<br>";
+	}
+
+	if (errormsg != "<strong>Errors:</strong><br>") {
+		res.render("new", {
+			_content: req.body.content,
+			pageid: req.body.pageid,
+			password: req.body.password,
+			errors: errormsg,
+		});
+	} else {
+		let foundContent = undefined;
+		if (process.env.DB_TYPE == "postgres") {
+			let pool = require("./postgres.js");
+			pool.query("SELECT * FROM documents WHERE id = $1", [req.body.pageid], (_err, data) => {
+				foundContent = data.rows[0];
+				if (foundContent) {
+					errormsg += "This page already exists!<br>";
+					res.render("new", {
+						_content: req.body.content,
+						pageid: req.body.pageid,
+						password: req.body.password,
+						errors: errormsg,
+					});
+				} else {
+					savePage(req, res);
+				}
+			});
+		} else {
+			db.get("SELECT * FROM documents WHERE id = ?", req.body.pageid, function (_err, data) {
+				foundContent = data;
+				if (foundContent) {
+					errormsg += "This page already exists!<br>";
+					res.render("new", {
+						_content: req.body.content,
+						pageid: req.body.pageid,
+						password: req.body.password,
+						errors: errormsg,
+					});
+				} else {
+					savePage(req, res);
+				}
+			});
+		}
+	}
+});
+
+app.post("/edit", (req, res) => {
+	//validate
+	let errormsg = "<strong>Errors:</strong><br>";
 	if (!validator.isLength(req.body.password, { min: 0, max: 50 })) {
 		errormsg += "The Password needs to be under 50 characters!<br>";
 	}
@@ -148,33 +238,57 @@ app.post("/submit-page", (req, res) => {
 		let foundContent = undefined;
 		if (process.env.DB_TYPE == "postgres") {
 			let pool = require("./postgres.js");
-			pool.query("SELECT * FROM documents WHERE id = $1", [req.body.pageid], (err, data) => {
+			pool.query("SELECT * FROM documents WHERE id = $1", [req.body.pageid], (_err, data) => {
 				foundContent = data.rows[0];
 				if (foundContent) {
-					errormsg += "This page already exists!<br>";
+					bcrypt.compare(req.body.password, foundContent.hash, function (_err, bres) {
+						if (!bres) {
+							errormsg += "Incorrect password!<br>";
+							res.render("edit", {
+								_content: req.body.content,
+								pageid: req.body.pageid,
+								password: "",
+								errors: errormsg,
+							});
+						} else {
+							editPage(req, res);
+						}
+					});
+				} else {
+					errormsg += "This page does not exist!<br>";
 					res.render("edit", {
 						_content: req.body.content,
 						pageid: req.body.pageid,
-						password: req.body.password,
+						password: "",
 						errors: errormsg,
 					});
-				} else {
-					save_page(req, res);
 				}
 			});
 		} else {
-			db.get("SELECT * FROM documents WHERE id = ?", req.body.pageid, function (err, data) {
+			db.get("SELECT * FROM documents WHERE id = ?", req.body.pageid, function (_err, data) {
 				foundContent = data;
 				if (foundContent) {
-					errormsg += "This page already exists!<br>";
+					bcrypt.compare(req.body.password, foundContent.hash, function (_err, bres) {
+						if (!bres) {
+							errormsg += "Incorrect password!<br>";
+							res.render("edit", {
+								_content: req.body.content,
+								pageid: req.body.pageid,
+								password: "",
+								errors: errormsg,
+							});
+						} else {
+							editPage(req, res);
+						}
+					});
+				} else {
+					errormsg += "This page does not exist!<br>";
 					res.render("edit", {
 						_content: req.body.content,
 						pageid: req.body.pageid,
-						password: req.body.password,
+						password: "",
 						errors: errormsg,
 					});
-				} else {
-					save_page(req, res);
 				}
 			});
 		}
