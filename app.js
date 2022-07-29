@@ -13,25 +13,75 @@ const app = express();
 const port = process.env.PORT || 3000;
 if (process.env.DB_TYPE == "postgres") {
 	let pool = require("./postgres.js");
-	pool.query("CREATE TABLE IF NOT EXISTS documents (id TEXT, content TEXT, created_at REAL, hash TEXT);");
+	pool.query(
+		"CREATE TABLE IF NOT EXISTS documents (id TEXT, content TEXT, created_at REAL, edited_at REAL, hash TEXT);"
+	);
 } else {
-	db.run("CREATE TABLE IF NOT EXISTS documents (id TEXT, content TEXT, created_at REAL, hash TEXT);");
+	db.run("CREATE TABLE IF NOT EXISTS documents (id TEXT, content TEXT, created_at REAL, edited_at REAL, hash TEXT);");
 }
-
+//functions
 function createPage(content, pageid, date, hash) {
 	let html = converter.makeHtml(content);
 	if (process.env.DB_TYPE == "postgres") {
 		let pool = require("./postgres.js");
-		pool.query("INSERT INTO documents (id, content, created_at, hash) VALUES ($1,$2,$3,$4)", [
+		pool.query("INSERT INTO documents (id, content, created_at, edited_at, hash) VALUES ($1,$2,$3,$3,$4)", [
 			pageid,
 			html,
 			date,
 			hash,
 		]);
 	} else {
-		db.run("INSERT INTO documents (id, content, created_at, hash) VALUES (?,?,?,?)", [pageid, html, date, hash]);
+		db.run("INSERT INTO documents (id, content, created_at, edited_at, hash) VALUES (?,?,?,?,?)", [
+			pageid,
+			html,
+			date,
+			date,
+			hash,
+		]);
 	}
 }
+function save_page(req, res) {
+	let bhash = "";
+	bcrypt.hash(req.body.password, 10, function (err, hash) {
+		bhash = hash;
+		if (err) {
+			console.error(err);
+		} else {
+			createPage(req.body.content, req.body.pageid, new Date().getTime(), bhash);
+		}
+		res.redirect(`/${req.body.pageid}`);
+	});
+}
+function get_timestamps(created_at, edited_at) {
+	let powered_by = "<a id='powered_by' href='/'>FROGZ</a>";
+	let t_string = "";
+	let cdate = new Date();
+	cdate.setTime(created_at);
+	t_string +=
+		cdate.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }) +
+		" " +
+		cdate.toLocaleDateString([], {
+			year: "numeric",
+			month: "2-digit",
+			day: "2-digit",
+		});
+	if (created_at != edited_at && edited_at != undefined) {
+		let edate = new Date();
+		edate.setTime(edited_at);
+		t_string +=
+			" (✎ " +
+			edate.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }) +
+			" " +
+			edate.toLocaleDateString([], {
+				year: "numeric",
+				month: "2-digit",
+				day: "2-digit",
+			}) +
+			")";
+	}
+	return t_string + " " + powered_by;
+}
+///
 
 app.set("view engine", "pug");
 app.use(express.static(path.join(__dirname, ".//static")));
@@ -55,7 +105,8 @@ app.get("/:pgpr", function (req, res) {
 			if (!foundContent || foundContent.id == "edit") {
 				res.render("edit", { errors: "", pageid: req.params.pgpr });
 			} else {
-				res.render("page", { content: foundContent.content });
+				let timestamps = get_timestamps(foundContent.created_at, foundContent.edited_at);
+				res.render("page", { content: foundContent.content, times: timestamps });
 			}
 		});
 	} else {
@@ -64,7 +115,8 @@ app.get("/:pgpr", function (req, res) {
 			if (!foundContent || foundContent.id == "edit") {
 				res.render("edit", { errors: "", pageid: req.params.pgpr });
 			} else {
-				res.render("page", { content: foundContent.content });
+				let timestamps = get_timestamps(foundContent.created_at, foundContent.edited_at);
+				res.render("page", { content: foundContent.content, times: timestamps });
 			}
 		});
 	}
@@ -128,19 +180,6 @@ app.post("/submit-page", (req, res) => {
 		}
 	}
 });
-
-function save_page(req, res) {
-	let bhash = "";
-	bcrypt.hash(req.body.password, 10, function (err, hash) {
-		bhash = hash;
-		if (err) {
-			console.error(err);
-		} else {
-			createPage(req.body.content, req.body.pageid, new Date().getTime(), bhash);
-		}
-		res.redirect(`/${req.body.pageid}`);
-	});
-}
 
 app.listen(port, () => {
 	console.log(`
