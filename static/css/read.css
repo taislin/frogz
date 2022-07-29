@@ -9,9 +9,9 @@ body {
 }
 
 #powered_by {
+	display: block;
 	text-align: right;
-}
-
-#powered_by a {
-	color: #999;
+	color: #2fa31a;
+	font-weight: bold;
+	text-decoration: none;
 }
