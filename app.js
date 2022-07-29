@@ -6,27 +6,28 @@ const bcrypt = require("bcrypt");
 const validator = require("validator");
 require("dotenv").config();
 
-var converter = new showdown.Converter();
+const converter = new showdown.Converter();
 const db = new sqlite3.Database("frogz.db");
 const app = express();
 
 const port = process.env.PORT || 3000;
 if (process.env.DB_TYPE == "postgres") {
-	var pool = require("./postgres.js");
+	let pool = require("./postgres.js");
 	pool.query("CREATE TABLE IF NOT EXISTS documents (id TEXT, content TEXT, created_at REAL, hash TEXT);");
 } else {
 	db.run("CREATE TABLE IF NOT EXISTS documents (id TEXT, content TEXT, created_at REAL, hash TEXT);");
 }
 
 function createPage(content, pageid, date, hash) {
-	var html = converter.makeHtml(content);
+	let html = converter.makeHtml(content);
 	if (process.env.DB_TYPE == "postgres") {
-		var pool = require("./postgres.js");
-		pool.query(
-			"INSERT INTO documents (id, content, created_at, hash) VALUES ($1,$2,$3,$4)",
-			[pageid, html, date, hash],
-			(err, data) => {}
-		);
+		let pool = require("./postgres.js");
+		pool.query("INSERT INTO documents (id, content, created_at, hash) VALUES ($1,$2,$3,$4)", [
+			pageid,
+			html,
+			date,
+			hash,
+		]);
 	} else {
 		db.run("INSERT INTO documents (id, content, created_at, hash) VALUES (?,?,?,?)", [pageid, html, date, hash]);
 	}
@@ -48,7 +49,7 @@ app.get("/new", function (req, res) {
 app.get("/:pgpr", function (req, res) {
 	let foundContent = undefined;
 	if (process.env.DB_TYPE == "postgres") {
-		var pool = require("./postgres.js");
+		let pool = require("./postgres.js");
 		pool.query("SELECT * FROM documents WHERE id = $1", [req.params.pgpr], (err, data) => {
 			foundContent = data.rows[0];
 			if (!foundContent || foundContent.id == "edit") {
@@ -94,7 +95,7 @@ app.post("/submit-page", (req, res) => {
 	} else {
 		let foundContent = undefined;
 		if (process.env.DB_TYPE == "postgres") {
-			var pool = require("./postgres.js");
+			let pool = require("./postgres.js");
 			pool.query("SELECT * FROM documents WHERE id = $1", [req.body.pageid], (err, data) => {
 				foundContent = data.rows[0];
 				if (foundContent) {
@@ -106,16 +107,7 @@ app.post("/submit-page", (req, res) => {
 						errors: errormsg,
 					});
 				} else {
-					let bhash = "";
-					bcrypt.hash(req.body.password, 10, function (err, hash) {
-						bhash = hash;
-						if (err) {
-							console.error(err);
-						} else {
-							createPage(req.body.content, req.body.pageid, new Date().getTime(), bhash);
-						}
-						res.redirect(`/${req.body.pageid}`);
-					});
+					save_page(req, res);
 				}
 			});
 		} else {
@@ -130,21 +122,25 @@ app.post("/submit-page", (req, res) => {
 						errors: errormsg,
 					});
 				} else {
-					let bhash = "";
-					bcrypt.hash(req.body.password, 10, function (err, hash) {
-						bhash = hash;
-						if (err) {
-							console.error(err);
-						} else {
-							createPage(req.body.content, req.body.pageid, new Date().getTime(), bhash);
-						}
-						res.redirect(`/${req.body.pageid}`);
-					});
+					save_page(req, res);
 				}
 			});
 		}
 	}
 });
+
+function save_page(req, res) {
+	let bhash = "";
+	bcrypt.hash(req.body.password, 10, function (err, hash) {
+		bhash = hash;
+		if (err) {
+			console.error(err);
+		} else {
+			createPage(req.body.content, req.body.pageid, new Date().getTime(), bhash);
+		}
+		res.redirect(`/${req.body.pageid}`);
+	});
+}
 
 app.listen(port, () => {
 	console.log(`
