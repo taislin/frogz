@@ -70,7 +70,7 @@ app.get("/:pgpr", function (req, res) {
 });
 app.post("/submit-page", (req, res) => {
 	//validate
-	let errormsg = "<b>Errors:</b><br>";
+	let errormsg = "<strong>Errors:</strong><br>";
 	if (!validator.isAlphanumeric(req.body.pageid)) {
 		errormsg += "The page name (url) must be alphanumeric.<br>";
 	}
@@ -84,7 +84,7 @@ app.post("/submit-page", (req, res) => {
 		errormsg += "The Content cannot be empty and needs to be under 10,000 characters!<br>";
 	}
 
-	if (errormsg != "<b>Errors:</b><br>") {
+	if (errormsg != "<strong>Errors:</strong><br>") {
 		res.render("edit", {
 			_content: req.body.content,
 			pageid: req.body.pageid,
