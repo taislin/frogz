@@ -93,7 +93,7 @@ function get_timestamps(created_at, edited_at) {
 	return t_string + " " + powered_by;
 }
 
-function bcryptCheckEdit(req, res, foundContent) {
+function bcryptCheckEdit(req, res, foundContent, errormsg) {
 	bcrypt.compare(req.body.password, foundContent.hash, function (_err, bres) {
 		if (!bres) {
 			errormsg += "Incorrect password!<br>";
@@ -106,6 +106,15 @@ function bcryptCheckEdit(req, res, foundContent) {
 		} else {
 			editPage(req, res);
 		}
+	});
+}
+function pageDoesNotExist(req, res, errormsg) {
+	errormsg += "This page does not exist!<br>";
+	res.render("edit", {
+		_content: req.body.content,
+		pageid: req.body.pageid,
+		password: "",
+		errors: errormsg,
 	});
 }
 ///
@@ -257,30 +266,18 @@ app.post("/edit", (req, res) => {
 			pool.query("SELECT * FROM documents WHERE id = $1", [req.body.pageid], (_err, data) => {
 				foundContent = data.rows[0];
 				if (foundContent) {
-					bcryptCheckEdit(req, res, foundContent);
+					bcryptCheckEdit(req, res, foundContent, errormsg);
 				} else {
-					errormsg += "This page does not exist!<br>";
-					res.render("edit", {
-						_content: req.body.content,
-						pageid: req.body.pageid,
-						password: "",
-						errors: errormsg,
-					});
+					pageDoesNotExist(req, res, errormsg);
 				}
 			});
 		} else {
 			db.get("SELECT * FROM documents WHERE id = ?", req.body.pageid, function (_err, data) {
 				foundContent = data;
 				if (foundContent) {
-					bcryptCheckEdit(req, res, foundContent);
+					bcryptCheckEdit(req, res, foundContent, errormsg);
 				} else {
-					errormsg += "This page does not exist!<br>";
-					res.render("edit", {
-						_content: req.body.content,
-						pageid: req.body.pageid,
-						password: "",
-						errors: errormsg,
-					});
+					pageDoesNotExist(req, res, errormsg);
 				}
 			});
 		}
