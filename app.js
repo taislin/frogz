@@ -117,6 +117,16 @@ function pageDoesNotExist(req, res, errormsg) {
 		errors: errormsg,
 	});
 }
+
+function pageAlreadyExists(req, res, errormsg) {
+	errormsg += "This page already exists!<br>";
+	res.render("new", {
+		_content: req.body.content,
+		pageid: req.body.pageid,
+		password: req.body.password,
+		errors: errormsg,
+	});
+}
 ///
 
 app.set("view engine", "pug");
@@ -212,13 +222,7 @@ app.post("/submit", (req, res) => {
 			pool.query("SELECT * FROM documents WHERE id = $1", [req.body.pageid], (_err, data) => {
 				foundContent = data.rows[0];
 				if (foundContent) {
-					errormsg += "This page already exists!<br>";
-					res.render("new", {
-						_content: req.body.content,
-						pageid: req.body.pageid,
-						password: req.body.password,
-						errors: errormsg,
-					});
+					pageAlreadyExists(req, res, errormsg);
 				} else {
 					savePage(req, res);
 				}
@@ -227,13 +231,7 @@ app.post("/submit", (req, res) => {
 			db.get("SELECT * FROM documents WHERE id = ?", req.body.pageid, function (_err, data) {
 				foundContent = data;
 				if (foundContent) {
-					errormsg += "This page already exists!<br>";
-					res.render("new", {
-						_content: req.body.content,
-						pageid: req.body.pageid,
-						password: req.body.password,
-						errors: errormsg,
-					});
+					pageAlreadyExists(req, res, errormsg);
 				} else {
 					savePage(req, res);
 				}
