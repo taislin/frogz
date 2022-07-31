@@ -145,6 +145,9 @@ app.get("/new", function (_req, res) {
 app.get("/edit", function (_req, res) {
 	res.render("new", { errors: "", pageid: "" });
 });
+app.get("/terms", function (_req, res) {
+	res.render("terms");
+});
 app.get("/:pgpr", function (req, res) {
 	if (req.params.pgpr == "edit.js" || req.params.pgpr == "new.js") {
 		return;
@@ -154,10 +157,10 @@ app.get("/:pgpr", function (req, res) {
 		let pool = require("./postgres.js");
 		pool.query("SELECT * FROM documents WHERE id = $1", [req.params.pgpr], (_err, data) => {
 			foundContent = data.rows[0];
-			let convContent = converter.makeHtml(foundContent.content);
 			if (!foundContent || foundContent.id == "edit") {
 				res.render("new", { errors: "", pageid: req.params.pgpr });
 			} else {
+				let convContent = converter.makeHtml(foundContent.content);
 				let timestamps = get_timestamps(foundContent.created_at, foundContent.edited_at);
 				res.render("page", { content: convContent, times: timestamps });
 			}
@@ -165,10 +168,10 @@ app.get("/:pgpr", function (req, res) {
 	} else {
 		db.get("SELECT * FROM documents WHERE id = ?", req.params.pgpr, function (_err, data) {
 			foundContent = data;
-			let convContent = converter.makeHtml(foundContent.content);
 			if (!foundContent || foundContent.id == "edit") {
 				res.render("new", { errors: "", pageid: req.params.pgpr });
 			} else {
+				let convContent = converter.makeHtml(foundContent.content);
 				let timestamps = get_timestamps(foundContent.created_at, foundContent.edited_at);
 				res.render("page", { content: convContent, times: timestamps });
 			}
