@@ -1,6 +1,10 @@
-extends layout
-
-block content
-    p!= content
-    hr
-    p#powered_by!= times
+doctype html
+html
+  head
+    link(rel='stylesheet', type="text/css", href='/css/read.css')
+    link(rel='icon', type='image/png', href='favicon.png')
+  body
+    block content
+      p!= content
+      hr
+      p#powered_by!= times

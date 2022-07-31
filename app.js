@@ -146,6 +146,9 @@ app.get("/edit", function (_req, res) {
 	res.render("new", { errors: "", pageid: "" });
 });
 app.get("/:pgpr", function (req, res) {
+	if (req.params.pgpr == "edit.js" || req.params.pgpr == "new.js") {
+		return;
+	}
 	let foundContent = undefined;
 	if (process.env.DB_TYPE == "postgres") {
 		let pool = require("./postgres.js");
@@ -173,6 +176,9 @@ app.get("/:pgpr", function (req, res) {
 	}
 });
 app.get("/:pgpr/edit", function (req, res) {
+	if (req.params.pgpr == "edit.js" || req.params.pgpr == "new.js") {
+		return;
+	}
 	let foundContent = undefined;
 	if (process.env.DB_TYPE == "postgres") {
 		let pool = require("./postgres.js");
