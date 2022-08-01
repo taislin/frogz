@@ -1,0 +1,1368 @@
+doctype html
+head
+  meta(charset='utf-8')
+  link(rel='stylesheet' type='text/css' href='css/read.css')
+  link(rel='icon' type='image/png' href='favicon.png')
+div
+  style.
+    td {
+    border: 1px solid #dee2e6;
+    }
+    table {
+    border: 2px solid #dee2e6;
+    text-align: center;
+    }
+  h2#overview
+    | Overview
+  p
+    | Nearly all Markdown applications support the basic syntax outlined in the original Markdown design document. There are minor variations and discrepancies between Markdown processors &mdash; those are noted inline wherever possible.
+  h2#headings
+    | Headings
+  p
+    | To create a heading, add number signs (
+    code #
+    | ) in front of a word or phrase. The number of number signs you use should correspond to the heading level. For example, to create a heading level three (
+    code &lt;h3&gt;
+    | ), use three number signs (e.g., 
+    code ### My Header
+    | ).
+  table.table
+    thead.thead-light
+      tr
+        th Markdown
+        th HTML
+        th Rendered Output
+    tbody
+      tr
+        td
+          code # Heading level 1
+        td
+          code &lt;h1&gt;Heading level 1&lt;/h1&gt;
+        td
+          h1#heading-level-1.no-anchor Heading level 1
+      tr
+        td
+          code ## Heading level 2
+        td
+          code &lt;h2&gt;Heading level 2&lt;/h2&gt;
+        td
+          h2#heading-level-2.no-anchor Heading level 2
+      tr
+        td
+          code ### Heading level 3
+        td
+          code &lt;h3&gt;Heading level 3&lt;/h3&gt;
+        td
+          h3#heading-level-3.no-anchor Heading level 3
+      tr
+        td
+          code #### Heading level 4
+        td
+          code &lt;h4&gt;Heading level  4&lt;/h4&gt;
+        td
+          h4#heading-level-4.no-anchor Heading level 4
+      tr
+        td
+          code ##### Heading level 5
+        td
+          code &lt;h5&gt;Heading level 5&lt;/h5&gt;
+        td
+          h5#heading-level-5.no-anchor Heading level 5
+      tr
+        td
+          code ###### Heading level 6
+        td
+          code &lt;h6&gt;Heading level 6&lt;/h6&gt;
+        td
+          h6.no-anchor Heading level 6
+  h3#alternate-syntax
+    | Alternate Syntax
+  p
+    | Alternatively, on the line below the text, add any number of 
+    code ==
+    |  characters for heading level 1 or 
+    code --
+    |  characters for heading level 2.
+  table.table
+    thead.thead-light
+      tr
+        th Markdown
+        th HTML
+        th Rendered Output
+    tbody
+      tr
+        td
+          code
+            | Heading level 1
+            br
+            | ===============
+        td
+          code &lt;h1&gt;Heading level 1&lt;/h1&gt;
+        td
+          h1#heading-level-1-1.no-anchor Heading level 1
+      tr
+        td
+          code
+            | Heading level 2
+            br
+            | ---------------
+        td
+          code &lt;h2&gt;Heading level 2&lt;/h2&gt;
+        td
+          h2#heading-level-2-1.no-anchor Heading level 2
+  h3#heading-best-practices
+    | Heading Best Practices
+  p
+    | Markdown applications don&rsquo;t agree on how to handle a missing space between the number signs (
+    code #
+    | ) and the heading name. For compatibility, always put a space between the number signs and the heading name.
+  table.table
+    thead.thead-light
+      tr
+        th &#x2705;&nbsp; Do this
+        th &#x274C;&nbsp; Don&apos;t do this
+    tbody
+      tr
+        td
+          code
+            | # Here&apos;s a Heading
+            br
+            br
+        td
+          code
+            | #Here&apos;s a Heading
+  p You should also put blank lines before and after a heading for compatibility.
+  table.table
+    thead.thead-light
+      tr
+        th &#x2705;&nbsp; Do this
+        th &#x274C;&nbsp; Don&apos;t do this
+    tbody
+      tr
+        td
+          code
+            | Try to put a blank line before...
+            br
+            br
+            |             # Heading
+            br
+            br
+            |             ...and after a heading.
+        td
+          code
+            | Without blank lines, this might not look right.
+            br
+            |             # Heading
+            br
+            |             Don&apos;t do this!
+  h2#paragraphs-1
+    | Paragraphs
+  p To create paragraphs, use a blank line to separate one or more lines of text.
+  table.table
+    thead.thead-light
+      tr
+        th Markdown
+        th HTML
+        th Rendered Output
+    tbody
+      tr
+        td
+          code
+            | I really like using Markdown.
+            br
+            br
+            |               I think I&apos;ll use it to format all of my documents from now on.
+        td
+          code
+            | &lt;p&gt;I really like using Markdown.&lt;/p&gt;
+            br
+            br
+            |             &lt;p&gt;I think I&apos;ll use it to format all of my documents from now on.&lt;/p&gt;
+        td
+          p I really like using Markdown.
+          p I think I&apos;ll use it to format all of my documents from now on.
+  h3#paragraph-best-practices
+    | Paragraph Best Practices
+  p
+    | Unless the paragraph is in a list
+    | , don&rsquo;t indent paragraphs with spaces or tabs.
+  .alert.alert-info
+    strong Note:
+    |  If you need to indent paragraphs in the output, see the section on how to indent (tab)
+    | .
+  table.table
+    thead.thead-light
+      tr
+        th &#x2705;&nbsp; Do this
+        th &#x274C;&nbsp; Don&apos;t do this
+    tbody
+      tr
+        td
+          code
+            | Don&apos;t put tabs or spaces in front of your paragraphs.
+            br
+            br
+            |               Keep lines left-aligned like this.
+            br
+            br
+        td
+          code
+            | This can result in unexpected
+            | formatting problems.
+            br
+            br
+            |             &nbsp;&nbsp;Don&apos;t add tabs or spaces in front of paragraphs.
+  h2#line-breaks
+    | Line Breaks
+  p
+    | To create a line break or new line (
+    code &lt;br&gt;
+    | ), end a line with two or more spaces, and then type return.
+  table.table
+    thead.thead-light
+      tr
+        th Markdown
+        th HTML
+        th Rendered Output
+    tbody
+      tr
+        td
+          code
+            | This is the first line. &nbsp;
+            br
+            |               And this is the second line.
+        td
+          code
+            | &lt;p&gt;This is the first line.&lt;br&gt;
+            br
+            |             And this is the second line.&lt;/p&gt;
+        td
+          p
+            | This is the first line.
+            br
+            |             And this is the second line.
+  h3#line-break-best-practices
+    | Line Break Best Practices
+  p
+    | You can use two or more spaces (commonly referred to as &ldquo;trailing whitespace&rdquo;) for line breaks in nearly every Markdown application, but it&rsquo;s controversial. It&rsquo;s hard to see trailing whitespace in an editor, and many people accidentally or intentionally put two spaces after every sentence. For this reason, you may want to use something other than trailing whitespace for line breaks. If your Markdown application supports HTML
+    | , you can use the 
+    code &lt;br&gt;
+    |  HTML tag.
+  p
+    | For compatibility, use trailing white space or the 
+    code &lt;br&gt;
+    |  HTML tag at the end of the line.
+  p
+    | There are two other options I don&rsquo;t recommend using. CommonMark and a few other lightweight markup languages let you type a backslash (
+    code \
+    | ) at the end of the line, but not all Markdown applications support this, so it isn&rsquo;t a great option from a compatibility perspective. And at least a couple lightweight markup languages don&rsquo;t require anything at the end of the line &mdash; just type return and they&rsquo;ll create a line break.
+  table.table
+    thead.thead-light
+      tr
+        th &#x2705;&nbsp; Do this
+        th &#x274C;&nbsp; Don&apos;t do this
+    tbody
+      tr
+        td
+          code
+            | First line with two spaces after. &nbsp;
+            br
+            |               And the next line.
+            br
+            br
+            |               First line with the HTML tag after.&lt;br&gt;
+            br
+            |               And the next line.
+            br
+            br
+        td
+          code
+            | First line with a backslash after.\
+            br
+            |             And the next line.
+            br
+            br
+            |             First line with nothing after.
+            br
+            |             And the next line.
+            br
+            br
+  h2#emphasis
+    | Emphasis
+  p You can add emphasis by making text bold or italic.
+  h3#bold
+    | Bold
+  p
+    | To bold text, add two asterisks or underscores before and after a word or phrase. To bold the middle of a word for emphasis, add two asterisks without spaces around the letters.
+  table.table
+    thead.thead-light
+      tr
+        th Markdown
+        th HTML
+        th Rendered Output
+    tbody
+      tr
+        td
+          code I just love **bold text**.
+        td
+          code I just love &lt;strong&gt;bold text&lt;/strong&gt;.
+        td
+          | I just love 
+          strong bold text
+          | .
+      tr
+        td
+          code I just love __bold text__.
+        td
+          code I just love &lt;strong&gt;bold text&lt;/strong&gt;.
+        td
+          | I just love 
+          strong bold text
+          | .
+      tr
+        td
+          code Love**is**bold
+        td
+          code Love&lt;strong&gt;is&lt;/strong&gt;bold
+        td
+          | Love
+          strong is
+          | bold
+  h4#bold-best-practices
+    | Bold Best Practices
+  p
+    | Markdown applications don&rsquo;t agree on how to handle underscores in the middle of a word. For compatibility, use asterisks to bold the middle of a word for emphasis.
+  table.table
+    thead.thead-light
+      tr
+        th &#x2705;&nbsp; Do this
+        th &#x274C;&nbsp; Don&apos;t do this
+    tbody
+      tr
+        td
+          code
+            | Love**is**bold
+        td
+          code
+            | Love__is__bold
+  h3#italic
+    | Italic
+  p
+    | To italicize text, add one asterisk or underscore before and after a word or phrase. To italicize the middle of a word for emphasis, add one asterisk without spaces around the letters.
+  table.table
+    thead.thead-light
+      tr
+        th Markdown
+        th HTML
+        th Rendered Output
+    tbody
+      tr
+        td
+          code Italicized text is the *cat&apos;s meow*.
+        td
+          code Italicized text is the &lt;em&gt;cat&apos;s meow&lt;/em&gt;.
+        td
+          | Italicized text is the 
+          em cat&rsquo;s meow
+          | .
+      tr
+        td
+          code Italicized text is the _cat&apos;s meow_.
+        td
+          code Italicized text is the &lt;em&gt;cat&apos;s meow&lt;/em&gt;.
+        td
+          | Italicized text is the 
+          em cat&rsquo;s meow
+          | .
+      tr
+        td
+          code A*cat*meow
+        td
+          code A&lt;em&gt;cat&lt;/em&gt;meow
+        td
+          | A
+          em cat
+          | meow
+  h4#italic-best-practices
+    | Italic Best Practices
+  p
+    | Markdown applications don&rsquo;t agree on how to handle underscores in the middle of a word. For compatibility, use asterisks to italicize the middle of a word for emphasis.
+  table.table
+    thead.thead-light
+      tr
+        th &#x2705;&nbsp; Do this
+        th &#x274C;&nbsp; Don&apos;t do this
+    tbody
+      tr
+        td
+          code
+            | A*cat*meow
+        td
+          code
+            | A_cat_meow
+  h3#bold-and-italic
+    | Bold and Italic
+  p
+    | To emphasize text with bold and italics at the same time, add three asterisks or underscores before and after a word or phrase. To bold and italicize the middle of a word for emphasis, add three asterisks without spaces around the letters.
+  table.table
+    thead.thead-light
+      tr
+        th Markdown
+        th HTML
+        th Rendered Output
+    tbody
+      tr
+        td
+          code This text is ***really important***.
+        td
+          code This text is &lt;em&gt;&lt;strong&gt;really important&lt;/strong&gt;&lt;/em&gt;.
+        td
+          | This text is 
+          em
+            strong really important
+          | .
+      tr
+        td
+          code This text is ___really important___.
+        td
+          code This text is &lt;em&gt;&lt;strong&gt;really important&lt;/strong&gt;&lt;/em&gt;.
+        td
+          | This text is 
+          em
+            strong really important
+          | .
+      tr
+        td
+          code This text is __*really important*__.
+        td
+          code This text is &lt;em&gt;&lt;strong&gt;really important&lt;/strong&gt;&lt;/em&gt;.
+        td
+          | This text is 
+          em
+            strong really important
+          | .
+      tr
+        td
+          code This text is **_really important_**.
+        td
+          code This text is &lt;em&gt;&lt;strong&gt;really important&lt;/strong&gt;&lt;/em&gt;.
+        td
+          | This text is 
+          em
+            strong really important
+          | .
+      tr
+        td
+          code This is really***very***important text.
+        td
+          code This is really&lt;em&gt;&lt;strong&gt;very&lt;/strong&gt;&lt;/em&gt;important text.
+        td
+          | This is really
+          em
+            strong very
+          | important text.
+  .alert.alert-info
+    strong Note:
+    |  The order of the 
+    code em
+    |  and 
+    code strong
+    |  tags might be reversed depending on the Markdown processor you&apos;re using.
+  h4#bold-and-italic-best-practices
+    | Bold and Italic Best Practices
+  p
+    | Markdown applications don&rsquo;t agree on how to handle underscores in the middle of a word. For compatibility, use asterisks to bold and italicize the middle of a word for emphasis.
+  table.table
+    thead.thead-light
+      tr
+        th &#x2705;&nbsp; Do this
+        th &#x274C;&nbsp; Don&apos;t do this
+    tbody
+      tr
+        td
+          code
+            | This is really***very***important text.
+        td
+          code
+            | This is really___very___important text.
+  h2#blockquotes-1
+    | Blockquotes
+  p
+    | To create a blockquote, add a 
+    code &gt;
+    |  in front of a paragraph.
+  
+
+  p The rendered output looks like this:
+  blockquote
+    p Dorothy followed her through many of the beautiful rooms in her castle.
+  h3#blockquotes-with-multiple-paragraphs
+    | Blockquotes with Multiple Paragraphs
+  p
+    | Blockquotes can contain multiple paragraphs. Add a 
+    code &gt;
+    |  on the blank lines between the paragraphs.
+  
+
+  p The rendered output looks like this:
+  blockquote
+    p Dorothy followed her through many of the beautiful rooms in her castle.
+    p
+      | The Witch bade her clean the pots and kettles and sweep the floor and keep the fire fed with wood.
+  h3#nested-blockquotes
+    | Nested Blockquotes
+  p
+    | Blockquotes can be nested. Add a 
+    code &gt;&gt;
+    |  in front of the paragraph you want to nest.
+  
+
+  p The rendered output looks like this:
+  blockquote
+    p Dorothy followed her through many of the beautiful rooms in her castle.
+    blockquote
+      p
+        | The Witch bade her clean the pots and kettles and sweep the floor and keep the fire fed with wood.
+  h3#blockquotes-with-other-elements
+    | Blockquotes with Other Elements
+  p
+    | Blockquotes can contain other Markdown formatted elements. Not all elements can be used &mdash; you&rsquo;ll need to experiment to see which ones work.
+  
+
+  p The rendered output looks like this:
+  blockquote
+    h4#the-quarterly-results-look-great.no-anchor The quarterly results look great!
+    ul
+      li Revenue was off the chart.
+      li Profits were higher than ever.
+    p
+      em Everything
+      |  is going according to 
+      strong plan
+      | .
+  h3#blockquotes-best-practices
+    | Blockquotes Best Practices
+  p For compatibility, put blank lines before and after blockquotes.
+  table.table
+    thead.thead-light
+      tr
+        th &#x2705;&nbsp; Do this
+        th &#x274C;&nbsp; Don&apos;t do this
+    tbody
+      tr
+        td
+          code
+            | Try to put a blank line before...
+            br
+            br
+            |             &gt; This is a blockquote
+            br
+            br
+            |             ...and after a blockquote.
+        td
+          code
+            | Without blank lines, this might not look right.
+            br
+            |             &gt; This is a blockquote
+            br
+            |             Don&apos;t do this!
+  h2#lists-1
+    | Lists
+  p You can organize items into ordered and unordered lists.
+  h3#ordered-lists
+    | Ordered Lists
+  p
+    | To create an ordered list, add line items with numbers followed by periods. The numbers don&rsquo;t have to be in numerical order, but the list should start with the number one.
+  table.table
+    thead.thead-light
+      tr
+        th Markdown
+        th HTML
+        th Rendered Output
+    tbody
+      tr
+        td
+          code
+            | 1. First item
+            br
+            |             2. Second item
+            br
+            |             3. Third item
+            br
+            |             4. Fourth item
+        td
+          code
+            | &lt;ol&gt;
+            br
+            |               &nbsp;&nbsp;&lt;li&gt;First item&lt;/li&gt;
+            br
+            |               &nbsp;&nbsp;&lt;li&gt;Second item&lt;/li&gt;
+            br
+            |               &nbsp;&nbsp;&lt;li&gt;Third item&lt;/li&gt;
+            br
+            |               &nbsp;&nbsp;&lt;li&gt;Fourth item&lt;/li&gt;
+            br
+            |             &lt;/ol&gt;
+        td
+          ol
+            li First item
+            li Second item
+            li Third item
+            li Fourth item
+      tr
+        td
+          code
+            | 1. First item
+            br
+            |               1. Second item
+            br
+            |               1. Third item
+            br
+            |               1. Fourth item
+        td
+          code
+            | &lt;ol&gt;
+            br
+            |                 &nbsp;&nbsp;&lt;li&gt;First item&lt;/li&gt;
+            br
+            |                 &nbsp;&nbsp;&lt;li&gt;Second item&lt;/li&gt;
+            br
+            |                 &nbsp;&nbsp;&lt;li&gt;Third item&lt;/li&gt;
+            br
+            |                 &nbsp;&nbsp;&lt;li&gt;Fourth item&lt;/li&gt;
+            br
+            |               &lt;/ol&gt;
+        td
+          ol
+            li First item
+            li Second item
+            li Third item
+            li Fourth item
+      tr
+        td
+          code
+            | 1. First item
+            br
+            |               8. Second item
+            br
+            |               3. Third item
+            br
+            |               5. Fourth item
+        td
+          code
+            | &lt;ol&gt;
+            br
+            |                 &nbsp;&nbsp;&lt;li&gt;First item&lt;/li&gt;
+            br
+            |                 &nbsp;&nbsp;&lt;li&gt;Second item&lt;/li&gt;
+            br
+            |                 &nbsp;&nbsp;&lt;li&gt;Third item&lt;/li&gt;
+            br
+            |                 &nbsp;&nbsp;&lt;li&gt;Fourth item&lt;/li&gt;
+            br
+            |               &lt;/ol&gt;
+        td
+          ol
+            li First item
+            li Second item
+            li Third item
+            li Fourth item
+      tr
+        td
+          code
+            | 1. First item
+            br
+            |               2. Second item
+            br
+            |               3. Third item
+            br
+            |               &nbsp;&nbsp;&nbsp;&nbsp;1. Indented item
+            br
+            |               &nbsp;&nbsp;&nbsp;&nbsp;2. Indented item
+            br
+            |               4. Fourth item
+        td
+          code
+            | &lt;ol&gt;
+            br
+            |                 &nbsp;&nbsp;&lt;li&gt;First item&lt;/li&gt;
+            br
+            |                 &nbsp;&nbsp;&lt;li&gt;Second item&lt;/li&gt;
+            br
+            |                 &nbsp;&nbsp;&lt;li&gt;Third item
+            br
+            |                   &nbsp;&nbsp;&nbsp;&nbsp;&lt;ol&gt;
+            br
+            |                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;li&gt;Indented item&lt;/li&gt;
+            br
+            |                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;li&gt;Indented item&lt;/li&gt;
+            br
+            |                   &nbsp;&nbsp;&nbsp;&nbsp;&lt;/ol&gt;
+            br
+            |                 &nbsp;&nbsp;&lt;/li&gt;
+            br
+            |                 &nbsp;&nbsp;&lt;li&gt;Fourth item&lt;/li&gt;
+            br
+            |               &lt;/ol&gt;
+        td
+          ol
+            li First item
+            li Second item
+            li
+              | Third item
+              ol
+                li Indented item
+                li Indented item
+            li Fourth item
+  h4#ordered-list-best-practices
+    | Ordered List Best Practices
+  p
+    | CommonMark and a few other lightweight markup languages let you use a parenthesis (
+    code )
+    | ) as a delimiter (e.g., 
+    code 1) First item
+    | ), but not all Markdown applications support this, so it isn&rsquo;t a great option from a compatibility perspective. For compatibility, use periods only.
+  table.table
+    thead.thead-light
+      tr
+        th &#x2705;&nbsp; Do this
+        th &#x274C;&nbsp; Don&apos;t do this
+    tbody
+      tr
+        td
+          code
+            | 1. First item
+            br
+            |               2. Second item
+        td
+          code
+            | 1) First item
+            br
+            |               2) Second item
+  h3#unordered-lists
+    | Unordered Lists
+  p
+    | To create an unordered list, add dashes (
+    code -
+    | ), asterisks (
+    code *
+    | ), or plus signs (
+    code +
+    | ) in front of line items. Indent one or more items to create a nested list.
+  table.table
+    thead.thead-light
+      tr
+        th Markdown
+        th HTML
+        th Rendered Output
+    tbody
+      tr
+        td
+          code
+            | - First item
+            br
+            |               - Second item
+            br
+            |               - Third item
+            br
+            |               - Fourth item
+        td
+          code
+            | &lt;ul&gt;
+            br
+            |                 &nbsp;&nbsp;&lt;li&gt;First item&lt;/li&gt;
+            br
+            |                 &nbsp;&nbsp;&lt;li&gt;Second item&lt;/li&gt;
+            br
+            |                 &nbsp;&nbsp;&lt;li&gt;Third item&lt;/li&gt;
+            br
+            |                 &nbsp;&nbsp;&lt;li&gt;Fourth item&lt;/li&gt;
+            br
+            |               &lt;/ul&gt;
+        td
+          ul
+            li First item
+            li Second item
+            li Third item
+            li Fourth item
+      tr
+        td
+          code
+            | * First item
+            br
+            |               * Second item
+            br
+            |               * Third item
+            br
+            |               * Fourth item
+        td
+          code
+            | &lt;ul&gt;
+            br
+            |                 &nbsp;&nbsp;&lt;li&gt;First item&lt;/li&gt;
+            br
+            |                 &nbsp;&nbsp;&lt;li&gt;Second item&lt;/li&gt;
+            br
+            |                 &nbsp;&nbsp;&lt;li&gt;Third item&lt;/li&gt;
+            br
+            |                 &nbsp;&nbsp;&lt;li&gt;Fourth item&lt;/li&gt;
+            br
+            |               &lt;/ul&gt;
+        td
+          ul
+            li First item
+            li Second item
+            li Third item
+            li Fourth item
+      tr
+        td
+          code
+            | + First item
+            br
+            |               + Second item
+            br
+            |               + Third item
+            br
+            |               + Fourth item
+        td
+          code
+            | &lt;ul&gt;
+            br
+            |                 &nbsp;&nbsp;&lt;li&gt;First item&lt;/li&gt;
+            br
+            |                 &nbsp;&nbsp;&lt;li&gt;Second item&lt;/li&gt;
+            br
+            |                 &nbsp;&nbsp;&lt;li&gt;Third item&lt;/li&gt;
+            br
+            |                 &nbsp;&nbsp;&lt;li&gt;Fourth item&lt;/li&gt;
+            br
+            |               &lt;/ul&gt;
+        td
+          ul
+            li First item
+            li Second item
+            li Third item
+            li Fourth item
+      tr
+        td
+          code
+            | - First item
+            br
+            |               - Second item
+            br
+            |               - Third item
+            br
+            |               &nbsp;&nbsp;&nbsp;&nbsp;- Indented item
+            br
+            |               &nbsp;&nbsp;&nbsp;&nbsp;- Indented item
+            br
+            |               - Fourth item
+        td
+          code
+            | &lt;ul&gt;
+            br
+            |                 &nbsp;&nbsp;&lt;li&gt;First item&lt;/li&gt;
+            br
+            |                 &nbsp;&nbsp;&lt;li&gt;Second item&lt;/li&gt;
+            br
+            |                 &nbsp;&nbsp;&lt;li&gt;Third item
+            br
+            |                   &nbsp;&nbsp;&nbsp;&nbsp;&lt;ul&gt;
+            br
+            |                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;li&gt;Indented item&lt;/li&gt;
+            br
+            |                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;li&gt;Indented item&lt;/li&gt;
+            br
+            |                   &nbsp;&nbsp;&nbsp;&nbsp;&lt;/ul&gt;
+            br
+            |                 &nbsp;&nbsp;&lt;/li&gt;
+            br
+            |                 &nbsp;&nbsp;&lt;li&gt;Fourth item&lt;/li&gt;
+            br
+            |               &lt;/ul&gt;
+        td
+          ul
+            li First item
+            li Second item
+            li
+              | Third item
+              ul
+                li Indented item
+                li Indented item
+            li Fourth item
+  h4#starting-unordered-list-items-with-numbers
+    | Starting Unordered List Items With Numbers
+  p
+    | If you need to start an unordered list item with a number followed by a period, you can use a backslash (
+    code \
+    | ) to escape the period.
+  table.table
+    thead.thead-light
+      tr
+        th Markdown
+        th HTML
+        th Rendered Output
+    tbody
+      tr
+        td
+          code
+            | - 1968\. A great year!
+            br
+            |               - I think 1969 was second best.
+        td
+          code
+            | &lt;ul&gt;
+            br
+            |                 &nbsp;&nbsp;&lt;li&gt;1968. A great year!&lt;/li&gt;
+            br
+            |                 &nbsp;&nbsp;&lt;li&gt;I think 1969 was second best.&lt;/li&gt;
+            br
+            |               &lt;/ul&gt;
+        td
+          ul
+            li 1968. A great year!
+            li I think 1969 was second best.
+  h4#unordered-list-best-practices
+    | Unordered List Best Practices
+  p
+    | Markdown applications don&rsquo;t agree on how to handle different delimiters in the same list. For compatibility, don&rsquo;t mix and match delimiters in the same list &mdash; pick one and stick with it.
+  table.table
+    thead.thead-light
+      tr
+        th &#x2705;&nbsp; Do this
+        th &#x274C;&nbsp; Don&apos;t do this
+    tbody
+      tr
+        td
+          code
+            | - First item
+            br
+            |               - Second item
+            br
+            |               - Third item
+            br
+            |               - Fourth item
+        td
+          code
+            | + First item
+            br
+            |               * Second item
+            br
+            |               - Third item
+            br
+            |               + Fourth item
+  h3#adding-elements-in-lists
+    | Adding Elements in Lists
+  p
+    | To add another element in a list while preserving the continuity of the list, indent the element four spaces or one tab, as shown in the following examples.
+  .alert.alert-success
+    strong Tip:
+    |  If things don&apos;t appear the way you expect, double check that you&apos;ve indented the elements in the list four spaces or one tab.
+  h4#paragraphs
+    | Paragraphs
+  
+
+  p The rendered output looks like this:
+  ul
+    li This is the first list item.
+    li
+      p Here&rsquo;s the second list item.
+      p I need to add another paragraph below the second list item.
+    li And here&rsquo;s the third list item.
+  h4#blockquotes
+    | Blockquotes
+  
+
+  p The rendered output looks like this:
+  ul
+    li This is the first list item.
+    li
+      p Here&rsquo;s the second list item.
+      blockquote
+        p A blockquote would look great below the second list item.
+    li And here&rsquo;s the third list item.
+  h4#code-blocks-1
+    | Code Blocks
+  p
+    | Code blocks are normally indented four spaces or one tab.  When they&rsquo;re in a list, indent them eight spaces or two tabs.
+
+  p The rendered output looks like this:
+  ol
+    li Open the file.
+    li
+      p Find the following code block on line 21:
+         
+    li Update the title to match the name of your website.
+  h4#images
+    | Images
+  
+  h4#lists
+    | Lists
+  p You can nest an unordered list in an ordered list, or vice versa.
+  
+
+  p The rendered output looks like this:
+  ol
+    li First item
+    li Second item
+    li
+      | Third item
+      ul
+        li Indented item
+        li Indented item
+    li Fourth item
+  h2#code
+    | Code
+  p
+    | To denote a word or phrase as code, enclose it in backticks (
+    code &grave;
+    | ).
+  table.table
+    thead.thead-light
+      tr
+        th Markdown
+        th HTML
+        th Rendered Output
+    tbody
+      tr
+        td
+          code At the command prompt, type &grave;nano&grave;.
+        td
+          code At the command prompt, type &lt;code&gt;nano&lt;/code&gt;. 
+        td
+          | At the command prompt, type 
+          code nano
+          | .
+  h3#escaping-backticks
+    | Escaping Backticks
+  p
+    | If the word or phrase you want to denote as code includes one or more backticks, you can escape it by enclosing the word or phrase in double backticks (
+    code &grave;&grave;
+    | ).
+  table.table
+    thead.thead-light
+      tr
+        th Markdown
+        th HTML
+        th Rendered Output
+    tbody
+      tr
+        td
+          code &grave;&grave;Use &grave;code&grave; in your Markdown file.&grave;&grave;
+        td
+          code &lt;code&gt;Use &grave;code&grave; in your Markdown file.&lt;/code&gt;
+        td
+          code Use &grave;code&grave; in your Markdown file.
+  h3#code-blocks
+    | Code Blocks
+  p
+    | To create code blocks, indent every line of the block by at least four spaces or one tab.
+
+  .alert.alert-info
+    strong Note:
+    |  To create code blocks without indenting lines, use fenced code blocks.
+  h2#horizontal-rules
+    | Horizontal Rules
+  p
+    | To create a horizontal rule, use three or more asterisks (
+    code ***
+    | ), dashes (
+    code ---
+    | ), or underscores (
+    code ___
+    | ) on a line by themselves.
+  
+
+  p The rendered output of all three looks identical:
+  hr
+  h3#horizontal-rule-best-practices
+    | Horizontal Rule Best Practices
+  p For compatibility, put blank lines before and after horizontal rules.
+  table.table
+    thead.thead-light
+      tr
+        th &#x2705;&nbsp; Do this
+        th &#x274C;&nbsp; Don&apos;t do this
+    tbody
+      tr
+        td
+          code
+            | Try to put a blank line before...
+            br
+            br
+            |             ---
+            br
+            br
+            |             ...and after a horizontal rule.
+        td
+          code
+            | Without blank lines, this would be a heading.
+            br
+            |             ---
+            br
+            |             Don&apos;t do this!
+  h2#links
+    | Links
+  p
+    | To create a link, enclose the link text in brackets (e.g., 
+    code [Duck Duck Go]
+    | ) and then follow it immediately with the URL in parentheses (e.g., 
+    code (https://duckduckgo.com)
+    | ).
+  
+
+  p The rendered output looks like this:
+  p
+    | My favorite search engine is 
+    a(href='https://duckduckgo.com') Duck Duck Go
+    | .
+  .alert.alert-info
+    strong Note:
+    |  To link to an element on the same page, see linking to heading IDs
+    | . To create a link that opens in a new tab or window, see the section on link targets
+    | .
+  h3#adding-titles
+    | Adding Titles
+  p
+    | You can optionally add a title for a link. This will appear as a tooltip when the user hovers over the link. To add a title, enclose it in quotation marks after the URL.
+  
+
+  p The rendered output looks like this:
+  p
+    | My favorite search engine is 
+    a(href='https://duckduckgo.com' title='The best search engine for privacy') Duck Duck Go
+    | .
+  h3#urls-and-email-addresses
+    | URLs and Email Addresses
+  p
+    | To quickly turn a URL or email address into a link, enclose it in angle brackets.
+  
+
+  p The rendered output looks like this:
+  p
+    a(href='https://www.markdownguide.org') https://www.markdownguide.org
+    br
+    a(href='mailto:fake@example.com') fake@example.com
+  h3#formatting-links
+    | Formatting Links
+  p
+    | To emphasize links, add asterisks before and after the brackets and parentheses. To denote links as code
+    | , add backticks in the brackets.
+  
+
+  p The rendered output looks like this:
+  p
+    | I love supporting the 
+    strong
+      a(href='https://eff.org') EFF
+    | .
+    br
+    |     This is the 
+    em
+      a(href='https://www.markdownguide.org') Markdown Guide
+    | .
+  
+  h3#reference-style-links
+    | Reference-style Links
+  p
+    | Reference-style links are a special kind of link that make URLs easier to display and read in Markdown. Reference-style links are constructed in two parts: the part you keep inline with your text and the part you store somewhere else in the file to keep the text easy to read.
+  h4#formatting-the-first-part-of-the-link
+    | Formatting the First Part of the Link
+  p
+    | The first part of a reference-style link is formatted with two sets of brackets. The first set of brackets surrounds the text that should appear linked. The second set of brackets displays a label used to point to the link you&rsquo;re storing elsewhere in your document.
+  p
+    | Although not required, you can include a space between the first and second set of brackets. The label in the second set of brackets is not case sensitive and can include letters, numbers, spaces, or punctuation.
+  p
+    | This means the following example formats are roughly equivalent for the first part of the link:
+  ul
+    li
+      code [hobbit-hole][1]
+    li
+      code [hobbit-hole] [1]
+  h4#formatting-the-second-part-of-the-link
+    | Formatting the Second Part of the Link
+  p
+    | The second part of a reference-style link is formatted with the following attributes:
+  ol
+    li
+      | The label, in brackets, followed immediately by a colon and at least one space (e.g., 
+      code [label]: 
+      | ).
+    li The URL for the link, which you can optionally enclose in angle brackets.
+    li
+      | The optional title for the link, which you can enclose in double quotes, single quotes, or parentheses.
+  p
+    | This means the following example formats are all roughly equivalent for the second part of the link:
+  ul
+    li
+      code [1]: https://en.wikipedia.org/wiki/Hobbit#Lifestyle
+    li
+      code [1]: https://en.wikipedia.org/wiki/Hobbit#Lifestyle &quot;Hobbit lifestyles&quot;
+    li
+      code [1]: https://en.wikipedia.org/wiki/Hobbit#Lifestyle &apos;Hobbit lifestyles&apos;
+    li
+      code [1]: https://en.wikipedia.org/wiki/Hobbit#Lifestyle (Hobbit lifestyles)
+    li
+      code [1]: &lt;https://en.wikipedia.org/wiki/Hobbit#Lifestyle&gt; &quot;Hobbit lifestyles&quot;
+    li
+      code [1]: &lt;https://en.wikipedia.org/wiki/Hobbit#Lifestyle&gt; &apos;Hobbit lifestyles&apos;
+    li
+      code [1]: &lt;https://en.wikipedia.org/wiki/Hobbit#Lifestyle&gt; (Hobbit lifestyles)
+  p
+    | You can place this second part of the link anywhere in your Markdown document. Some people place them immediately after the paragraph in which they appear while other people place them at the end of the document (like endnotes or footnotes).
+  h4#an-example-putting-the-parts-together
+    | An Example Putting the Parts Together
+  p
+    | Say you add a URL as a standard URL link
+    |  to a paragraph and it looks like this in Markdown:
+  
+
+  p
+    | Though it may point to interesting additional information, the URL as displayed really doesn&rsquo;t add much to the existing raw text other than making it harder to read. To fix that, you could format the URL like this instead:
+  
+
+  p In both instances above, the rendered output would be identical:
+  blockquote
+    p
+      | In a hole in the ground there lived a hobbit. Not a nasty, dirty, wet hole, filled with the ends of worms and an oozy smell, nor yet a dry, bare, sandy hole with nothing in it to sit down on or to  eat: it was a 
+      a(href='https://en.wikipedia.org/wiki/Hobbit#Lifestyle' title='Hobbit lifestyles') hobbit-hole
+      | , and that means comfort.
+  p and the HTML for the link would be:
+  
+
+  h3#link-best-practices
+    | Link Best Practices
+  p
+    | Markdown applications don&rsquo;t agree on how to handle spaces in the middle of a URL. For compatibility, try to URL encode any spaces with 
+    code %20
+    | . Alternatively, if your Markdown application supports HTML
+    | , you could use the 
+    code a
+    |  HTML tag.
+  table.table
+    thead.thead-light
+      tr
+        th &#x2705;&nbsp; Do this
+        th &#x274C;&nbsp; Don&apos;t do this
+    tbody
+      tr
+        td
+          code
+            | [link](https://www.example.com/my%20great%20page)
+            br
+            br
+            |             &lt;a href=&quot;https://www.example.com/my great page&quot;&gt;link&lt;/a&gt;
+        td
+          code
+            | [link](https://www.example.com/my great page)
+  h2#images-1
+    | Images
+  p
+    | To add an image, add an exclamation mark (
+    code !
+    | ), followed by alt text in brackets, and the path or URL to the image asset in parentheses. You can optionally add a title in quotation marks after the path or URL.
+  
+
+  p The rendered output looks like this:
+
+  h3#linking-images
+    | Linking Images
+  p
+    | To add a link to an image, enclose the Markdown for the image in brackets, and then add the link in parentheses.
+  
+  h2#escaping-characters
+    | Escaping Characters
+  p
+    | To display a literal character that would otherwise be used to format text in a Markdown document, add a backslash (
+    code \
+    | ) in front of the character.
+  
+
+  p The rendered output looks like this:
+  p * Without the backslash, this would be a bullet in an unordered list.
+  h3#characters-you-can-escape
+    | Characters You Can Escape
+  p You can use a backslash to escape the following characters.
+  table.table
+    thead.thead-light
+      tr
+        th Character
+        th Name
+    tbody
+      tr
+        td \
+        td backslash
+      tr
+        td &grave;
+        td
+          | backtick (see also escaping backticks in code)
+      tr
+        td *
+        td asterisk
+      tr
+        td _
+        td underscore
+      tr
+        td { }
+        td curly braces
+      tr
+        td [ ]
+        td brackets
+      tr
+        td &lt; &gt;
+        td angle brackets
+      tr
+        td ( )
+        td parentheses
+      tr
+        td #
+        td pound sign
+      tr
+        td +
+        td plus sign
+      tr
+        td -
+        td minus sign (hyphen)
+      tr
+        td .
+        td dot
+      tr
+        td !
+        td exclamation mark
+      tr
+        td |
+        td
+          | pipe (see also escaping pipe in tables)
+  h2#html
+    | HTML
+  p
+    | Many Markdown applications allow you to use HTML tags in Markdown-formatted text. This is helpful if you prefer certain HTML tags to Markdown syntax. For example, some people find it easier to use HTML tags for images. Using HTML is also helpful when you need to change the attributes of an element, like specifying the color of text
+    | or changing the width of an image.
+  p To use HTML, place the tags in the text of your Markdown-formatted file.
+  
+
+  p The rendered output looks like this:
+  p
+    | This 
+    strong word
+    |  is bold. This 
+    em word
+    |  is italic.
+  h3#html-best-practices
+    | HTML Best Practices
+  p
+    | For security reasons, not all Markdown applications support HTML in Markdown documents. When in doubt, check your Markdown application&rsquo;s documentation. Some applications support only a subset of HTML tags.
+  p
+    | Use blank lines to separate block-level HTML elements like 
+    code &lt;div&gt;
+    | , 
+    code &lt;table&gt;
+    | , 
+    code &lt;pre&gt;
+    | , and 
+    code &lt;p&gt;
+    |  from the surrounding content. Try not to indent the tags with tabs or spaces &mdash; that can interfere with the formatting.
+  p
+    | You can&rsquo;t use Markdown syntax inside block-level HTML tags. For example, 
+    code &lt;p&gt;italic and **bold**&lt;/p&gt;
+    |  won&rsquo;t work.

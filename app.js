@@ -137,7 +137,7 @@ app.use(
 	})
 );
 app.get("/", function (_req, res) {
-	res.sendFile("index.html", { root: path.join(__dirname, "./static/") });
+	res.render("index");
 });
 app.get("/new", function (_req, res) {
 	res.render("new", { errors: "", pageid: "" });
@@ -147,6 +147,9 @@ app.get("/edit", function (_req, res) {
 });
 app.get("/terms", function (_req, res) {
 	res.render("terms");
+});
+app.get("/markdown", function (_req, res) {
+	res.render("markdown");
 });
 app.get("/:pgpr", function (req, res) {
 	if (req.params.pgpr == "edit.js" || req.params.pgpr == "new.js") {

@@ -7,7 +7,37 @@ body {
 	background-color: black;
 	color: darkgray;
 }
+h1 {
+	color: #47b932;
+	font-size: 2em;
+}
+h2 {
+	color: #258814;
+	font-size: 1.5em;
+}
+h3 {
+	color: #c4ce2d;
+	font-size: 1.25em;
+}
+/* unvisited link */
+a:link {
+	color: #2fa31a;
+}
 
+/* visited link */
+a:visited {
+	color: #2fa31a;
+}
+
+/* mouse over link */
+a:hover {
+	color: #195a0e;
+}
+
+/* selected link */
+a:active {
+	color: yellow;
+}
 #powered_by {
 	display: block;
 	text-align: right;
