@@ -1,0 +1,46 @@
+body {
+	margin: 0 auto;
+	max-width: 900px;
+	padding: 1em;
+	font-family: sans-serif;
+	font-size: 16px;
+	background-color: #17490e;
+	color: lightgray;
+}
+h1 {
+	color: #c4ce2d;
+	font-size: 2em;
+}
+h2 {
+	color: #abb42d;
+	font-size: 1.5em;
+}
+h3 {
+	color: #9da52a;
+	font-size: 1.25em;
+}
+/* unvisited link */
+a:link {
+	color: yellow;
+}
+/* visited link */
+a:visited {
+	color: orange;
+}
+/* mouse over link */
+a:hover {
+	color: gold;
+}
+/* selected link */
+a:active {
+	color: yellowgreen;
+}
+#powered_by {
+	display: block;
+	text-align: right;
+}
+#powered_by a {
+	color: #ffffff;
+	font-weight: bold;
+	text-decoration: none;
+}

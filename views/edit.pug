@@ -13,9 +13,20 @@ html
         br
         input(type='text' name='pageid' value=pageid readonly)
         br
+        br
         label(for='content') Editing password
         br
         input(type='password' name='password' value=password)
+        br
+        br
+        label(for='style') Style: 
+        select(name='dropDown', id='')
+            each stl in Styles
+              if(stl == style)
+                option(selected)=stl
+              else 
+                option=stl
+        br
         br
         label(for='content') Content (markdown supported)
         textarea(name='content' autofocus='') #{_content}

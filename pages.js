@@ -3,6 +3,7 @@ const showdown = require("showdown");
 const converter = new showdown.Converter();
 
 const { editPage, createPage } = require("./databases.js");
+const Styles = require("./styles.json");
 
 function bcryptCheckEdit(req, res, foundContent, errormsg) {
 	bcrypt.compare(req.body.password, foundContent.hash, function (_err, bres) {
@@ -13,6 +14,8 @@ function bcryptCheckEdit(req, res, foundContent, errormsg) {
 				pageid: req.body.pageid,
 				password: "",
 				errors: errormsg,
+				style: req.body.style,
+				Styles: Styles,
 			});
 		} else {
 			editPage(req, res);
@@ -26,6 +29,8 @@ function pageDoesNotExist(req, res, errormsg) {
 		pageid: req.body.pageid,
 		password: "",
 		errors: errormsg,
+		style: req.body.style,
+		Styles: Styles,
 	});
 }
 
@@ -36,6 +41,8 @@ function pageAlreadyExists(req, res, errormsg) {
 		pageid: req.body.pageid,
 		password: req.body.password,
 		errors: errormsg,
+		style: req.body.style,
+		Styles: Styles,
 	});
 }
 function renderPage(req, res, foundContent) {
@@ -58,7 +65,7 @@ function savePage(req, res) {
 		if (err) {
 			console.error(err);
 		} else {
-			createPage(req.body.content, req.body.pageid, new Date().getTime(), bhash);
+			createPage(req.body.content, req.body.pageid, new Date().getTime(), bhash, req.body.style);
 		}
 		res.redirect(`/${req.body.pageid}`);
 	});

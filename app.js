@@ -6,8 +6,9 @@ require("dotenv").config();
 const { createTable, editExistingPage, processEdit, findPage, submitPage } = require("./databases.js");
 
 const app = express();
-
 const port = process.env.PORT || 3000;
+
+const Styles = require("./styles.json");
 
 createTable();
 
@@ -22,10 +23,10 @@ app.get("/", function (_req, res) {
 	res.render("index");
 });
 app.get("/new", function (_req, res) {
-	res.render("new", { errors: "", pageid: "" });
+	res.render("new", { errors: "", pageid: "", style: "classic", Styles: Styles });
 });
 app.get("/edit", function (_req, res) {
-	res.render("new", { errors: "", pageid: "" });
+	res.render("new", { errors: "", pageid: "", style: "classic", Styles: Styles });
 });
 app.get("/terms", function (_req, res) {
 	res.render("terms");
@@ -68,6 +69,8 @@ app.post("/submit", (req, res) => {
 			pageid: req.body.pageid,
 			password: req.body.password,
 			errors: errormsg,
+			style: req.body.style,
+			Styles: Styles,
 		});
 	} else {
 		submitPage(req, res);
@@ -90,6 +93,8 @@ app.post("/edit", (req, res) => {
 			pageid: req.body.pageid,
 			password: req.body.password,
 			errors: errormsg,
+			style: req.body.style,
+			Styles: Styles,
 		});
 	} else {
 		processEdit(req, res);
