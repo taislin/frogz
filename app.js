@@ -1,133 +1,15 @@
-const showdown = require("showdown");
-const sqlite3 = require("sqlite3").verbose();
 const express = require("express");
 const path = require("path");
-const bcrypt = require("bcrypt");
 const validator = require("validator");
 require("dotenv").config();
 
-const converter = new showdown.Converter();
-const db = new sqlite3.Database("frogz.db");
+const { createTable, editExistingPage, processEdit, findPage, submitPage } = require("./databases.js");
+
 const app = express();
 
 const port = process.env.PORT || 3000;
 
-const querystring =
-	"CREATE TABLE IF NOT EXISTS documents (id TEXT, content TEXT, created_at INTEGER, edited_at INTEGER, hash TEXT);";
-if (process.env.DB_TYPE == "postgres") {
-	let pool = require("./postgres.js");
-	pool.query(querystring);
-} else {
-	db.run(querystring);
-}
-//functions
-function createPage(content, pageid, date, hash) {
-	if (process.env.DB_TYPE == "postgres") {
-		let pool = require("./postgres.js");
-		pool.query("INSERT INTO documents (id, content, created_at, edited_at, hash) VALUES ($1,$2,$3,$3,$4)", [
-			pageid,
-			content,
-			date,
-			hash,
-		]);
-	} else {
-		db.run("INSERT INTO documents (id, content, created_at, edited_at, hash) VALUES (?,?,?,?,?)", [
-			pageid,
-			content,
-			date,
-			date,
-			hash,
-		]);
-	}
-}
-function savePage(req, res) {
-	let bhash = "";
-	bcrypt.hash(req.body.password, 10, function (err, hash) {
-		bhash = hash;
-		if (err) {
-			console.error(err);
-		} else {
-			createPage(req.body.content, req.body.pageid, new Date().getTime(), bhash);
-		}
-		res.redirect(`/${req.body.pageid}`);
-	});
-}
-function editPage(req, res) {
-	let date = new Date().getTime();
-
-	if (process.env.DB_TYPE == "postgres") {
-		let pool = require("./postgres.js");
-		pool.query("UPDATE documents SET content=$1, edited_at=$2 WHERE id=$3", [req.body.content, date, req.body.pageid]);
-	} else {
-		db.run("UPDATE documents SET content=?, edited_at=? WHERE id=?", [req.body.content, date, req.body.pageid]);
-	}
-	res.redirect(`/${req.body.pageid}`);
-}
-function get_timestamps(created_at, edited_at) {
-	let powered_by = "<a id='powered_by' href='/'>FROGZ</a>";
-	let t_string = "";
-	let cdate = new Date();
-	cdate.setTime(created_at);
-	t_string +=
-		cdate.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }) +
-		" " +
-		cdate.toLocaleDateString([], {
-			year: "numeric",
-			month: "2-digit",
-			day: "2-digit",
-		});
-	if (created_at != edited_at && edited_at != undefined) {
-		let edate = new Date();
-		edate.setTime(edited_at);
-		t_string +=
-			" (✎ " +
-			edate.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }) +
-			" " +
-			edate.toLocaleDateString([], {
-				year: "numeric",
-				month: "2-digit",
-				day: "2-digit",
-			}) +
-			")";
-	}
-	return t_string + " " + powered_by;
-}
-
-function bcryptCheckEdit(req, res, foundContent, errormsg) {
-	bcrypt.compare(req.body.password, foundContent.hash, function (_err, bres) {
-		if (!bres) {
-			errormsg += "Incorrect password!<br>";
-			res.render("edit", {
-				_content: req.body.content,
-				pageid: req.body.pageid,
-				password: "",
-				errors: errormsg,
-			});
-		} else {
-			editPage(req, res);
-		}
-	});
-}
-function pageDoesNotExist(req, res, errormsg) {
-	errormsg += "This page does not exist!<br>";
-	res.render("edit", {
-		_content: req.body.content,
-		pageid: req.body.pageid,
-		password: "",
-		errors: errormsg,
-	});
-}
-
-function pageAlreadyExists(req, res, errormsg) {
-	errormsg += "This page already exists!<br>";
-	res.render("new", {
-		_content: req.body.content,
-		pageid: req.body.pageid,
-		password: req.body.password,
-		errors: errormsg,
-	});
-}
-///
+createTable();
 
 app.set("view engine", "pug");
 app.use(express.static(path.join(__dirname, ".//static")));
@@ -155,53 +37,13 @@ app.get("/:pgpr", function (req, res) {
 	if (req.params.pgpr == "edit.js" || req.params.pgpr == "new.js") {
 		return;
 	}
-	let foundContent = undefined;
-	if (process.env.DB_TYPE == "postgres") {
-		let pool = require("./postgres.js");
-		pool.query("SELECT * FROM documents WHERE id = $1", [req.params.pgpr], (_err, data) => {
-			foundContent = data.rows[0];
-			if (!foundContent || foundContent.id == "edit") {
-				res.render("new", { errors: "", pageid: req.params.pgpr });
-			} else {
-				let convContent = converter.makeHtml(foundContent.content);
-				let timestamps = get_timestamps(foundContent.created_at, foundContent.edited_at);
-				res.render("page", { content: convContent, times: timestamps });
-			}
-		});
-	} else {
-		db.get("SELECT * FROM documents WHERE id = ?", req.params.pgpr, function (_err, data) {
-			foundContent = data;
-			if (!foundContent || foundContent.id == "edit") {
-				res.render("new", { errors: "", pageid: req.params.pgpr });
-			} else {
-				let convContent = converter.makeHtml(foundContent.content);
-				let timestamps = get_timestamps(foundContent.created_at, foundContent.edited_at);
-				res.render("page", { content: convContent, times: timestamps });
-			}
-		});
-	}
+	findPage(req, res);
 });
 app.get("/:pgpr/edit", function (req, res) {
 	if (req.params.pgpr == "edit.js" || req.params.pgpr == "new.js") {
 		return;
 	}
-	let foundContent = undefined;
-	if (process.env.DB_TYPE == "postgres") {
-		let pool = require("./postgres.js");
-		pool.query("SELECT * FROM documents WHERE id = $1", [req.params.pgpr], (_err, data) => {
-			foundContent = data.rows[0];
-			if (foundContent) {
-				res.render("edit", { errors: "", pageid: req.params.pgpr, _content: foundContent.content });
-			}
-		});
-	} else {
-		db.get("SELECT * FROM documents WHERE id = ?", req.params.pgpr, function (_err, data) {
-			foundContent = data;
-			if (foundContent) {
-				res.render("edit", { errors: "", pageid: req.params.pgpr, _content: foundContent.content });
-			}
-		});
-	}
+	editExistingPage(req, res);
 });
 
 app.post("/submit", (req, res) => {
@@ -228,27 +70,7 @@ app.post("/submit", (req, res) => {
 			errors: errormsg,
 		});
 	} else {
-		let foundContent = undefined;
-		if (process.env.DB_TYPE == "postgres") {
-			let pool = require("./postgres.js");
-			pool.query("SELECT * FROM documents WHERE id = $1", [req.body.pageid], (_err, data) => {
-				foundContent = data.rows[0];
-				if (foundContent) {
-					pageAlreadyExists(req, res, errormsg);
-				} else {
-					savePage(req, res);
-				}
-			});
-		} else {
-			db.get("SELECT * FROM documents WHERE id = ?", req.body.pageid, function (_err, data) {
-				foundContent = data;
-				if (foundContent) {
-					pageAlreadyExists(req, res, errormsg);
-				} else {
-					savePage(req, res);
-				}
-			});
-		}
+		submitPage(req, res);
 	}
 });
 
@@ -270,27 +92,7 @@ app.post("/edit", (req, res) => {
 			errors: errormsg,
 		});
 	} else {
-		let foundContent = undefined;
-		if (process.env.DB_TYPE == "postgres") {
-			let pool = require("./postgres.js");
-			pool.query("SELECT * FROM documents WHERE id = $1", [req.body.pageid], (_err, data) => {
-				foundContent = data.rows[0];
-				if (foundContent) {
-					bcryptCheckEdit(req, res, foundContent, errormsg);
-				} else {
-					pageDoesNotExist(req, res, errormsg);
-				}
-			});
-		} else {
-			db.get("SELECT * FROM documents WHERE id = ?", req.body.pageid, function (_err, data) {
-				foundContent = data;
-				if (foundContent) {
-					bcryptCheckEdit(req, res, foundContent, errormsg);
-				} else {
-					pageDoesNotExist(req, res, errormsg);
-				}
-			});
-		}
+		processEdit(req, res);
 	}
 });
 
