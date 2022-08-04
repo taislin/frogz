@@ -34,6 +34,9 @@ app.get("/terms", function (_req, res) {
 app.get("/markdown", function (_req, res) {
 	res.render("markdown");
 });
+app.get("/about", function (_req, res) {
+	res.render("about");
+});
 app.get("/:pgpr", function (req, res) {
 	if (req.params.pgpr == "edit.js" || req.params.pgpr == "new.js") {
 		return;
