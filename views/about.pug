@@ -4,5 +4,43 @@ head
   title Frogz - About Us
   link(rel='stylesheet' type='text/css' href='css/frontpage.css')
   link(rel='icon' type='image/png' href='favicon.png')
-h2 About FROGZ
-| Under construction
+h1.shimmer About FROGZ
+img.flip.crop(src='favicon.png' alt='frogz')
+div(style={'text-align': 'left'})
+  p FROGZ is an open-source, anti-bloat microhosting service. Our aim is to help everyone create their own internet presence.
+    br
+    br
+    | We oppose modern soydevs and their ultra-complex and bloated webpages. For most websites, a simple static HTML + CSS framework is sufficient.
+    br
+    br
+    | You can create your own pages using only a password. Subpages can be added to a page (for example, if you have the password to 
+    strong frogz.club/mypage
+    |  you can create unlimited subpages like 
+    strong frogz.club/mypage/mysubpage
+    | )
+    br
+    br
+    | 
+  h2 Features
+  li Absolutely 
+    strong FREE
+    |  and with no ads.
+  li Totally anonymous - no registration or e-mail required. Pages are editable with a defined password.
+  li Virtually no censorship - we only remove pages in 
+    a(href='terms') very specific cases.
+  li Open-Source code licensed under AGPL3.0, open to contributions.
+  li Pages can be made with 
+    a(href='/markdown') MarkDown
+    | , no HTML knowledge required, altough you can obviously use it if you want to.
+  li Different styles available that can be selected from a dropdown list. You can still add your own CSS on the page's contents.
+  li No bloat, no JavaScript on the frontend, no cookies, no trackers, and no information recorded besides what you submit on your website - not even your IP address.
+  li Backend uses 
+    a(href='https://nodejs.org/') Node.JS
+    | , served by 
+    a(href='https://expressjs.com/') Express
+    |  and using 
+    a(href='https://pugjs.org/') Pug
+    |  as a template engine.
+br
+h3
+  a(href='/') Return to Homepage
