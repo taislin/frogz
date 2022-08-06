@@ -47,7 +47,7 @@ function pageAlreadyExists(req, res, errormsg) {
 }
 function renderPage(req, res, foundContent) {
 	if (!foundContent || foundContent.id == "edit") {
-		res.render("new", { errors: "", pageid: req.params.pgpr });
+		res.render("new", { errors: "", pageid: req.params.pgpr, Styles: Styles });
 	} else {
 		let convContent = converter.makeHtml(foundContent.content);
 		let timestamps = get_timestamps(foundContent.created_at, foundContent.edited_at);
