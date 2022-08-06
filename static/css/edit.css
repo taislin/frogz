@@ -9,6 +9,10 @@ body {
 	text-align: left;
 }
 
+label {
+	font-size: 24px;
+}
+
 textarea {
 	display: block;
 	box-sizing: border-box;
@@ -26,9 +30,11 @@ textarea {
 	color: red;
 }
 
-input {
+input,
+select {
 	background-color: black;
 	color: white;
+	font-size: 24px;
 }
 
 button,
