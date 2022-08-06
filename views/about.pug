@@ -7,10 +7,18 @@ head
 h1.shimmer About FROGZ
 img.flip.crop(src='favicon.png' alt='frogz')
 div(style={'text-align': 'left'})
-  p FROGZ is an open-source, anti-bloat microhosting service. Our aim is to help everyone create their own internet presence.
+  p 
+    strong FROGZ
+    |  is an open-source, anti-bloat microhosting service. We oppose modern soydevs and their ultra-complex and bloated webpages.
     br
     br
-    | We oppose modern soydevs and their ultra-complex and bloated webpages. For most websites, a simple static HTML + CSS framework is sufficient.
+    | For most websites, simple static HTML and CSS files are sufficient. Even so, this might be challenging for someone who is not experienced in both. Our aim is to help everyone create their own internet presence, making this process as simple as possible - you can publish a 
+    strong FROGZ
+    |  page with just plain text.
+    br
+    br
+    strong FROGZ
+    |  can also be used to learn web development. You can, for example, start with a purely plaintext page and then start adding basic HTML, then CSS, then scripts, and so on.
     br
     br
     | You can create your own pages using only a password. Subpages can be added to a page (for example, if you have the password to 
@@ -24,16 +32,21 @@ div(style={'text-align': 'left'})
   h2 Features
   li Absolutely 
     strong FREE
-    |  and with no ads.
+    |  and with 
+    strong no ads.
   li Totally anonymous - no registration or e-mail required. Pages are editable with a defined password.
-  li Virtually no censorship - we only remove pages in 
-    a(href='terms') very specific cases.
+  li
+    | (Almost) 
+    strong No censorship
+    |  - we only remove pages in 
+    a(href='terms') very specific cases
+    | .
   li Open-Source code licensed under AGPL3.0, open to contributions.
   li Pages can be made with 
     a(href='/markdown') MarkDown
-    | , no HTML knowledge required, altough you can obviously use it if you want to.
-  li Different styles available that can be selected from a dropdown list. You can still add your own CSS on the page's contents.
-  li No bloat, no JavaScript on the frontend, no cookies, no trackers, and no information recorded besides what you submit on your website - not even your IP address.
+    | , no HTML knowledge required, altough you can use it if you want to.
+  li Different styles available that can be selected from a dropdown list. You can also add your own CSS on the page's contents.
+  li No bloat, no JavaScript on the frontend, no cookies, no trackers, and no information recorded besides the page's contents - not even your IP address.
   li Backend uses 
     a(href='https://nodejs.org/') Node.JS
     | , served by 
@@ -41,6 +54,11 @@ div(style={'text-align': 'left'})
     |  and using 
     a(href='https://pugjs.org/') Pug
     |  as a template engine.
+  li Supports both 
+    strong postgreSQL
+    |  and 
+    strong SQLite
+    |  databases.
 br
 h3
   a(href='/') Return to Homepage
