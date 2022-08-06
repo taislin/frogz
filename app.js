@@ -100,7 +100,7 @@ app.post("/edit", (req, res) => {
 			Styles: Styles,
 		});
 	} else {
-		processEdit(req, res);
+		processEdit(req, res, errormsg);
 	}
 });
 

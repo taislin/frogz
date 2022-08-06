@@ -127,7 +127,7 @@ function submitPage(req, res) {
 	}
 }
 
-function processEdit(req, res) {
+function processEdit(req, res, errormsg = "") {
 	let foundContent = undefined;
 	if (process.env.DB_TYPE == "postgres") {
 		pool.query("SELECT * FROM documents WHERE id = $1", [req.body.pageid], (_err, data) => {
@@ -210,6 +210,7 @@ function savePage(req, res) {
 		if (err) {
 			console.error(err);
 		} else {
+			console.log(req.body);
 			createPage(req.body.content, req.body.pageid, new Date().getTime(), bhash, req.body.style);
 		}
 		res.redirect(`/${req.body.pageid}`);

@@ -14,13 +14,13 @@ html
         input(type='text' name='pageid' value=pageid readonly)
         br
         br
-        label(for='content') Editing password
+        label(for='password') Editing password
         br
         input(type='password' name='password' value=password)
         br
         br
         label(for='style') Style: 
-        select(name='dropDown', id='')
+        select(name='style', id='')
             each stl in Styles
               if(stl == style)
                 option(selected)=stl
