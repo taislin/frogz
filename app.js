@@ -38,18 +38,17 @@ app.get("/about", function (_req, res) {
 	res.render("about");
 });
 app.get("/:pgpr", function (req, res) {
-	if (req.params.pgpr == "edit.js" || req.params.pgpr == "new.js") {
-		return;
-	}
 	findPage(req, res);
 });
 app.get("/:pgpr/edit", function (req, res) {
-	if (req.params.pgpr == "edit.js" || req.params.pgpr == "new.js") {
-		return;
-	}
 	editExistingPage(req, res);
 });
-
+app.get("/:master/:pgpr", function (req, res) {
+	findPage(req, res, req.params.master);
+});
+app.get("/:master/:pgpr/edit", function (req, res) {
+	editExistingPage(req, res, req.params.master);
+});
 app.post("/submit", (req, res) => {
 	//validate
 	let errormsg = "<strong>Errors:</strong><br>";

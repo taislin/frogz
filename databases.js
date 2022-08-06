@@ -60,29 +60,37 @@ function editPage(req, res) {
 	res.redirect(`/${req.body.pageid}`);
 }
 
-function findPage(req, res) {
+function findPage(req, res, sub = undefined) {
 	let foundContent = undefined;
+	let pageURL = req.params.pgpr;
+	if (sub) {
+		pageURL = sub + "/" + req.params.pgpr;
+	}
 	if (process.env.DB_TYPE == "postgres") {
-		pool.query("SELECT * FROM documents WHERE id = $1", [req.params.pgpr], (_err, data) => {
+		pool.query("SELECT * FROM documents WHERE id = $1", [pageURL], (_err, data) => {
 			foundContent = data.rows[0];
-			renderPage(req, res, foundContent);
+			renderPage(res, foundContent, pageURL, sub);
 		});
 	} else {
-		db.get("SELECT * FROM documents WHERE id = ?", req.params.pgpr, function (_err, data) {
+		db.get("SELECT * FROM documents WHERE id = ?", pageURL, function (_err, data) {
 			foundContent = data;
-			renderPage(req, res, foundContent);
+			renderPage(res, foundContent, pageURL, sub);
 		});
 	}
 }
-function editExistingPage(req, res) {
+function editExistingPage(req, res, sub = undefined) {
 	let foundContent = undefined;
+	let pageURL = req.params.pgpr;
+	if (sub) {
+		pageURL = sub + "/" + req.params.pgpr;
+	}
 	if (process.env.DB_TYPE == "postgres") {
-		pool.query("SELECT * FROM documents WHERE id = $1", [req.params.pgpr], (_err, data) => {
+		pool.query("SELECT * FROM documents WHERE id = $1", [pageURL], (_err, data) => {
 			foundContent = data.rows[0];
 			if (foundContent) {
 				res.render("edit", {
 					errors: "",
-					pageid: req.params.pgpr,
+					pageid: pageURL,
 					_content: foundContent.content,
 					style: foundContent.style,
 					Styles: Styles,
@@ -90,12 +98,12 @@ function editExistingPage(req, res) {
 			}
 		});
 	} else {
-		db.get("SELECT * FROM documents WHERE id = ?", req.params.pgpr, function (_err, data) {
+		db.get("SELECT * FROM documents WHERE id = ?", pageURL, function (_err, data) {
 			foundContent = data;
 			if (foundContent) {
 				res.render("edit", {
 					errors: "",
-					pageid: req.params.pgpr,
+					pageid: pageURL,
 					_content: foundContent.content,
 					style: foundContent.style,
 					Styles: Styles,
@@ -129,8 +137,9 @@ function submitPage(req, res) {
 
 function processEdit(req, res, errormsg = "") {
 	let foundContent = undefined;
+	let subdomain = req.body.pageid.split("/")[0];
 	if (process.env.DB_TYPE == "postgres") {
-		pool.query("SELECT * FROM documents WHERE id = $1", [req.body.pageid], (_err, data) => {
+		pool.query("SELECT * FROM documents WHERE id = $1", [subdomain], (_err, data) => {
 			foundContent = data.rows[0];
 			if (foundContent) {
 				bcryptCheckEdit(req, res, foundContent, errormsg);
@@ -139,7 +148,7 @@ function processEdit(req, res, errormsg = "") {
 			}
 		});
 	} else {
-		db.get("SELECT * FROM documents WHERE id = ?", req.body.pageid, function (_err, data) {
+		db.get("SELECT * FROM documents WHERE id = ?", subdomain, function (_err, data) {
 			foundContent = data;
 			if (foundContent) {
 				bcryptCheckEdit(req, res, foundContent, errormsg);
@@ -163,7 +172,16 @@ function bcryptCheckEdit(req, res, foundContent, errormsg) {
 				Styles: Styles,
 			});
 		} else {
-			editPage(req, res);
+			let subdomain = undefined;
+			if (req.body.pageid.includes("/")) {
+				subdomain = req.body.pageid.split("/")[0];
+			}
+			if (subdomain) {
+				createPage(req.body.content, req.body.pageid, new Date().getTime(), foundContent.hash, req.body.style);
+				res.redirect(`/${req.body.pageid}`);
+			} else {
+				editPage(req, res);
+			}
 		}
 	});
 }
@@ -190,15 +208,26 @@ function pageAlreadyExists(req, res, errormsg) {
 		Styles: Styles,
 	});
 }
-function renderPage(req, res, foundContent) {
+function renderPage(res, foundContent, _pageid, sub = undefined) {
 	if (!foundContent || foundContent.id == "edit") {
-		res.render("new", { errors: "", pageid: req.params.pgpr, Styles: Styles });
+		if (_pageid.includes("/") && sub) {
+			res.render("edit", {
+				errors:
+					"<strong>Errors:</strong><br>This subpage does not exist! You can create it if you have the master page's password.<br>",
+				pageid: _pageid,
+				_content: "",
+				style: "",
+				Styles: Styles,
+			});
+		} else {
+			res.render("new", { errors: "", pageid: _pageid, Styles: Styles });
+		}
 	} else {
 		let convContent = converter.makeHtml(foundContent.content);
 		let timestamps = get_timestamps(foundContent.created_at, foundContent.edited_at);
-		let style = "css/styles/classic.css";
+		let style = "/css/styles/classic.css";
 		if (foundContent.style != "" && foundContent.style != undefined) {
-			style = "css/styles/" + foundContent.style + ".css";
+			style = "/css/styles/" + foundContent.style + ".css";
 		}
 		res.render("page", { content: convContent, times: timestamps, styling: style });
 	}
