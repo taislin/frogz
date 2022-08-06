@@ -11,23 +11,23 @@ const Styles = require("./styles.json");
 
 function createTable() {
 	let querystring =
-		"CREATE TABLE IF NOT EXISTS documents (id TEXT, content TEXT, created_at BIGINT, edited_at BIGINT, hash TEXT, style TEXT, index INTEGER);";
+		"CREATE TABLE IF NOT EXISTS documents (id TEXT, content TEXT, created_at BIGINT, edited_at BIGINT, hash TEXT, style TEXT, indexed INTEGER);";
 	if (process.env.DB_TYPE == "postgres") {
 		pool.query(querystring);
 	} else {
 		querystring =
-			"CREATE TABLE IF NOT EXISTS documents (id TEXT, content TEXT, created_at REAL, edited_at REAL, hash TEXT, style TEXT, index INTEGER);";
+			"CREATE TABLE IF NOT EXISTS documents (id TEXT, content TEXT, created_at REAL, edited_at REAL, hash TEXT, style TEXT, indexed INTEGER);";
 		db.run(querystring);
 	}
 }
 function createPage(content, pageid, date, hash, style) {
 	if (process.env.DB_TYPE == "postgres") {
 		pool.query(
-			"INSERT INTO documents (id, content, created_at, edited_at, hash, style, index) VALUES ($1,$2,$3,$3,$4,$5,1)",
+			"INSERT INTO documents (id, content, created_at, edited_at, hash, style, indexed) VALUES ($1,$2,$3,$3,$4,$5,1)",
 			[pageid, content, date, hash, style]
 		);
 	} else {
-		db.run("INSERT INTO documents (id, content, created_at, edited_at, hash, style, index) VALUES (?,?,?,?,?,?,1)", [
+		db.run("INSERT INTO documents (id, content, created_at, edited_at, hash, style, indexed) VALUES (?,?,?,?,?,?,1)", [
 			pageid,
 			content,
 			date,
