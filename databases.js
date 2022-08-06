@@ -210,7 +210,6 @@ function savePage(req, res) {
 		if (err) {
 			console.error(err);
 		} else {
-			console.log(req.body);
 			createPage(req.body.content, req.body.pageid, new Date().getTime(), bhash, req.body.style);
 		}
 		res.redirect(`/${req.body.pageid}`);
