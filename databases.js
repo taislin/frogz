@@ -11,24 +11,23 @@ const Styles = require("./styles.json");
 
 function createTable() {
 	let querystring =
-		"CREATE TABLE IF NOT EXISTS documents (id TEXT, content TEXT, created_at INTEGER, edited_at INTEGER, hash TEXT, style TEXT);";
+		"CREATE TABLE IF NOT EXISTS documents (id TEXT, content TEXT, created_at BIGINT, edited_at BIGINT, hash TEXT, style TEXT, index INTEGER);";
 	if (process.env.DB_TYPE == "postgres") {
 		pool.query(querystring);
 	} else {
+		querystring =
+			"CREATE TABLE IF NOT EXISTS documents (id TEXT, content TEXT, created_at REAL, edited_at REAL, hash TEXT, style TEXT, index INTEGER);";
 		db.run(querystring);
 	}
 }
 function createPage(content, pageid, date, hash, style) {
 	if (process.env.DB_TYPE == "postgres") {
-		pool.query("INSERT INTO documents (id, content, created_at, edited_at, hash, style) VALUES ($1,$2,$3,$3,$4,$5)", [
-			pageid,
-			content,
-			date,
-			hash,
-			style,
-		]);
+		pool.query(
+			"INSERT INTO documents (id, content, created_at, edited_at, hash, style, index) VALUES ($1,$2,$3,$3,$4,$5,1)",
+			[pageid, content, date, hash, style]
+		);
 	} else {
-		db.run("INSERT INTO documents (id, content, created_at, edited_at, hash, style) VALUES (?,?,?,?,?,?)", [
+		db.run("INSERT INTO documents (id, content, created_at, edited_at, hash, style, index) VALUES (?,?,?,?,?,?,1)", [
 			pageid,
 			content,
 			date,
