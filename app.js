@@ -2,10 +2,12 @@ const express = require("express");
 const path = require("path");
 const validator = require("validator");
 require("dotenv").config();
+var http = require("http");
 
 const { createTable, editExistingPage, processEdit, findPage, submitPage } = require("./databases.js");
 
 const app = express();
+const server = http.createServer(app);
 const port = process.env.PORT || 3000;
 
 const Styles = require("./styles.json");
@@ -102,7 +104,7 @@ app.post("/edit", (req, res) => {
 		processEdit(req, res, errormsg);
 	}
 });
-
+server.listen(3000, "localhost");
 app.listen(port, () => {
 	console.log(`
 
