@@ -1,8 +1,6 @@
 const express = require("express");
 const path = require("path");
 const validator = require("validator");
-var vhost = require("vhost");
-var connect = require("connect");
 require("dotenv").config();
 
 const { createTable, editExistingPage, processEdit, findPage, submitPage } = require("./databases.js");
@@ -16,8 +14,6 @@ createTable();
 
 app.set("view engine", "pug");
 app.use(express.static(path.join(__dirname, ".//static")));
-var domain = connect();
-app.use(vhost("frogz.club", domain));
 app.use(
 	express.urlencoded({
 		extended: true,

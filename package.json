@@ -12,15 +12,13 @@
     "license": "MIT",
     "dependencies": {
         "bcrypt": "^5.0.1",
-        "connect": "^3.7.0",
         "dotenv": "^16.0.1",
         "express": "^4.18.1",
         "pg": "^8.7.3",
         "pug": "^3.0.2",
         "showdown": "^2.1.0",
         "sqlite3": "^5.0.10",
-        "validator": "^13.7.0",
-        "vhost": "^3.0.2"
+        "validator": "^13.7.0"
     },
     "engines": {
         "node": "16.x"
