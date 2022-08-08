@@ -270,6 +270,29 @@ function get_timestamps(created_at, edited_at) {
 			}) +
 			")";
 	}
-	return t_string + " " + powered_by;
+	return t_string + " | " + powered_by;
 }
-module.exports = { createTable, editExistingPage, processEdit, findPage, submitPage };
+function randomPage(res) {
+	let foundContent = undefined;
+	if (process.env.DB_TYPE == "postgres") {
+		pool.query("SELECT * FROM documents WHERE indexed = 1 ORDER BY RANDOM() LIMIT 1;", [], (_err, data) => {
+			foundContent = data.rows[0];
+			console.log(foundContent);
+			if (foundContent) {
+				renderPage(res, foundContent, foundContent.id);
+			} else {
+				res.render("index");
+			}
+		});
+	} else {
+		db.get("SELECT * FROM documents WHERE indexed = 1 ORDER BY RANDOM() LIMIT 1;", [], function (_err, data) {
+			foundContent = data;
+			if (foundContent) {
+				renderPage(res, foundContent, foundContent.id);
+			} else {
+				res.render("index");
+			}
+		});
+	}
+}
+module.exports = { createTable, editExistingPage, processEdit, findPage, submitPage, randomPage };

@@ -3,7 +3,7 @@ const path = require("path");
 const validator = require("validator");
 require("dotenv").config();
 
-const { createTable, editExistingPage, processEdit, findPage, submitPage } = require("./databases.js");
+const { createTable, editExistingPage, processEdit, findPage, submitPage, randomPage } = require("./databases.js");
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -37,6 +37,10 @@ app.get("/markdown", function (_req, res) {
 app.get("/about", function (_req, res) {
 	res.render("about");
 });
+//
+//app.get("/random", function (_req, res) {
+//	randomPage(res);
+//});
 app.get("/:pgpr", function (req, res) {
 	findPage(req, res);
 });
