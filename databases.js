@@ -81,7 +81,7 @@ function editExistingPage(req, res, sub = undefined) {
 	let foundContent = undefined;
 	let pageURL = req.params.pgpr;
 	if (sub) {
-		pageURL = sub + "/" + req.params.pgpr;
+		pageURL = req.params.master + "/" + req.params.pgpr;
 	}
 	if (process.env.DB_TYPE == "postgres") {
 		pool.query("SELECT * FROM documents WHERE id = $1", [pageURL], (_err, data) => {
@@ -137,6 +137,7 @@ function submitPage(req, res) {
 function processEdit(req, res, errormsg = "") {
 	let foundContent = undefined;
 	let subdomain = req.body.pageid.split("/")[0];
+	console.log(subdomain);
 	if (process.env.DB_TYPE == "postgres") {
 		pool.query("SELECT * FROM documents WHERE id = $1", [subdomain], (_err, data) => {
 			foundContent = data.rows[0];
@@ -176,8 +177,7 @@ function bcryptCheckEdit(req, res, foundContent, errormsg) {
 				subdomain = req.body.pageid.split("/")[0];
 			}
 			if (subdomain) {
-				createPage(req.body.content, req.body.pageid, new Date().getTime(), foundContent.hash, req.body.style);
-				res.redirect(`/${req.body.pageid}`);
+				editPage(req, res);
 			} else {
 				editPage(req, res);
 			}
@@ -277,11 +277,10 @@ function randomPage(res) {
 	if (process.env.DB_TYPE == "postgres") {
 		pool.query("SELECT * FROM documents WHERE indexed = 1 ORDER BY RANDOM() LIMIT 1;", [], (_err, data) => {
 			foundContent = data.rows[0];
-			console.log(foundContent);
 			if (foundContent) {
-				renderPage(res, foundContent, foundContent.id);
+				res.redirect("/" + foundContent.id);
 			} else {
-				res.render("index");
+				res.redirect("/index");
 			}
 		});
 	} else {

@@ -26,7 +26,7 @@ app.get("/new", function (_req, res) {
 	res.render("new", { errors: "", pageid: "", style: "classic", Styles: Styles });
 });
 app.get("/edit", function (_req, res) {
-	res.render("new", { errors: "", pageid: "", style: "classic", Styles: Styles });
+	res.redirect("/edit");
 });
 app.get("/terms", function (_req, res) {
 	res.render("terms");
