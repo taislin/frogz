@@ -2,14 +2,14 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>Frogz - Create/Edit a Page</title>
+  <title>Frogz - {action} a Page</title>
   <link rel="stylesheet" type="text/css" href="/css/frontpage.css">
   <link rel="stylesheet" type="text/css" href="/css/edit.css">
   <link rel="icon" type="image/png" href="/favicon.png">
 </head>
 <body>
   <p class="errors">{errors}</p>
-  <form action={action} method="POST">
+  <form action="/{action}" method="POST">
     <p>
       <label for="pageid">Page Name (URL)</label><br/>
       {if pageid}

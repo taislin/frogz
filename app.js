@@ -34,10 +34,10 @@ app.get("/", function (_req, res) {
 	res.render("index.html");
 });
 app.get("/new", function (_req, res) {
-	res.render("new.html", { errors: "", pageid: "", Styles: Styles, action: "/submit" });
+	res.render("new.html", { errors: "", pageid: "", Styles: Styles, action: "submit" });
 });
 app.get("/edit", function (_req, res) {
-	res.render("new.html", { errors: "", pageid: "", Styles: Styles, action: "/edit" });
+	res.render("new.html", { errors: "", pageid: "", Styles: Styles, action: "edit" });
 });
 app.get("/terms", function (_req, res) {
 	res.render("terms.html");
@@ -92,7 +92,7 @@ app.post("/submit", (req, res) => {
 			errors: errormsg,
 			style: req.body.style,
 			Styles: _Styles,
-			action: "/submit",
+			action: "submit",
 		});
 	} else {
 		submitPage(req, res);
@@ -118,7 +118,7 @@ app.post("/edit", (req, res) => {
 			errors: errormsg,
 			style: req.body.style,
 			Styles: _Styles,
-			action: "/edit",
+			action: "edit",
 		});
 	} else {
 		processEdit(req, res, errormsg);
