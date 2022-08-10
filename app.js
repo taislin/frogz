@@ -1,6 +1,5 @@
 const express = require("express");
 const path = require("path");
-const validator = require("validator");
 const whiskers = require("whiskers");
 require("dotenv").config();
 
@@ -67,19 +66,19 @@ app.get("/:master/:pgpr/edit", function (req, res) {
 app.post("/submit", (req, res) => {
 	//validate
 	let errormsg = "<strong>Errors:</strong><br>";
-	if (!validator.isAlphanumeric(req.body.pageid)) {
+	if (!validateAlphanumeric(req.body.pageid)) {
 		let _pid = req.body.pageid.replace("/", "");
-		if (!validator.isAlphanumeric(_pid)) {
+		if (!validateAlphanumeric(_pid)) {
 			errormsg += "The page name (url) must be alphanumeric.<br>";
 		}
 	}
-	if (!validator.isLength(req.body.pageid, { min: 1, max: 100 })) {
+	if (!validateLength(req.body.pageid, 1, 100)) {
 		errormsg += "The page name (url) cannot be empty and needs to be under 100 characters.<br>";
 	}
-	if (!validator.isLength(req.body.password, { min: 0, max: 50 })) {
+	if (!validateLength(req.body.password, 0, 50)) {
 		errormsg += "The Password needs to be under 50 characters!<br>";
 	}
-	if (!validator.isLength(req.body.content, { min: 1, max: 10000 })) {
+	if (!validateLength(req.body.content, 1, 10000)) {
 		errormsg += "The Content cannot be empty and needs to be under 10,000 characters!<br>";
 	}
 
@@ -102,10 +101,10 @@ app.post("/submit", (req, res) => {
 app.post("/edit", (req, res) => {
 	//validate
 	let errormsg = "<strong>Errors:</strong><br>";
-	if (!validator.isLength(req.body.password, { min: 0, max: 50 })) {
+	if (!validateLength(req.body.password, 0, 50)) {
 		errormsg += "The Password needs to be under 50 characters!<br>";
 	}
-	if (!validator.isLength(req.body.content, { min: 1, max: 10000 })) {
+	if (!validateLength(req.body.content, 1, 10000)) {
 		errormsg += "The Content cannot be empty and needs to be under 10,000 characters!<br>";
 	}
 
@@ -139,12 +138,19 @@ app.listen(port, () => {
 	console.log(`STATUS: App running on port ${port}.`);
 });
 
-function charCount(str, letter) {
-	var letterCount = 0;
-	for (var position = 0; position < str.length; position++) {
-		if (str.charAt(position) == letter) {
-			letterCount += 1;
-		}
+function validateAlphanumeric(str) {
+	let regexp = /^[a-z0-9-_]+$/i;
+	if (str.search(regexp) === -1) {
+		return false;
+	} else {
+		return true;
 	}
-	return letterCount;
+}
+function validateLength(str, min = 0, max = 100) {
+	let strl = str.length;
+	if (strl < min || strl > max) {
+		return false;
+	} else {
+		return true;
+	}
 }
