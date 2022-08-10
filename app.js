@@ -142,15 +142,13 @@ function validateAlphanumeric(str) {
 	let regexp = /^[a-z0-9-_]+$/i;
 	if (str.search(regexp) === -1) {
 		return false;
-	} else {
-		return true;
 	}
+	return true;
 }
 function validateLength(str, min = 0, max = 100) {
 	let strl = str.length;
 	if (strl < min || strl > max) {
 		return false;
-	} else {
-		return true;
 	}
+	return true;
 }
