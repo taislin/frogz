@@ -96,6 +96,17 @@ function editExistingPage(req, res, sub = undefined) {
 					Styles: _Styles,
 					action: "/edit",
 				});
+			} else {
+				if (_pageid.includes("/") && sub) {
+					res.render("new.html", {
+						errors:
+							"<strong>Errors:</strong><br>This subpage does not exist! You can create it if you have the master page's password.<br>",
+						pageid: pageURL,
+						_content: "",
+						Styles: _Styles,
+						action: "/submit",
+					});
+				}
 			}
 		});
 	} else {
@@ -111,6 +122,17 @@ function editExistingPage(req, res, sub = undefined) {
 					Styles: _Styles,
 					action: "/edit",
 				});
+			} else {
+				if (_pageid.includes("/") && sub) {
+					res.render("new.html", {
+						errors:
+							"<strong>Errors:</strong><br>This subpage does not exist! You can create it if you have the master page's password.<br>",
+						pageid: pageURL,
+						_content: "",
+						Styles: _Styles,
+						action: "/submit",
+					});
+				}
 			}
 		});
 	}
@@ -132,7 +154,16 @@ function submitPage(req, res) {
 			if (foundContent) {
 				pageAlreadyExists(req, res);
 			} else {
-				savePage(req, res);
+				let foundContent2 = undefined;
+				let subdomain = req.body.pageid.split("/")[0];
+				db.get("SELECT * FROM documents WHERE id = ?", [subdomain], (_err2, data2) => {
+					foundContent2 = data2;
+					if (foundContent2) {
+						bcryptCheckEdit(req, res, foundContent2, "", true);
+					} else {
+						savePage(req, res);
+					}
+				});
 			}
 		});
 	}
@@ -162,7 +193,7 @@ function processEdit(req, res, errormsg = "") {
 	}
 }
 
-function bcryptCheckEdit(req, res, foundContent, errormsg) {
+function bcryptCheckEdit(req, res, foundContent, errormsg = "", newpage = false) {
 	bcrypt.compare(req.body.password, foundContent.hash, function (_err, bres) {
 		if (!bres) {
 			errormsg += "Incorrect password!<br>";
@@ -177,14 +208,10 @@ function bcryptCheckEdit(req, res, foundContent, errormsg) {
 				action: "/edit",
 			});
 		} else {
-			let subdomain = undefined;
-			if (req.body.pageid.includes("/")) {
-				subdomain = req.body.pageid.split("/")[0];
-			}
-			if (subdomain) {
+			if (newpage) {
 				editPage(req, res);
 			} else {
-				editPage(req, res);
+				savePage(req, res);
 			}
 		}
 	});

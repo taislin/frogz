@@ -12,7 +12,12 @@
   <form action={action} method="POST">
     <p>
       <label for="pageid">Page Name (URL)</label><br/>
-      <input type="text" name="pageid" value={pageid}></input><br/><br/>
+      {if pageid}
+        <input type="text" name="pageid" value={pageid} readonly></input>
+      {else}
+        <input type="text" name="pageid" value={pageid}></input>
+      {/if}
+      <br/><br/>
       <label for="password">Editing password <em>(do not lose this!)</em></label><br/>
       <input type="password" name="password" value={password}></input><br/><br/>
       <label for="style">Style: </label>

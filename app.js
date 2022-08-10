@@ -4,7 +4,15 @@ const validator = require("validator");
 const whiskers = require("whiskers");
 require("dotenv").config();
 
-const { createTable, editExistingPage, processEdit, findPage, submitPage, randomPage } = require("./databases.js");
+const {
+	createTable,
+	editExistingPage,
+	processEdit,
+	findPage,
+	submitPage,
+	randomPage,
+	purgeStyles,
+} = require("./databases.js");
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -60,7 +68,10 @@ app.post("/submit", (req, res) => {
 	//validate
 	let errormsg = "<strong>Errors:</strong><br>";
 	if (!validator.isAlphanumeric(req.body.pageid)) {
-		errormsg += "The page name (url) must be alphanumeric.<br>";
+		let _pid = req.body.pageid.replace("/", "");
+		if (!validator.isAlphanumeric(_pid)) {
+			errormsg += "The page name (url) must be alphanumeric.<br>";
+		}
 	}
 	if (!validator.isLength(req.body.pageid, { min: 1, max: 100 })) {
 		errormsg += "The page name (url) cannot be empty and needs to be under 100 characters.<br>";
@@ -127,3 +138,13 @@ app.listen(port, () => {
   `);
 	console.log(`STATUS: App running on port ${port}.`);
 });
+
+function charCount(str, letter) {
+	var letterCount = 0;
+	for (var position = 0; position < str.length; position++) {
+		if (str.charAt(position) == letter) {
+			letterCount += 1;
+		}
+	}
+	return letterCount;
+}
