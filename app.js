@@ -3,15 +3,7 @@ const path = require("path");
 const whiskers = require("whiskers");
 require("dotenv").config();
 
-const {
-	createTable,
-	editExistingPage,
-	processEdit,
-	findPage,
-	submitPage,
-	randomPage,
-	purgeStyles,
-} = require("./databases.js");
+const { createTable, editExistingPage, processEdit, findPage, submitPage, randomPage } = require("./databases.js");
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -64,61 +56,22 @@ app.get("/:master/:pgpr/edit", function (req, res) {
 	editExistingPage(req, res, req.params.master);
 });
 app.post("/submit", (req, res) => {
-	//validate
+	let _action = "submit";
 	let errormsg = "<strong>Errors:</strong><br>";
-	if (!validateAlphanumeric(req.body.pageid)) {
-		let _pid = req.body.pageid.replace("/", "");
-		if (!validateAlphanumeric(_pid)) {
-			errormsg += "The page name (url) must be alphanumeric.<br>";
-		}
-	}
-	if (!validateLength(req.body.pageid, 1, 100)) {
-		errormsg += "The page name (url) cannot be empty and needs to be under 100 characters.<br>";
-	}
-	if (!validateLength(req.body.password, 0, 50)) {
-		errormsg += "The Password needs to be under 50 characters!<br>";
-	}
-	if (!validateLength(req.body.content, 1, 10000)) {
-		errormsg += "The Content cannot be empty and needs to be under 10,000 characters!<br>";
-	}
-
+	errormsg = doValidations(req, errormsg);
 	if (errormsg != "<strong>Errors:</strong><br>") {
-		let _Styles = purgeStyles(req.body.style);
-		res.render("new.html", {
-			_content: req.body.content,
-			pageid: req.body.pageid,
-			password: req.body.password,
-			errors: errormsg,
-			style: req.body.style,
-			Styles: _Styles,
-			action: "submit",
-		});
+		reRenderPage(req, res, _action, errormsg);
 	} else {
 		submitPage(req, res);
 	}
 });
 
 app.post("/edit", (req, res) => {
-	//validate
+	let _action = "edit";
 	let errormsg = "<strong>Errors:</strong><br>";
-	if (!validateLength(req.body.password, 0, 50)) {
-		errormsg += "The Password needs to be under 50 characters!<br>";
-	}
-	if (!validateLength(req.body.content, 1, 10000)) {
-		errormsg += "The Content cannot be empty and needs to be under 10,000 characters!<br>";
-	}
-
+	errormsg = doValidations(req, errormsg);
 	if (errormsg != "<strong>Errors:</strong><br>") {
-		let _Styles = purgeStyles(req.body.style);
-		res.render("new.html", {
-			_content: req.body.content,
-			pageid: req.body.pageid,
-			password: req.body.password,
-			errors: errormsg,
-			style: req.body.style,
-			Styles: _Styles,
-			action: "edit",
-		});
+		reRenderPage(req, res, _action, errormsg);
 	} else {
 		processEdit(req, res, errormsg);
 	}
@@ -151,4 +104,36 @@ function validateLength(str, min = 0, max = 100) {
 		return false;
 	}
 	return true;
+}
+
+function doValidations(req, errormsg = "") {
+	if (!validateAlphanumeric(req.body.pageid)) {
+		let _pid = req.body.pageid.replace("/", "");
+		if (!validateAlphanumeric(_pid)) {
+			errormsg += "The page name (url) must be alphanumeric!<br>";
+		}
+	}
+	if (!validateLength(req.body.pageid, 1, 100)) {
+		errormsg += "The page name (url) cannot be empty and needs to be under 100 characters!<br>";
+	}
+	if (!validateLength(req.body.password, 0, 50)) {
+		errormsg += "The Password needs to be under 50 characters!<br>";
+	}
+	if (!validateLength(req.body.content, 1, 10000)) {
+		errormsg += "The Content cannot be empty and needs to be under 10,000 characters!<br>";
+	}
+
+	return errormsg;
+}
+
+function reRenderPage(req, res, _action, errormsg) {
+	res.render("new.html", {
+		_content: req.body.content,
+		pageid: req.body.pageid,
+		password: req.body.password,
+		errors: errormsg,
+		style: req.body.style,
+		Styles: Styles,
+		action: _action,
+	});
 }

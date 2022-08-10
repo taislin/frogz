@@ -53,13 +53,12 @@ function editExistingPage(req, res, sub = undefined) {
 	pool.query("SELECT * FROM documents WHERE id = $1", [pageURL], (_err, data) => {
 		foundContent = data.rows[0];
 		if (foundContent) {
-			let _Styles = purgeStyles(foundContent.style);
 			res.render("new.html", {
 				errors: "",
 				pageid: pageURL,
 				_content: foundContent.content,
 				style: foundContent.style,
-				Styles: _Styles,
+				Styles: Styles,
 				action: "edit",
 			});
 		} else {
@@ -69,7 +68,7 @@ function editExistingPage(req, res, sub = undefined) {
 						"<strong>Errors:</strong><br>This subpage does not exist! You can create it if you have the master page's password.<br>",
 					pageid: pageURL,
 					_content: "",
-					Styles: _Styles,
+					Styles: Styles,
 					action: "submit",
 				});
 			}
@@ -114,14 +113,13 @@ function bcryptCheckEdit(req, res, foundContent, errormsg = "", newpage = false)
 	bcrypt.compare(req.body.password, foundContent.hash, function (_err, bres) {
 		if (!bres) {
 			errormsg += "Incorrect password!<br>";
-			let _Styles = purgeStyles(req.body.style);
 			res.render("new.html", {
 				_content: req.body.content,
 				pageid: req.body.pageid,
 				password: "",
 				errors: errormsg,
 				style: req.body.style,
-				Styles: _Styles,
+				Styles: Styles,
 				action: "edit",
 			});
 		} else {
@@ -135,28 +133,26 @@ function bcryptCheckEdit(req, res, foundContent, errormsg = "", newpage = false)
 }
 function pageDoesNotExist(req, res, errormsg) {
 	errormsg += "This page does not exist!<br>";
-	let _Styles = purgeStyles(req.body.style);
 	res.render("new.html", {
 		_content: req.body.content,
 		pageid: req.body.pageid,
 		password: "",
 		errors: errormsg,
 		style: req.body.style,
-		Styles: _Styles,
+		Styles: Styles,
 		action: "submit",
 	});
 }
 
 function pageAlreadyExists(req, res, errormsg = "") {
 	errormsg += "This page already exists!<br>";
-	let _Styles = purgeStyles(req.body.style);
 	res.render("new.html", {
 		_content: req.body.content,
 		pageid: req.body.pageid,
 		password: req.body.password,
 		errors: errormsg,
 		style: req.body.style,
-		Styles: _Styles,
+		Styles: Styles,
 		action: "submit",
 	});
 }
@@ -237,12 +233,5 @@ function randomPage(res) {
 		}
 	});
 }
-function purgeStyles(_style) {
-	let _Styles = Styles;
-	let usedStyle = _Styles.indexOf(_style);
-	if (usedStyle > -1) {
-		_Styles.splice(usedStyle, 1);
-	}
-	return _Styles;
-}
-module.exports = { createTable, editExistingPage, processEdit, findPage, submitPage, randomPage, purgeStyles };
+
+module.exports = { createTable, editExistingPage, processEdit, findPage, submitPage, randomPage };
