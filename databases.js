@@ -87,12 +87,14 @@ function editExistingPage(req, res, sub = undefined) {
 		pool.query("SELECT * FROM documents WHERE id = $1", [pageURL], (_err, data) => {
 			foundContent = data.rows[0];
 			if (foundContent) {
-				res.render("edit", {
+				let _Styles = purgeStyles(foundContent.style);
+				res.render("new.html", {
 					errors: "",
 					pageid: pageURL,
 					_content: foundContent.content,
 					style: foundContent.style,
-					Styles: Styles,
+					Styles: _Styles,
+					action: "/edit",
 				});
 			}
 		});
@@ -100,12 +102,14 @@ function editExistingPage(req, res, sub = undefined) {
 		db.get("SELECT * FROM documents WHERE id = ?", pageURL, function (_err, data) {
 			foundContent = data;
 			if (foundContent) {
-				res.render("edit", {
+				let _Styles = purgeStyles(foundContent.style);
+				res.render("new.html", {
 					errors: "",
 					pageid: pageURL,
 					_content: foundContent.content,
 					style: foundContent.style,
-					Styles: Styles,
+					Styles: _Styles,
+					action: "/edit",
 				});
 			}
 		});
@@ -117,7 +121,7 @@ function submitPage(req, res) {
 		pool.query("SELECT * FROM documents WHERE id = $1", [req.body.pageid], (_err, data) => {
 			foundContent = data.rows[0];
 			if (foundContent) {
-				pageAlreadyExists(req, res, errormsg);
+				pageAlreadyExists(req, res);
 			} else {
 				savePage(req, res);
 			}
@@ -126,7 +130,7 @@ function submitPage(req, res) {
 		db.get("SELECT * FROM documents WHERE id = ?", req.body.pageid, function (_err, data) {
 			foundContent = data;
 			if (foundContent) {
-				pageAlreadyExists(req, res, errormsg);
+				pageAlreadyExists(req, res);
 			} else {
 				savePage(req, res);
 			}
@@ -137,7 +141,6 @@ function submitPage(req, res) {
 function processEdit(req, res, errormsg = "") {
 	let foundContent = undefined;
 	let subdomain = req.body.pageid.split("/")[0];
-	console.log(subdomain);
 	if (process.env.DB_TYPE == "postgres") {
 		pool.query("SELECT * FROM documents WHERE id = $1", [subdomain], (_err, data) => {
 			foundContent = data.rows[0];
@@ -163,13 +166,15 @@ function bcryptCheckEdit(req, res, foundContent, errormsg) {
 	bcrypt.compare(req.body.password, foundContent.hash, function (_err, bres) {
 		if (!bres) {
 			errormsg += "Incorrect password!<br>";
-			res.render("edit", {
+			let _Styles = purgeStyles(req.body.style);
+			res.render("new.html", {
 				_content: req.body.content,
 				pageid: req.body.pageid,
 				password: "",
 				errors: errormsg,
 				style: req.body.style,
-				Styles: Styles,
+				Styles: _Styles,
+				action: "/edit",
 			});
 		} else {
 			let subdomain = undefined;
@@ -186,40 +191,44 @@ function bcryptCheckEdit(req, res, foundContent, errormsg) {
 }
 function pageDoesNotExist(req, res, errormsg) {
 	errormsg += "This page does not exist!<br>";
-	res.render("edit", {
+	let _Styles = purgeStyles(req.body.style);
+	res.render("new.html", {
 		_content: req.body.content,
 		pageid: req.body.pageid,
 		password: "",
 		errors: errormsg,
 		style: req.body.style,
-		Styles: Styles,
+		Styles: _Styles,
+		action: "/submit",
 	});
 }
 
-function pageAlreadyExists(req, res, errormsg) {
+function pageAlreadyExists(req, res, errormsg = "") {
 	errormsg += "This page already exists!<br>";
-	res.render("new", {
+	let _Styles = purgeStyles(req.body.style);
+	res.render("new.html", {
 		_content: req.body.content,
 		pageid: req.body.pageid,
 		password: req.body.password,
 		errors: errormsg,
 		style: req.body.style,
-		Styles: Styles,
+		Styles: _Styles,
+		action: "/submit",
 	});
 }
 function renderPage(res, foundContent, _pageid, sub = undefined) {
 	if (!foundContent || foundContent.id == "edit") {
 		if (_pageid.includes("/") && sub) {
-			res.render("edit", {
+			res.render("new.html", {
 				errors:
 					"<strong>Errors:</strong><br>This subpage does not exist! You can create it if you have the master page's password.<br>",
 				pageid: _pageid,
 				_content: "",
-				style: "",
 				Styles: Styles,
+				action: "/submit",
 			});
 		} else {
-			res.render("new", { errors: "", pageid: _pageid, Styles: Styles });
+			res.render("new.html", { errors: "", pageid: _pageid, Styles: Styles, action: "/submit" });
 		}
 	} else {
 		let convContent = converter.makeHtml(foundContent.content);
@@ -228,7 +237,7 @@ function renderPage(res, foundContent, _pageid, sub = undefined) {
 		if (foundContent.style != "" && foundContent.style != undefined) {
 			style = "/css/styles/" + foundContent.style + ".css";
 		}
-		res.render("page", { content: convContent, times: timestamps, styling: style });
+		res.render("page.html", { content: convContent, times: timestamps, styling: style });
 	}
 }
 function savePage(req, res) {
@@ -289,9 +298,17 @@ function randomPage(res) {
 			if (foundContent) {
 				renderPage(res, foundContent, foundContent.id);
 			} else {
-				res.render("index");
+				res.render("index.html");
 			}
 		});
 	}
 }
-module.exports = { createTable, editExistingPage, processEdit, findPage, submitPage, randomPage };
+function purgeStyles(_style) {
+	let _Styles = Styles;
+	let usedStyle = _Styles.indexOf(_style);
+	if (usedStyle > -1) {
+		_Styles.splice(usedStyle, 1);
+	}
+	return _Styles;
+}
+module.exports = { createTable, editExistingPage, processEdit, findPage, submitPage, randomPage, purgeStyles };

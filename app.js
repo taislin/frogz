@@ -1,6 +1,7 @@
 const express = require("express");
 const path = require("path");
 const validator = require("validator");
+const whiskers = require("whiskers");
 require("dotenv").config();
 
 const { createTable, editExistingPage, processEdit, findPage, submitPage, randomPage } = require("./databases.js");
@@ -12,7 +13,9 @@ const Styles = require("./styles.json");
 
 createTable();
 
-app.set("view engine", "pug");
+app.engine(".html", whiskers.__express);
+app.set("views", __dirname + "/views");
+app.set("view engine", "whiskers");
 app.use(express.static(path.join(__dirname, ".//static")));
 app.use(
 	express.urlencoded({
@@ -20,22 +23,22 @@ app.use(
 	})
 );
 app.get("/", function (_req, res) {
-	res.render("index");
+	res.render("index.html");
 });
 app.get("/new", function (_req, res) {
-	res.render("new", { errors: "", pageid: "", style: "classic", Styles: Styles });
+	res.render("new.html", { errors: "", pageid: "", Styles: Styles, action: "/submit" });
 });
 app.get("/edit", function (_req, res) {
-	res.redirect("/edit");
+	res.render("new.html", { errors: "", pageid: "", Styles: Styles, action: "/edit" });
 });
 app.get("/terms", function (_req, res) {
-	res.render("terms");
+	res.render("terms.html");
 });
 app.get("/markdown", function (_req, res) {
-	res.render("markdown");
+	res.render("markdown.html");
 });
 app.get("/about", function (_req, res) {
-	res.render("about");
+	res.render("about.html");
 });
 //
 //app.get("/random", function (_req, res) {
@@ -70,13 +73,15 @@ app.post("/submit", (req, res) => {
 	}
 
 	if (errormsg != "<strong>Errors:</strong><br>") {
-		res.render("new", {
+		let _Styles = purgeStyles(req.body.style);
+		res.render("new.html", {
 			_content: req.body.content,
 			pageid: req.body.pageid,
 			password: req.body.password,
 			errors: errormsg,
 			style: req.body.style,
-			Styles: Styles,
+			Styles: _Styles,
+			action: "/submit",
 		});
 	} else {
 		submitPage(req, res);
@@ -94,13 +99,15 @@ app.post("/edit", (req, res) => {
 	}
 
 	if (errormsg != "<strong>Errors:</strong><br>") {
-		res.render("edit", {
+		let _Styles = purgeStyles(req.body.style);
+		res.render("new.html", {
 			_content: req.body.content,
 			pageid: req.body.pageid,
 			password: req.body.password,
 			errors: errormsg,
 			style: req.body.style,
-			Styles: Styles,
+			Styles: _Styles,
+			action: "/edit",
 		});
 	} else {
 		processEdit(req, res, errormsg);
