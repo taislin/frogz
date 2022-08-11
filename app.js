@@ -93,17 +93,11 @@ app.listen(port, () => {
 
 function validateAlphanumeric(str) {
 	let regexp = /^[a-z0-9-_]+$/i;
-	if (str.search(regexp) === -1) {
-		return false;
-	}
-	return true;
+	return !(str.search(regexp) === -1);
 }
 function validateLength(str, min = 0, max = 100) {
 	let strl = str.length;
-	if (strl < min || strl > max) {
-		return false;
-	}
-	return true;
+	return !(strl < min || strl > max);
 }
 
 function doValidations(req, errormsg = "") {
