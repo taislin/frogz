@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Frogz - {action} a Page</title>
+  <link rel="stylesheet" type="text/css" href="/css/frontpage.css">
+  <link rel="stylesheet" type="text/css" href="/css/edit.css">
+  <link rel="icon" type="image/png" href="/favicon.png">
+</head>
+<body>
+  <p class="errors">{errors}</p>
+  <form action="/{action}" method="POST">
+    <p>
+      <label for="pageid">Page Name (URL)</label><br/>
+      {if pageid}
+        <input type="text" name="pageid" value={pageid} readonly></input>
+      {else}
+        <input type="text" name="pageid" value={pageid}></input>
+      {/if}
+      <br/><br/>
+      <label for="password">Editing password <em>(do not lose this!)</em></label><br/>
+      <input type="password" name="password" value={password}></input><br/><br/>
+      <label for="style">Style: </label>
+      <select name='style' id='styles'>
+        {if style}
+        <option selected value={style}>{style}</option>
+        {/if}
+        {for stl in Styles}
+          <option value={stl}>{stl}</option>
+        {/for}
+      </select>
+      <br/><br/>
+      <label for="content">Content (markdown/html supported):</label>
+      <textarea name="content" autofocus>{_content}</textarea>
+      <p>
+        <input type="submit" value="save"></input>
+      </p>
+    </p>
+  </form>
+  <br>
+  <hr>
+  <p style="font-style: italic">
+    <strong>Markdown:</strong> You can use <a href='markdown.html' target='_blank' rel='noopener'>our guide</a> to learn MarkDown or use <a href='https://markdownlivepreview.com/' target='_blank' rel='noopener'>Markdown Live Preview</a> to write and preview your code in real-time, then copy it here.
+  </p>
+    <br>
+  <p style="font-style: italic">
+    <strong>HTML:</strong> You can use <a href='https://htmledit.squarefree.com/' target='_blank' rel='noopener'>Real-Time HTML Editor</a> to write and preview your code in real-time, then copy it here.
+  </p>
+</body>
+</html>

@@ -1,0 +1,913 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Frogz - Markdown Guide</title>
+  <link rel="stylesheet" type="text/css" href="css/styles/classic.css">
+  <link rel="icon" type="image/png" href="favicon.png">
+</head>
+<body>
+<div>
+  <style>
+    td {
+    border: 1px solid #dee2e6;
+    }
+    table {
+    border: 2px solid #dee2e6;
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
+    }
+  </style>
+  <h1>Markdown Guide</h1>
+  <h2 id="overview">Overview</h2>
+  <p>Nearly all Markdown applications support the basic syntax outlined in the original Markdown design document. There are minor variations and discrepancies between Markdown processors &mdash; those are noted inline wherever possible.</p>
+  <h2 id="headings">Headings</h2>
+  <p>To create a heading, add number signs (<code>#</code>) in front of a word or phrase. The number of number signs you use should correspond to the heading level. For example, to create a heading level three (<code>&lt;h3&gt;</code>), use three number signs (e.g., <code>### My Header</code>).</p>
+  <table class="table">
+    <caption>Headings</caption>
+    <thead class="thead-light">
+      <tr>
+        <th>Markdown</th>
+        <th>HTML</th>
+        <th>Rendered Output</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><code># Heading level 1</code></td>
+        <td><code>&lt;h1&gt;Heading level 1&lt;/h1&gt;</code></td>
+        <td>
+          <h1 class="no-anchor" id="heading-level-1">Heading level 1</h1>
+        </td>
+      </tr>
+      <tr>
+        <td><code>## Heading level 2</code></td>
+        <td><code>&lt;h2&gt;Heading level 2&lt;/h2&gt;</code></td>
+        <td>
+          <h2 class="no-anchor" id="heading-level-2">Heading level 2</h2>
+        </td>
+      </tr>
+      <tr>
+        <td><code>### Heading level 3</code></td>
+        <td><code>&lt;h3&gt;Heading level 3&lt;/h3&gt;</code></td>
+        <td>
+          <h3 class="no-anchor" id="heading-level-3">Heading level 3</h3>
+        </td>
+      </tr>
+      <tr>
+        <td><code>#### Heading level 4</code></td>
+        <td><code>&lt;h4&gt;Heading level  4&lt;/h4&gt;</code></td>
+        <td>
+          <h4 class="no-anchor" id="heading-level-4">Heading level 4</h4>
+        </td>
+      </tr>
+      <tr>
+        <td><code>##### Heading level 5</code></td>
+        <td><code>&lt;h5&gt;Heading level 5&lt;/h5&gt;</code></td>
+        <td>
+          <h5 class="no-anchor" id="heading-level-5">Heading level 5</h5>
+        </td>
+      </tr>
+      <tr>
+        <td><code>###### Heading level 6</code></td>
+        <td><code>&lt;h6&gt;Heading level 6&lt;/h6&gt;</code></td>
+        <td>
+          <h6 class="no-anchor">Heading level 6</h6>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="alternate-syntax">Alternate Syntax</h3>
+  <p>Alternatively, on the line below the text, add any number of <code>==</code> characters for heading level 1 or <code>--</code> characters for heading level 2.</p>
+  <table class="table">
+    <caption>Alternate Syntax</caption>
+    <thead class="thead-light">
+      <tr>
+        <th>Markdown</th>
+        <th>HTML</th>
+        <th>Rendered Output</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><code>Heading level 1<br>===============</code></td>
+        <td><code>&lt;h1&gt;Heading level 1&lt;/h1&gt;</code></td>
+        <td>
+          <h1 class="no-anchor" id="heading-level-1-1">Heading level 1</h1>
+        </td>
+      </tr>
+      <tr>
+        <td><code>Heading level 2<br>---------------</code></td>
+        <td><code>&lt;h2&gt;Heading level 2&lt;/h2&gt;</code></td>
+        <td>
+          <h2 class="no-anchor" id="heading-level-2-1">Heading level 2</h2>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="heading-best-practices">Heading Best Practices</h3>
+  <p>Markdown applications don&rsquo;t agree on how to handle a missing space between the number signs (<code>#</code>) and the heading name. For compatibility, always put a space between the number signs and the heading name.</p>
+  <table class="table">
+    <caption>Heading Best Practices</caption>
+    <thead class="thead-light">
+      <tr>
+        <th>&#x2705;&nbsp; Do this</th>
+        <th>&#x274C;&nbsp; Don&apos;t do this</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><code># Here&apos;s a Heading<br><br></code></td>
+        <td><code>#Here&apos;s a Heading</code></td>
+      </tr>
+    </tbody>
+  </table>
+  <p>You should also put blank lines before and after a heading for compatibility.</p>
+  <table class="table">
+    <caption>Blank Lines</caption>
+    <thead class="thead-light">
+      <tr>
+        <th>&#x2705;&nbsp; Do this</th>
+        <th>&#x274C;&nbsp; Don&apos;t do this</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><code>Try to put a blank line before...<br><br>            # Heading<br><br>            ...and after a heading.</code></td>
+        <td><code>Without blank lines, this might not look right.<br>            # Heading<br>            Don&apos;t do this!</code></td>
+      </tr>
+    </tbody>
+  </table>
+  <h2 id="paragraphs-1">Paragraphs</h2>
+  <p>To create paragraphs, use a blank line to separate one or more lines of text.</p>
+  <table class="table">
+    <caption>Paragraphs</caption>
+    <thead class="thead-light">
+      <tr>
+        <th>Markdown</th>
+        <th>HTML</th>
+        <th>Rendered Output</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><code>I really like using Markdown.<br><br>              I think I&apos;ll use it to format all of my documents from now on.</code></td>
+        <td><code>&lt;p&gt;I really like using Markdown.&lt;/p&gt;<br><br>            &lt;p&gt;I think I&apos;ll use it to format all of my documents from now on.&lt;/p&gt;</code></td>
+        <td>
+          <p>I really like using Markdown.</p>
+          <p>I think I&apos;ll use it to format all of my documents from now on.</p>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="paragraph-best-practices">Paragraph Best Practices</h3>
+  <p>
+    Unless the paragraph is in a list
+    , don&rsquo;t indent paragraphs with spaces or tabs.
+  </p>
+  <div class="alert alert-info"><strong>Note:</strong> If you need to indent paragraphs in the output, see the section on how to indent (tab)
+    .
+  </div>
+  <table class="table">
+    <caption>Paragraph Best Practices</caption>
+    <thead class="thead-light">
+      <tr>
+        <th>&#x2705;&nbsp; Do this</th>
+        <th>&#x274C;&nbsp; Don&apos;t do this</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><code>Don&apos;t put tabs or spaces in front of your paragraphs.<br><br>              Keep lines left-aligned like this.<br><br></code></td>
+        <td><code>
+            This can result in unexpected
+            formatting problems.<br><br>            &nbsp;&nbsp;Don&apos;t add tabs or spaces in front of paragraphs.</code></td>
+      </tr>
+    </tbody>
+  </table>
+  <h2 id="line-breaks">Line Breaks</h2>
+  <p>To create a line break or new line (<code>&lt;br&gt;</code>), end a line with two or more spaces, and then type return.</p>
+  <table class="table">
+    <caption>Line Breaks</caption>
+    <thead class="thead-light">
+      <tr>
+        <th>Markdown</th>
+        <th>HTML</th>
+        <th>Rendered Output</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><code>This is the first line. &nbsp;<br>              And this is the second line.</code></td>
+        <td><code>&lt;p&gt;This is the first line.&lt;br&gt;<br>            And this is the second line.&lt;/p&gt;</code></td>
+        <td>
+          <p>This is the first line.<br>            And this is the second line.</p>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="line-break-best-practices">Line Break Best Practices</h3>
+  <p>
+    You can use two or more spaces (commonly referred to as &ldquo;trailing whitespace&rdquo;) for line breaks in nearly every Markdown application, but it&rsquo;s controversial. It&rsquo;s hard to see trailing whitespace in an editor, and many people accidentally or intentionally put two spaces after every sentence. For this reason, you may want to use something other than trailing whitespace for line breaks. If your Markdown application supports HTML
+    , you can use the <code>&lt;br&gt;</code> HTML tag.
+  </p>
+  <p>For compatibility, use trailing white space or the <code>&lt;br&gt;</code> HTML tag at the end of the line.</p>
+  <p>There are two other options I don&rsquo;t recommend using. CommonMark and a few other lightweight markup languages let you type a backslash (<code>\</code>) at the end of the line, but not all Markdown applications support this, so it isn&rsquo;t a great option from a compatibility perspective. And at least a couple lightweight markup languages don&rsquo;t require anything at the end of the line &mdash; just type return and they&rsquo;ll create a line break.</p>
+  <table class="table">
+    <caption>Line Break Best Practices</caption>
+    <thead class="thead-light">
+      <tr>
+        <th>&#x2705;&nbsp; Do this</th>
+        <th>&#x274C;&nbsp; Don&apos;t do this</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><code>First line with two spaces after. &nbsp;<br>              And the next line.<br><br>              First line with the HTML tag after.&lt;br&gt;<br>              And the next line.<br><br></code></td>
+        <td><code>First line with a backslash after.\<br>            And the next line.<br><br>            First line with nothing after.<br>            And the next line.<br><br></code></td>
+      </tr>
+    </tbody>
+  </table>
+  <h2 id="emphasis">Emphasis</h2>
+  <p>You can add emphasis by making text bold or italic.</p>
+  <h3 id="bold">Bold</h3>
+  <p>To bold text, add two asterisks or underscores before and after a word or phrase. To bold the middle of a word for emphasis, add two asterisks without spaces around the letters.</p>
+  <table class="table">
+    <caption>Emphasis</caption>
+    <thead class="thead-light">
+      <tr>
+        <th>Markdown</th>
+        <th>HTML</th>
+        <th>Rendered Output</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><code>I just love **bold text**.</code></td>
+        <td><code>I just love &lt;strong&gt;bold text&lt;/strong&gt;.</code></td>
+        <td>I just love <strong>bold text</strong>.</td>
+      </tr>
+      <tr>
+        <td><code>I just love __bold text__.</code></td>
+        <td><code>I just love &lt;strong&gt;bold text&lt;/strong&gt;.</code></td>
+        <td>I just love <strong>bold text</strong>.</td>
+      </tr>
+      <tr>
+        <td><code>Love**is**bold</code></td>
+        <td><code>Love&lt;strong&gt;is&lt;/strong&gt;bold</code></td>
+        <td>Love<strong>is</strong>bold</td>
+      </tr>
+    </tbody>
+  </table>
+  <h4 id="bold-best-practices">Bold Best Practices</h4>
+  <p>Markdown applications don&rsquo;t agree on how to handle underscores in the middle of a word. For compatibility, use asterisks to bold the middle of a word for emphasis.</p>
+  <table class="table">
+    <caption>Bold Best Practices</caption>
+    <thead class="thead-light">
+      <tr>
+        <th>&#x2705;&nbsp; Do this</th>
+        <th>&#x274C;&nbsp; Don&apos;t do this</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><code>Love**is**bold</code></td>
+        <td><code>Love__is__bold</code></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="italic">Italic</h3>
+  <p>To italicize text, add one asterisk or underscore before and after a word or phrase. To italicize the middle of a word for emphasis, add one asterisk without spaces around the letters.</p>
+  <table class="table">
+    <caption>Italic</caption>
+    <thead class="thead-light">
+      <tr>
+        <th>Markdown</th>
+        <th>HTML</th>
+        <th>Rendered Output</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><code>Italicized text is the *cat&apos;s meow*.</code></td>
+        <td><code>Italicized text is the &lt;em&gt;cat&apos;s meow&lt;/em&gt;.</code></td>
+        <td>Italicized text is the <em>cat&rsquo;s meow</em>.</td>
+      </tr>
+      <tr>
+        <td><code>Italicized text is the _cat&apos;s meow_.</code></td>
+        <td><code>Italicized text is the &lt;em&gt;cat&apos;s meow&lt;/em&gt;.</code></td>
+        <td>Italicized text is the <em>cat&rsquo;s meow</em>.</td>
+      </tr>
+      <tr>
+        <td><code>A*cat*meow</code></td>
+        <td><code>A&lt;em&gt;cat&lt;/em&gt;meow</code></td>
+        <td>A<em>cat</em>meow</td>
+      </tr>
+    </tbody>
+  </table>
+  <h4 id="italic-best-practices">Italic Best Practices</h4>
+  <p>Markdown applications don&rsquo;t agree on how to handle underscores in the middle of a word. For compatibility, use asterisks to italicize the middle of a word for emphasis.</p>
+  <table class="table">
+    <caption>Italic Best Practices</caption>
+    <thead class="thead-light">
+      <tr>
+        <th>&#x2705;&nbsp; Do this</th>
+        <th>&#x274C;&nbsp; Don&apos;t do this</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><code>A*cat*meow</code></td>
+        <td><code>A_cat_meow</code></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="bold-and-italic">Bold and Italic</h3>
+  <p>To emphasize text with bold and italics at the same time, add three asterisks or underscores before and after a word or phrase. To bold and italicize the middle of a word for emphasis, add three asterisks without spaces around the letters.</p>
+  <table class="table">
+    <caption>Bold and Italic</caption>
+    <thead class="thead-light">
+      <tr>
+        <th>Markdown</th>
+        <th>HTML</th>
+        <th>Rendered Output</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><code>This text is ***really important***.</code></td>
+        <td><code>This text is &lt;em&gt;&lt;strong&gt;really important&lt;/strong&gt;&lt;/em&gt;.</code></td>
+        <td>This text is <em><strong>really important</strong></em>.</td>
+      </tr>
+      <tr>
+        <td><code>This text is ___really important___.</code></td>
+        <td><code>This text is &lt;em&gt;&lt;strong&gt;really important&lt;/strong&gt;&lt;/em&gt;.</code></td>
+        <td>This text is <em><strong>really important</strong></em>.</td>
+      </tr>
+      <tr>
+        <td><code>This text is __*really important*__.</code></td>
+        <td><code>This text is &lt;em&gt;&lt;strong&gt;really important&lt;/strong&gt;&lt;/em&gt;.</code></td>
+        <td>This text is <em><strong>really important</strong></em>.</td>
+      </tr>
+      <tr>
+        <td><code>This text is **_really important_**.</code></td>
+        <td><code>This text is &lt;em&gt;&lt;strong&gt;really important&lt;/strong&gt;&lt;/em&gt;.</code></td>
+        <td>This text is <em><strong>really important</strong></em>.</td>
+      </tr>
+      <tr>
+        <td><code>This is really***very***important text.</code></td>
+        <td><code>This is really&lt;em&gt;&lt;strong&gt;very&lt;/strong&gt;&lt;/em&gt;important text.</code></td>
+        <td>This is really<em><strong>very</strong></em>important text.</td>
+      </tr>
+    </tbody>
+  </table>
+  <div class="alert alert-info"><strong>Note:</strong> The order of the <code>em</code> and <code>strong</code> tags might be reversed depending on the Markdown processor you&apos;re using.</div>
+  <h4 id="bold-and-italic-best-practices">Bold and Italic Best Practices</h4>
+  <p>Markdown applications don&rsquo;t agree on how to handle underscores in the middle of a word. For compatibility, use asterisks to bold and italicize the middle of a word for emphasis.</p>
+  <table class="table">
+    <caption>Bold and Italic Best Practices</caption>
+    <thead class="thead-light">
+      <tr>
+        <th>&#x2705;&nbsp; Do this</th>
+        <th>&#x274C;&nbsp; Don&apos;t do this</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><code>This is really***very***important text.</code></td>
+        <td><code>This is really___very___important text.</code></td>
+      </tr>
+    </tbody>
+  </table>
+  <h2 id="blockquotes-1">Blockquotes</h2>
+  <p>To create a blockquote, add a <code>&gt;</code> in front of a paragraph.</p>
+  <p>The rendered output looks like this:</p>
+  <blockquote>
+    <p>Dorothy followed her through many of the beautiful rooms in her castle.</p>
+  </blockquote>
+  <h3 id="blockquotes-with-multiple-paragraphs">Blockquotes with Multiple Paragraphs</h3>
+  <p>Blockquotes can contain multiple paragraphs. Add a <code>&gt;</code> on the blank lines between the paragraphs.</p>
+  <p>The rendered output looks like this:</p>
+  <blockquote>
+    <p>Dorothy followed her through many of the beautiful rooms in her castle.</p>
+    <p>The Witch bade her clean the pots and kettles and sweep the floor and keep the fire fed with wood.</p>
+  </blockquote>
+  <h3 id="nested-blockquotes">Nested Blockquotes</h3>
+  <p>Blockquotes can be nested. Add a <code>&gt;&gt;</code> in front of the paragraph you want to nest.</p>
+  <p>The rendered output looks like this:</p>
+  <blockquote>
+    <p>Dorothy followed her through many of the beautiful rooms in her castle.</p>
+    <blockquote>
+      <p>The Witch bade her clean the pots and kettles and sweep the floor and keep the fire fed with wood.</p>
+    </blockquote>
+  </blockquote>
+  <h3 id="blockquotes-with-other-elements">Blockquotes with Other Elements</h3>
+  <p>Blockquotes can contain other Markdown formatted elements. Not all elements can be used &mdash; you&rsquo;ll need to experiment to see which ones work.</p>
+  <p>The rendered output looks like this:</p>
+  <blockquote>
+    <h4 class="no-anchor" id="the-quarterly-results-look-great">The quarterly results look great!</h4>
+    <ul>
+      <li>Revenue was off the chart.</li>
+      <li>Profits were higher than ever.</li>
+    </ul>
+    <p><em>Everything</em> is going according to <strong>plan</strong>.</p>
+  </blockquote>
+  <h3 id="blockquotes-best-practices">Blockquotes Best Practices</h3>
+  <p>For compatibility, put blank lines before and after blockquotes.</p>
+  <table class="table">
+    <caption>Blockquotes</caption>
+    <thead class="thead-light">
+      <tr>
+        <th>&#x2705;&nbsp; Do this</th>
+        <th>&#x274C;&nbsp; Don&apos;t do this</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><code>Try to put a blank line before...<br><br>            &gt; This is a blockquote<br><br>            ...and after a blockquote.</code></td>
+        <td><code>Without blank lines, this might not look right.<br>            &gt; This is a blockquote<br>            Don&apos;t do this!</code></td>
+      </tr>
+    </tbody>
+  </table>
+  <h2 id="lists-1">Lists</h2>
+  <p>You can organize items into ordered and unordered lists.</p>
+  <h3 id="ordered-lists">Ordered Lists</h3>
+  <p>To create an ordered list, add line items with numbers followed by periods. The numbers don&rsquo;t have to be in numerical order, but the list should start with the number one.</p>
+  <table class="table">
+    <caption>Ordered Lists</caption>
+    <thead class="thead-light">
+      <tr>
+        <th>Markdown</th>
+        <th>HTML</th>
+        <th>Rendered Output</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><code>1. First item<br>            2. Second item<br>            3. Third item<br>            4. Fourth item</code></td>
+        <td><code>&lt;ol&gt;<br>              &nbsp;&nbsp;&lt;li&gt;First item&lt;/li&gt;<br>              &nbsp;&nbsp;&lt;li&gt;Second item&lt;/li&gt;<br>              &nbsp;&nbsp;&lt;li&gt;Third item&lt;/li&gt;<br>              &nbsp;&nbsp;&lt;li&gt;Fourth item&lt;/li&gt;<br>            &lt;/ol&gt;</code></td>
+        <td>
+          <ol>
+            <li>First item</li>
+            <li>Second item</li>
+            <li>Third item</li>
+            <li>Fourth item</li>
+          </ol>
+        </td>
+      </tr>
+      <tr>
+        <td><code>1. First item<br>              1. Second item<br>              1. Third item<br>              1. Fourth item</code></td>
+        <td><code>&lt;ol&gt;<br>                &nbsp;&nbsp;&lt;li&gt;First item&lt;/li&gt;<br>                &nbsp;&nbsp;&lt;li&gt;Second item&lt;/li&gt;<br>                &nbsp;&nbsp;&lt;li&gt;Third item&lt;/li&gt;<br>                &nbsp;&nbsp;&lt;li&gt;Fourth item&lt;/li&gt;<br>              &lt;/ol&gt;</code></td>
+        <td>
+          <ol>
+            <li>First item</li>
+            <li>Second item</li>
+            <li>Third item</li>
+            <li>Fourth item</li>
+          </ol>
+        </td>
+      </tr>
+      <tr>
+        <td><code>1. First item<br>              8. Second item<br>              3. Third item<br>              5. Fourth item</code></td>
+        <td><code>&lt;ol&gt;<br>                &nbsp;&nbsp;&lt;li&gt;First item&lt;/li&gt;<br>                &nbsp;&nbsp;&lt;li&gt;Second item&lt;/li&gt;<br>                &nbsp;&nbsp;&lt;li&gt;Third item&lt;/li&gt;<br>                &nbsp;&nbsp;&lt;li&gt;Fourth item&lt;/li&gt;<br>              &lt;/ol&gt;</code></td>
+        <td>
+          <ol>
+            <li>First item</li>
+            <li>Second item</li>
+            <li>Third item</li>
+            <li>Fourth item</li>
+          </ol>
+        </td>
+      </tr>
+      <tr>
+        <td><code>1. First item<br>              2. Second item<br>              3. Third item<br>              &nbsp;&nbsp;&nbsp;&nbsp;1. Indented item<br>              &nbsp;&nbsp;&nbsp;&nbsp;2. Indented item<br>              4. Fourth item</code></td>
+        <td><code>&lt;ol&gt;<br>                &nbsp;&nbsp;&lt;li&gt;First item&lt;/li&gt;<br>                &nbsp;&nbsp;&lt;li&gt;Second item&lt;/li&gt;<br>                &nbsp;&nbsp;&lt;li&gt;Third item<br>                  &nbsp;&nbsp;&nbsp;&nbsp;&lt;ol&gt;<br>                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;li&gt;Indented item&lt;/li&gt;<br>                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;li&gt;Indented item&lt;/li&gt;<br>                  &nbsp;&nbsp;&nbsp;&nbsp;&lt;/ol&gt;<br>                &nbsp;&nbsp;&lt;/li&gt;<br>                &nbsp;&nbsp;&lt;li&gt;Fourth item&lt;/li&gt;<br>              &lt;/ol&gt;</code></td>
+        <td>
+          <ol>
+            <li>First item</li>
+            <li>Second item</li>
+            <li>Third item
+              <ol>
+                <li>Indented item</li>
+                <li>Indented item</li>
+              </ol>
+            </li>
+            <li>Fourth item</li>
+          </ol>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <h4 id="ordered-list-best-practices">Ordered List Best Practices</h4>
+  <p>CommonMark and a few other lightweight markup languages let you use a parenthesis (<code>)</code>) as a delimiter (e.g., <code>1) First item</code>), but not all Markdown applications support this, so it isn&rsquo;t a great option from a compatibility perspective. For compatibility, use periods only.</p>
+  <table class="table">
+    <caption>Ordered List Best Practices</caption>
+    <thead class="thead-light">
+      <tr>
+        <th>&#x2705;&nbsp; Do this</th>
+        <th>&#x274C;&nbsp; Don&apos;t do this</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><code>1. First item<br>              2. Second item</code></td>
+        <td><code>1) First item<br>              2) Second item</code></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="unordered-lists">Unordered Lists</h3>
+  <p>To create an unordered list, add dashes (<code>-</code>), asterisks (<code>*</code>), or plus signs (<code>+</code>) in front of line items. Indent one or more items to create a nested list.</p>
+  <table class="table">
+    <caption>Unordered Lists</caption>
+    <thead class="thead-light">
+      <tr>
+        <th>Markdown</th>
+        <th>HTML</th>
+        <th>Rendered Output</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><code>- First item<br>              - Second item<br>              - Third item<br>              - Fourth item</code></td>
+        <td><code>&lt;ul&gt;<br>                &nbsp;&nbsp;&lt;li&gt;First item&lt;/li&gt;<br>                &nbsp;&nbsp;&lt;li&gt;Second item&lt;/li&gt;<br>                &nbsp;&nbsp;&lt;li&gt;Third item&lt;/li&gt;<br>                &nbsp;&nbsp;&lt;li&gt;Fourth item&lt;/li&gt;<br>              &lt;/ul&gt;</code></td>
+        <td>
+          <ul>
+            <li>First item</li>
+            <li>Second item</li>
+            <li>Third item</li>
+            <li>Fourth item</li>
+          </ul>
+        </td>
+      </tr>
+      <tr>
+        <td><code>* First item<br>              * Second item<br>              * Third item<br>              * Fourth item</code></td>
+        <td><code>&lt;ul&gt;<br>                &nbsp;&nbsp;&lt;li&gt;First item&lt;/li&gt;<br>                &nbsp;&nbsp;&lt;li&gt;Second item&lt;/li&gt;<br>                &nbsp;&nbsp;&lt;li&gt;Third item&lt;/li&gt;<br>                &nbsp;&nbsp;&lt;li&gt;Fourth item&lt;/li&gt;<br>              &lt;/ul&gt;</code></td>
+        <td>
+          <ul>
+            <li>First item</li>
+            <li>Second item</li>
+            <li>Third item</li>
+            <li>Fourth item</li>
+          </ul>
+        </td>
+      </tr>
+      <tr>
+        <td><code>+ First item<br>              + Second item<br>              + Third item<br>              + Fourth item</code></td>
+        <td><code>&lt;ul&gt;<br>                &nbsp;&nbsp;&lt;li&gt;First item&lt;/li&gt;<br>                &nbsp;&nbsp;&lt;li&gt;Second item&lt;/li&gt;<br>                &nbsp;&nbsp;&lt;li&gt;Third item&lt;/li&gt;<br>                &nbsp;&nbsp;&lt;li&gt;Fourth item&lt;/li&gt;<br>              &lt;/ul&gt;</code></td>
+        <td>
+          <ul>
+            <li>First item</li>
+            <li>Second item</li>
+            <li>Third item</li>
+            <li>Fourth item</li>
+          </ul>
+        </td>
+      </tr>
+      <tr>
+        <td><code>- First item<br>              - Second item<br>              - Third item<br>              &nbsp;&nbsp;&nbsp;&nbsp;- Indented item<br>              &nbsp;&nbsp;&nbsp;&nbsp;- Indented item<br>              - Fourth item</code></td>
+        <td><code>&lt;ul&gt;<br>                &nbsp;&nbsp;&lt;li&gt;First item&lt;/li&gt;<br>                &nbsp;&nbsp;&lt;li&gt;Second item&lt;/li&gt;<br>                &nbsp;&nbsp;&lt;li&gt;Third item<br>                  &nbsp;&nbsp;&nbsp;&nbsp;&lt;ul&gt;<br>                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;li&gt;Indented item&lt;/li&gt;<br>                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;li&gt;Indented item&lt;/li&gt;<br>                  &nbsp;&nbsp;&nbsp;&nbsp;&lt;/ul&gt;<br>                &nbsp;&nbsp;&lt;/li&gt;<br>                &nbsp;&nbsp;&lt;li&gt;Fourth item&lt;/li&gt;<br>              &lt;/ul&gt;</code></td>
+        <td>
+          <ul>
+            <li>First item</li>
+            <li>Second item</li>
+            <li>Third item
+              <ul>
+                <li>Indented item</li>
+                <li>Indented item</li>
+              </ul>
+            </li>
+            <li>Fourth item</li>
+          </ul>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <h4 id="starting-unordered-list-items-with-numbers">Starting Unordered List Items With Numbers</h4>
+  <p>If you need to start an unordered list item with a number followed by a period, you can use a backslash (<code>\</code>) to escape the period.</p>
+  <table class="table">
+    <caption>Unordered Lists with Numbers</caption>
+    <thead class="thead-light">
+      <tr>
+        <th>Markdown</th>
+        <th>HTML</th>
+        <th>Rendered Output</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><code>- 1968\. A great year!<br>              - I think 1969 was second best.</code></td>
+        <td><code>&lt;ul&gt;<br>                &nbsp;&nbsp;&lt;li&gt;1968. A great year!&lt;/li&gt;<br>                &nbsp;&nbsp;&lt;li&gt;I think 1969 was second best.&lt;/li&gt;<br>              &lt;/ul&gt;</code></td>
+        <td>
+          <ul>
+            <li>1968. A great year!</li>
+            <li>I think 1969 was second best.</li>
+          </ul>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <h4 id="unordered-list-best-practices">Unordered List Best Practices</h4>
+  <p>Markdown applications don&rsquo;t agree on how to handle different delimiters in the same list. For compatibility, don&rsquo;t mix and match delimiters in the same list &mdash; pick one and stick with it.</p>
+  <table class="table">
+    <caption>Unordered Lists Best Practices</caption>
+    <thead class="thead-light">
+      <tr>
+        <th>&#x2705;&nbsp; Do this</th>
+        <th>&#x274C;&nbsp; Don&apos;t do this</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><code>- First item<br>              - Second item<br>              - Third item<br>              - Fourth item</code></td>
+        <td><code>+ First item<br>              * Second item<br>              - Third item<br>              + Fourth item</code></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="adding-elements-in-lists">Adding Elements in Lists</h3>
+  <p>To add another element in a list while preserving the continuity of the list, indent the element four spaces or one tab, as shown in the following examples.</p>
+  <div class="alert alert-success"><strong>Tip:</strong> If things don&apos;t appear the way you expect, double check that you&apos;ve indented the elements in the list four spaces or one tab.</div>
+  <h4 id="paragraphs">Paragraphs</h4>
+  <p>The rendered output looks like this:</p>
+  <ul>
+    <li>This is the first list item.</li>
+    <li>
+      <p>Here&rsquo;s the second list item.</p>
+      <p>I need to add another paragraph below the second list item.</p>
+    </li>
+    <li>And here&rsquo;s the third list item.</li>
+  </ul>
+  <h4 id="blockquotes">Blockquotes</h4>
+  <p>The rendered output looks like this:</p>
+  <ul>
+    <li>This is the first list item.</li>
+    <li>
+      <p>Here&rsquo;s the second list item.</p>
+      <blockquote>
+        <p>A blockquote would look great below the second list item.</p>
+      </blockquote>
+    </li>
+    <li>And here&rsquo;s the third list item.</li>
+  </ul>
+  <h4 id="code-blocks-1">Code Blocks</h4>
+  <p>Code blocks are normally indented four spaces or one tab.  When they&rsquo;re in a list, indent them eight spaces or two tabs.</p>
+  <p>The rendered output looks like this:</p>
+  <ol>
+    <li>Open the file.</li>
+    <li>
+      <p>Find the following code block on line 21:</p>
+    </li>
+    <li>Update the title to match the name of your website.</li>
+  </ol>
+  <h4 id="images">Images</h4>
+  <h4 id="lists">Lists</h4>
+  <p>You can nest an unordered list in an ordered list, or vice versa.</p>
+  <p>The rendered output looks like this:</p>
+  <ol>
+    <li>First item</li>
+    <li>Second item</li>
+    <li>Third item
+      <ul>
+        <li>Indented item</li>
+        <li>Indented item</li>
+      </ul>
+    </li>
+    <li>Fourth item</li>
+  </ol>
+  <h2 id="code">Code</h2>
+  <p>To denote a word or phrase as code, enclose it in backticks (<code>&grave;</code>).</p>
+  <table class="table">
+    <caption>Code</caption>
+    <thead class="thead-light">
+      <tr>
+        <th>Markdown</th>
+        <th>HTML</th>
+        <th>Rendered Output</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><code>At the command prompt, type &grave;nano&grave;.</code></td>
+        <td><code>At the command prompt, type &lt;code&gt;nano&lt;/code&gt;. </code></td>
+        <td>At the command prompt, type <code>nano</code>.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="escaping-backticks">Escaping Backticks</h3>
+  <p>If the word or phrase you want to denote as code includes one or more backticks, you can escape it by enclosing the word or phrase in double backticks (<code>&grave;&grave;</code>).</p>
+  <table class="table">
+    <caption>Escaping Backticks</caption>
+    <thead class="thead-light">
+      <tr>
+        <th>Markdown</th>
+        <th>HTML</th>
+        <th>Rendered Output</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><code>&grave;&grave;Use &grave;code&grave; in your Markdown file.&grave;&grave;</code></td>
+        <td><code>&lt;code&gt;Use &grave;code&grave; in your Markdown file.&lt;/code&gt;</code></td>
+        <td><code>Use &grave;code&grave; in your Markdown file.</code></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="code-blocks">Code Blocks</h3>
+  <p>To create code blocks, indent every line of the block by at least four spaces or one tab.</p>
+  <div class="alert alert-info"><strong>Note:</strong> To create code blocks without indenting lines, use fenced code blocks.</div>
+  <h2 id="horizontal-rules">Horizontal Rules</h2>
+  <p>To create a horizontal rule, use three or more asterisks (<code>***</code>), dashes (<code>---</code>), or underscores (<code>___</code>) on a line by themselves.</p>
+  <p>The rendered output of all three looks identical:</p>
+  <hr>
+  <h3 id="horizontal-rule-best-practices">Horizontal Rule Best Practices</h3>
+  <p>For compatibility, put blank lines before and after horizontal rules.</p>
+  <table class="table">
+    <caption>Horizontal Rule Best Practices</caption>
+    <thead class="thead-light">
+      <tr>
+        <th>&#x2705;&nbsp; Do this</th>
+        <th>&#x274C;&nbsp; Don&apos;t do this</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><code>Try to put a blank line before...<br><br>            ---<br><br>            ...and after a horizontal rule.</code></td>
+        <td><code>Without blank lines, this would be a heading.<br>            ---<br>            Don&apos;t do this!</code></td>
+      </tr>
+    </tbody>
+  </table>
+  <h2 id="links">Links</h2>
+  <p>To create a link, enclose the link text in brackets (e.g., <code>[Duck Duck Go]</code>) and then follow it immediately with the URL in parentheses (e.g., <code>(https://duckduckgo.com)</code>).</p>
+  <p>The rendered output looks like this:</p>
+  <p>My favorite search engine is <a href="https://duckduckgo.com">Duck Duck Go</a>.</p>
+  <div class="alert alert-info"><strong>Note:</strong> To link to an element on the same page, see linking to heading IDs
+    . To create a link that opens in a new tab or window, see the section on link targets
+    .
+  </div>
+  <h3 id="adding-titles">Adding Titles</h3>
+  <p>You can optionally add a title for a link. This will appear as a tooltip when the user hovers over the link. To add a title, enclose it in quotation marks after the URL.</p>
+  <p>The rendered output looks like this:</p>
+  <p>My favorite search engine is <a href="https://duckduckgo.com" title="The best search engine for privacy">Duck Duck Go</a>.</p>
+  <h3 id="urls-and-email-addresses">URLs and Email Addresses</h3>
+  <p>To quickly turn a URL or email address into a link, enclose it in angle brackets.</p>
+  <p>The rendered output looks like this:</p>
+  <p><a href="https://www.markdownguide.org">https://www.markdownguide.org</a><br><a href="mailto:fake@example.com">fake@example.com</a></p>
+  <h3 id="formatting-links">Formatting Links</h3>
+  <p>
+    To emphasize links, add asterisks before and after the brackets and parentheses. To denote links as code
+    , add backticks in the brackets.
+  </p>
+  <p>The rendered output looks like this:</p>
+  <p>I love supporting the <strong><a href="https://eff.org">EFF</a></strong>.<br>    This is the <em><a href="https://www.markdownguide.org">Markdown Guide</a></em>.</p>
+  <h3 id="reference-style-links">Reference-style Links</h3>
+  <p>Reference-style links are a special kind of link that make URLs easier to display and read in Markdown. Reference-style links are constructed in two parts: the part you keep inline with your text and the part you store somewhere else in the file to keep the text easy to read.</p>
+  <h4 id="formatting-the-first-part-of-the-link">Formatting the First Part of the Link</h4>
+  <p>The first part of a reference-style link is formatted with two sets of brackets. The first set of brackets surrounds the text that should appear linked. The second set of brackets displays a label used to point to the link you&rsquo;re storing elsewhere in your document.</p>
+  <p>Although not required, you can include a space between the first and second set of brackets. The label in the second set of brackets is not case sensitive and can include letters, numbers, spaces, or punctuation.</p>
+  <p>This means the following example formats are roughly equivalent for the first part of the link:</p>
+  <ul>
+    <li><code>[hobbit-hole][1]</code></li>
+    <li><code>[hobbit-hole] [1]</code></li>
+  </ul>
+  <h4 id="formatting-the-second-part-of-the-link">Formatting the Second Part of the Link</h4>
+  <p>The second part of a reference-style link is formatted with the following attributes:</p>
+  <ol>
+    <li>The label, in brackets, followed immediately by a colon and at least one space (e.g., <code>[label]: </code>).</li>
+    <li>The URL for the link, which you can optionally enclose in angle brackets.</li>
+    <li>The optional title for the link, which you can enclose in double quotes, single quotes, or parentheses.</li>
+  </ol>
+  <p>This means the following example formats are all roughly equivalent for the second part of the link:</p>
+  <ul>
+    <li><code>[1]: https://en.wikipedia.org/wiki/Hobbit#Lifestyle</code></li>
+    <li><code>[1]: https://en.wikipedia.org/wiki/Hobbit#Lifestyle &quot;Hobbit lifestyles&quot;</code></li>
+    <li><code>[1]: https://en.wikipedia.org/wiki/Hobbit#Lifestyle &apos;Hobbit lifestyles&apos;</code></li>
+    <li><code>[1]: https://en.wikipedia.org/wiki/Hobbit#Lifestyle (Hobbit lifestyles)</code></li>
+    <li><code>[1]: &lt;https://en.wikipedia.org/wiki/Hobbit#Lifestyle&gt; &quot;Hobbit lifestyles&quot;</code></li>
+    <li><code>[1]: &lt;https://en.wikipedia.org/wiki/Hobbit#Lifestyle&gt; &apos;Hobbit lifestyles&apos;</code></li>
+    <li><code>[1]: &lt;https://en.wikipedia.org/wiki/Hobbit#Lifestyle&gt; (Hobbit lifestyles)</code></li>
+  </ul>
+  <p>You can place this second part of the link anywhere in your Markdown document. Some people place them immediately after the paragraph in which they appear while other people place them at the end of the document (like endnotes or footnotes).</p>
+  <h4 id="an-example-putting-the-parts-together">An Example Putting the Parts Together</h4>
+  <p>
+    Say you add a URL as a standard URL link
+     to a paragraph and it looks like this in Markdown:
+  </p>
+  <p>Though it may point to interesting additional information, the URL as displayed really doesn&rsquo;t add much to the existing raw text other than making it harder to read. To fix that, you could format the URL like this instead:</p>
+  <p>In both instances above, the rendered output would be identical:</p>
+  <blockquote>
+    <p>In a hole in the ground there lived a hobbit. Not a nasty, dirty, wet hole, filled with the ends of worms and an oozy smell, nor yet a dry, bare, sandy hole with nothing in it to sit down on or to  eat: it was a <a href="https://en.wikipedia.org/wiki/Hobbit#Lifestyle" title="Hobbit lifestyles">hobbit-hole</a>, and that means comfort.</p>
+  </blockquote>
+  <p>and the HTML for the link would be:</p>
+  <h3 id="link-best-practices">Link Best Practices</h3>
+  <p>Markdown applications don&rsquo;t agree on how to handle spaces in the middle of a URL. For compatibility, try to URL encode any spaces with <code>%20</code>. Alternatively, if your Markdown application supports HTML
+    , you could use the <code>a</code> HTML tag.
+  </p>
+  <table class="table">
+    <caption>Link Best Practices</caption>
+    <thead class="thead-light">
+      <tr>
+        <th>&#x2705;&nbsp; Do this</th>
+        <th>&#x274C;&nbsp; Don&apos;t do this</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><code>[link](https://www.example.com/my%20great%20page)<br><br>            &lt;a href=&quot;https://www.example.com/my great page&quot;&gt;link&lt;/a&gt;</code></td>
+        <td><code>[link](https://www.example.com/my great page)</code></td>
+      </tr>
+    </tbody>
+  </table>
+  <h2 id="images-1">Images</h2>
+  <p>To add an image, add an exclamation mark (<code>!</code>), followed by alt text in brackets, and the path or URL to the image asset in parentheses. You can optionally add a title in quotation marks after the path or URL.</p>
+  <p>The rendered output looks like this:</p>
+  <h3 id="linking-images">Linking Images</h3>
+  <p>To add a link to an image, enclose the Markdown for the image in brackets, and then add the link in parentheses.</p>
+  <h2 id="escaping-characters">Escaping Characters</h2>
+  <p>To display a literal character that would otherwise be used to format text in a Markdown document, add a backslash (<code>\</code>) in front of the character.</p>
+  <p>The rendered output looks like this:</p>
+  <p>* Without the backslash, this would be a bullet in an unordered list.</p>
+  <h3 id="characters-you-can-escape">Characters You Can Escape</h3>
+  <p>You can use a backslash to escape the following characters.</p>
+  <table class="table">
+    <caption>Characters you can escape</caption>
+    <thead class="thead-light">
+      <tr>
+        <th>Character</th>
+        <th>Name</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>\</td>
+        <td>backslash</td>
+      </tr>
+      <tr>
+        <td>&grave;</td>
+        <td>backtick (see also escaping backticks in code)</td>
+      </tr>
+      <tr>
+        <td>*</td>
+        <td>asterisk</td>
+      </tr>
+      <tr>
+        <td>_</td>
+        <td>underscore</td>
+      </tr>
+      <tr>
+        <td>{ }</td>
+        <td>curly braces</td>
+      </tr>
+      <tr>
+        <td>[ ]</td>
+        <td>brackets</td>
+      </tr>
+      <tr>
+        <td>&lt; &gt;</td>
+        <td>angle brackets</td>
+      </tr>
+      <tr>
+        <td>( )</td>
+        <td>parentheses</td>
+      </tr>
+      <tr>
+        <td>#</td>
+        <td>pound sign</td>
+      </tr>
+      <tr>
+        <td>+</td>
+        <td>plus sign</td>
+      </tr>
+      <tr>
+        <td>-</td>
+        <td>minus sign (hyphen)</td>
+      </tr>
+      <tr>
+        <td>.</td>
+        <td>dot</td>
+      </tr>
+      <tr>
+        <td>!</td>
+        <td>exclamation mark</td>
+      </tr>
+      <tr>
+        <td>|</td>
+        <td>pipe (see also escaping pipe in tables)</td>
+      </tr>
+    </tbody>
+  </table>
+  <h2 id="html">HTML</h2>
+  <p>
+    Many Markdown applications allow you to use HTML tags in Markdown-formatted text. This is helpful if you prefer certain HTML tags to Markdown syntax. For example, some people find it easier to use HTML tags for images. Using HTML is also helpful when you need to change the attributes of an element, like specifying the color of text
+    or changing the width of an image.
+  </p>
+  <p>To use HTML, place the tags in the text of your Markdown-formatted file.</p>
+  <p>The rendered output looks like this:</p>
+  <p>This <strong>word</strong> is bold. This <em>word</em> is italic.</p>
+  <h3 id="html-best-practices">HTML Best Practices</h3>
+  <p>For security reasons, not all Markdown applications support HTML in Markdown documents. When in doubt, check your Markdown application&rsquo;s documentation. Some applications support only a subset of HTML tags.</p>
+  <p>Use blank lines to separate block-level HTML elements like <code>&lt;div&gt;</code>, <code>&lt;table&gt;</code>, <code>&lt;pre&gt;</code>, and <code>&lt;p&gt;</code> from the surrounding content. Try not to indent the tags with tabs or spaces &mdash; that can interfere with the formatting.</p>
+  <p>You can&rsquo;t use Markdown syntax inside block-level HTML tags. For example, <code>&lt;p&gt;italic and **bold**&lt;/p&gt;</code> won&rsquo;t work.</p>
+</div><br>
+<h3><a href="/">Return to Homepage</a></h3>
+</body>
+</html>
