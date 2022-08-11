@@ -38,6 +38,9 @@ app.get("/about", function (_req, res) {
 app.get("/styles", function (_req, res) {
 	res.render("styles", { partials: { styledemo: "styledemo" }, Styles: Styles, style: "classic" });
 });
+app.post("/styles", (req, res) => {
+	res.render("styles", { partials: { styledemo: "styledemo" }, Styles: Styles, style: req.body.style });
+});
 //
 //app.get("/random", function (_req, res) {
 //	randomPage(res);

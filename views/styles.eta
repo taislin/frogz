@@ -3,19 +3,23 @@
 <head>
   <meta charset="utf-8">
   <title>Frogz - Page Styles</title>
-  <link rel="stylesheet" type="text/css" href="css/frontpage.css">
+  <link rel="stylesheet" type="text/css" href="css/styles/<%= it.style %>.css">
   <link rel="icon" type="image/png" href="favicon.png">
 </head>
 <body>
+  <form action="/styles" method="POST">
   <label for="style">Style: </label>
   <select name='style' id='styles'>
-    <% for (stl in it.Styles) %>
-        <option id="option" value="<%= it.Styles[stl] %>"><%= it.Styles[stl] %></option>
-    <% } %>
+    <% for (stl in it.Styles) {if (it.Styles[stl] == it.style) { %>
+        <option selected value="<%= it.Styles[stl] %>"><%= it.Styles[stl] %></option>
+      <% } else { %>
+        <option value="<%= it.Styles[stl] %>"><%= it.Styles[stl] %></option>
+    <% }} %>
   </select>
+  <p><input type="submit" value="update"></input></p>
+  </form>
   <br/>
   <hr/>
-    <link rel="stylesheet" type="text/css" href="css/<% it.style %>.css">
     <%~ includeFile("styledemo.eta") %>
 </body>
 </html>
