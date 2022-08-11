@@ -33,9 +33,6 @@ app.get("/edit", function (_req, res) {
 app.get("/terms", function (_req, res) {
 	res.render("terms.html");
 });
-app.get("/markdown", function (_req, res) {
-	res.render("markdown.html");
-});
 app.get("/about", function (_req, res) {
 	res.render("about.html");
 });
