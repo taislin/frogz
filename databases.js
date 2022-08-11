@@ -53,7 +53,7 @@ function editExistingPage(req, res, sub = undefined) {
 	pool.query("SELECT * FROM documents WHERE id = $1", [pageURL], (_err, data) => {
 		foundContent = data.rows[0];
 		if (foundContent) {
-			res.render("new.html", {
+			res.render("new", {
 				errors: "",
 				pageid: pageURL,
 				_content: foundContent.content,
@@ -63,7 +63,7 @@ function editExistingPage(req, res, sub = undefined) {
 			});
 		} else {
 			if (_pageid.includes("/") && sub) {
-				res.render("new.html", {
+				res.render("new", {
 					errors:
 						"<strong>Errors:</strong><br>This subpage does not exist! You can create it if you have the master page's password.<br>",
 					pageid: pageURL,
@@ -113,7 +113,7 @@ function bcryptCheckEdit(req, res, foundContent, errormsg = "", newpage = false)
 	bcrypt.compare(req.body.password, foundContent.hash, function (_err, bres) {
 		if (!bres) {
 			errormsg += "Incorrect password!<br>";
-			res.render("new.html", {
+			res.render("new", {
 				_content: req.body.content,
 				pageid: req.body.pageid,
 				password: "",
@@ -133,7 +133,7 @@ function bcryptCheckEdit(req, res, foundContent, errormsg = "", newpage = false)
 }
 function pageDoesNotExist(req, res, errormsg) {
 	errormsg += "This page does not exist!<br>";
-	res.render("new.html", {
+	res.render("new", {
 		_content: req.body.content,
 		pageid: req.body.pageid,
 		password: "",
@@ -146,7 +146,7 @@ function pageDoesNotExist(req, res, errormsg) {
 
 function pageAlreadyExists(req, res, errormsg = "") {
 	errormsg += "This page already exists!<br>";
-	res.render("new.html", {
+	res.render("new", {
 		_content: req.body.content,
 		pageid: req.body.pageid,
 		password: req.body.password,
@@ -159,7 +159,7 @@ function pageAlreadyExists(req, res, errormsg = "") {
 function renderPage(res, foundContent, _pageid, sub = undefined) {
 	if (!foundContent || foundContent.id == "edit") {
 		if (_pageid.includes("/") && sub) {
-			res.render("new.html", {
+			res.render("new", {
 				errors:
 					"<strong>Errors:</strong><br>This subpage does not exist! You can create it if you have the master page's password.<br>",
 				pageid: _pageid,
@@ -168,7 +168,7 @@ function renderPage(res, foundContent, _pageid, sub = undefined) {
 				action: "submit",
 			});
 		} else {
-			res.render("new.html", { errors: "", pageid: _pageid, Styles: Styles, action: "submit" });
+			res.render("new", { errors: "", pageid: _pageid, Styles: Styles, action: "submit" });
 		}
 	} else {
 		let convContent = snarkdown(foundContent.content);
@@ -177,7 +177,7 @@ function renderPage(res, foundContent, _pageid, sub = undefined) {
 		if (foundContent.style != "" && foundContent.style != undefined) {
 			style = "/css/styles/" + foundContent.style + ".css";
 		}
-		res.render("page.html", { content: convContent, times: timestamps, styling: style });
+		res.render("page", { content: convContent, times: timestamps, styling: style });
 	}
 }
 function savePage(req, res) {
@@ -193,7 +193,7 @@ function savePage(req, res) {
 	});
 }
 function get_timestamps(created_at, edited_at) {
-	let powered_by = "<a id='powered_by' href='/'>FROGZ</a>";
+	let powered_by = "";
 	let t_string = "";
 	let cdate = new Date();
 	cdate.setTime(created_at);

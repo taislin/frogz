@@ -6,15 +6,15 @@ require("dotenv").config();
 const { createTable, editExistingPage, processEdit, findPage, submitPage, randomPage } = require("./databases.js");
 
 const app = express();
+const eta = require("eta");
 const port = process.env.PORT || 3000;
-
+app.engine("eta", eta.renderFile);
+app.set("view engine", "eta");
+app.set("views", "./views");
 const Styles = require("./styles.json");
 
 createTable();
 
-app.engine(".html", whiskers.__express);
-app.set("views", __dirname + "/views");
-app.set("view engine", "whiskers");
 app.use(express.static(path.join(__dirname, ".//static")));
 app.use(
 	express.urlencoded({
@@ -22,19 +22,22 @@ app.use(
 	})
 );
 app.get("/", function (_req, res) {
-	res.render("index.html");
+	res.render("index");
 });
 app.get("/new", function (_req, res) {
-	res.render("new.html", { errors: "", pageid: "", Styles: Styles, action: "submit" });
+	res.render("new", { errors: "", pageid: "", Styles: Styles, action: "submit" });
 });
 app.get("/edit", function (_req, res) {
-	res.render("new.html", { errors: "", pageid: "", Styles: Styles, action: "edit" });
+	res.render("new", { errors: "", pageid: "", Styles: Styles, action: "edit" });
 });
 app.get("/terms", function (_req, res) {
-	res.render("terms.html");
+	res.render("terms");
 });
 app.get("/about", function (_req, res) {
-	res.render("about.html");
+	res.render("about");
+});
+app.get("/styles", function (_req, res) {
+	res.render("styles", { partials: { styledemo: "styledemo" }, Styles: Styles });
 });
 //
 //app.get("/random", function (_req, res) {
@@ -118,7 +121,7 @@ function doValidations(req, errormsg = "") {
 }
 
 function reRenderPage(req, res, _action, errormsg) {
-	res.render("new.html", {
+	res.render("new", {
 		_content: req.body.content,
 		pageid: req.body.pageid,
 		password: req.body.password,

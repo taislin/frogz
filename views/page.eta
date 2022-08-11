@@ -3,14 +3,14 @@
 <head>
   <meta charset="utf-8">
   <title>Frogz</title>
-  <link rel="stylesheet" type="text/css" href={styling}>
+  <link rel="stylesheet" type="text/css" href="<%= it.styling %>">
   <link rel="icon" type="image/png" href="favicon.png">
 </head>
 
 <body>
-  <p>{content}</p>
+  <p><%= it.content %></p>
   <hr>
-  <p id="powered_by">{times}</p>
+  <p id="powered_by"><%= it.times %><a id='powered_by' href='/'>FROGZ</a></p>
 </body>
 
 </html>

@@ -2,36 +2,35 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <title>Frogz - {action} a Page</title>
+  <title>Frogz - <%= it.action %> a Page</title>
   <link rel="stylesheet" type="text/css" href="/css/frontpage.css">
   <link rel="stylesheet" type="text/css" href="/css/edit.css">
   <link rel="icon" type="image/png" href="/favicon.png">
 </head>
 <body>
-  <p class="errors">{errors}</p>
-  <form action="/{action}" method="POST">
+  <p class="errors"><%= it.errors %></p>
+  <form action="/<%= it.action %>" method="POST">
     <p>
       <label for="pageid">Page Name (URL)</label><br/>
-      {if pageid}
-        <input type="text" name="pageid" value={pageid} readonly></input>
-      {else}
-        <input type="text" name="pageid" value={pageid}></input>
-      {/if}
+      <% if (it.pageid) { %>
+        <input type="text" name="pageid" value="<%= it.pageid %>" readonly></input>
+      <% } else { %>
+        <input type="text" name="pageid" value="<%= it.pageid %>"></input>
+      <% } %>
       <br/><br/>
       <label for="password">Editing password <em>(do not lose this!)</em></label><br/>
-      <input type="password" name="password" value={password}></input><br/><br/>
+      <input type="password" name="password" value="<% if (it.password) { %><%= it.password %><% } %>"></input><br/><br/>
       <label for="style">Style: </label>
       <select name='style' id='styles'>
-        {if style}
-        <option selected value={style}>{style}</option>
-        {/if}
-        {for stl in Styles}
-          <option value={stl}>{stl}</option>
-        {/for}
+        <% for (stl in it.Styles) {if (it.Styles[stl] == it.style) { %>
+            <option selected value="<%= it.Styles[stl] %>"><%= it.Styles[stl] %></option>
+          <% } else { %>
+            <option value="<%= it.Styles[stl] %>"><%= it.Styles[stl] %></option>
+        <% }} %>
       </select>
       <br/><br/>
       <label for="content">Content (markdown/html supported):</label>
-      <textarea name="content" autofocus>{_content}</textarea>
+      <textarea name="content" autofocus><% if (it._content) { %><%= it._content %><% } %></textarea>
       <p>
         <input type="submit" value="save"></input>
       </p>
