@@ -8,7 +8,7 @@
 </head>
 
 <body>
-  <%= it.content %>
+  <%~ it.content %>
   <hr>
   <p id="powered_by"><%= it.times %><a id='powered_by' href='/'>FROGZ</a></p>
 </body>
