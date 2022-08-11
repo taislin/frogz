@@ -8,7 +8,7 @@
 </head>
 <body>
 <h1 class="shimmer">About FROGZ</h1>
-<img class="flip crop" src="favicon.png" alt="frogz">
+<img class="crop" src="favicon.png" alt="frogz">
 <div style="text-align:left;">
   <p>
     <strong>FROGZ</strong> is an open-source, anti-bloat microhosting service. We oppose modern soydevs and their ultra-complex and bloated webpages.<br><br>For most websites, simple static HTML and CSS files are sufficient. Even so, this might be challenging for someone who is not experienced in both. Our aim is to help everyone create their own internet presence, making this process as simple as possible - you can publish a <strong>FROGZ</strong> page with just plain text.
