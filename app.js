@@ -1,6 +1,5 @@
 const express = require("express");
 const path = require("path");
-const whiskers = require("whiskers");
 require("dotenv").config();
 
 const { createTable, editExistingPage, processEdit, findPage, submitPage, randomPage } = require("./databases.js");
@@ -37,7 +36,7 @@ app.get("/about", function (_req, res) {
 	res.render("about");
 });
 app.get("/styles", function (_req, res) {
-	res.render("styles", { partials: { styledemo: "styledemo" }, Styles: Styles });
+	res.render("styles", { partials: { styledemo: "styledemo" }, Styles: Styles, style: "classic" });
 });
 //
 //app.get("/random", function (_req, res) {
