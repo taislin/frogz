@@ -1,6 +1,6 @@
 const Pool = require("pg").Pool;
 require("dotenv").config();
-let ssl_mode = true;
+let ssl_mode = {rejectUnauthorized: false};
 if (process.env.NODE_ENV == "development") {
 	ssl_mode = false;
 }
