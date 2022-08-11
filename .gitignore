@@ -127,3 +127,4 @@ dist
 .pnp.*
 frogz.db
 frogz.code-workspace
+.env-backup

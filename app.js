@@ -32,7 +32,7 @@ app.get("/terms", function (_req, res) {
 	res.render("terms");
 });
 app.get("/markdown", function (_req, res) {
-	res.render("markdown");
+	res.render("markdown.html");
 });
 app.get("/about", function (_req, res) {
 	res.render("about");
