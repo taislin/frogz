@@ -124,9 +124,9 @@ function bcryptCheckEdit(req, res, foundContent, errormsg = "", newpage = false)
 			});
 		} else {
 			if (newpage) {
-				editPage(req, res);
-			} else {
 				savePage(req, res);
+			} else {
+				editPage(req, res);
 			}
 		}
 	});
