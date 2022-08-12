@@ -3,6 +3,7 @@
 <head>
   <meta charset="utf-8">
   <title>Frogz - Page Styles</title>
+  <link rel="stylesheet" type="text/css" href="/css/basic.css">
   <link rel="stylesheet" type="text/css" href="css/styles/<%= it.style %>.css">
   <link rel="icon" type="image/png" href="favicon.png">
 </head>

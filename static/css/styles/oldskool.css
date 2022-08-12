@@ -1,9 +1,5 @@
 body {
-	margin: 0 auto;
-	max-width: 900px;
-	padding: 1em;
 	font-family: monospace;
-	font-size: 16px;
 	background-color: black;
 	color: #32cd32;
 }
@@ -29,15 +25,6 @@ a:link {
 /* mouse over link */
 a:hover {
 	color: #3cb371;
-}
-
-#powered_by {
-	text-align: right;
-}
-#powered_by a {
-	color: #2fa31a;
-	font-weight: bold;
-	text-decoration: none;
 }
 
 strong {
