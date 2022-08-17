@@ -40,7 +40,7 @@ function findPage(req, res, sub = undefined) {
 
 	pool.query("SELECT * FROM documents WHERE id = $1", [pageURL], (_err, data) => {
 		foundContent = data.rows[0];
-		renderPage(res, foundContent, pageURL, sub);
+		renderPage(req, res, foundContent, pageURL, sub);
 	});
 }
 function editExistingPage(req, res, sub = undefined) {
@@ -156,7 +156,7 @@ function pageAlreadyExists(req, res, errormsg = "") {
 		action: "submit",
 	});
 }
-function renderPage(res, foundContent, _pageid, sub = undefined) {
+function renderPage(req, res, foundContent, _pageid, sub = undefined) {
 	if (!foundContent || foundContent.id == "edit") {
 		if (_pageid.includes("/") && sub) {
 			res.render("new", {
@@ -172,7 +172,11 @@ function renderPage(res, foundContent, _pageid, sub = undefined) {
 		}
 	} else {
 		let convContent = snarkdown(foundContent.content);
-		let timestamps = get_timestamps(foundContent.created_at, foundContent.edited_at);
+		let locale = "en-GB";
+		if (req.headers["accept-language"]) {
+			locale = req.headers["accept-language"];
+		}
+		let timestamps = get_timestamps(foundContent.created_at, foundContent.edited_at, locale);
 		let style = "/css/styles/classic.css";
 		if (foundContent.style != "" && foundContent.style != undefined) {
 			style = "/css/styles/" + foundContent.style + ".css";
@@ -192,16 +196,16 @@ function savePage(req, res) {
 		res.redirect(`/${req.body.pageid}`);
 	});
 }
-function get_timestamps(created_at, edited_at) {
+function get_timestamps(created_at, edited_at, locale = "en-GB") {
 	let powered_by = "";
 	let t_string = "";
 	let cdate = new Date();
 	cdate.setTime(created_at);
 	t_string +=
-		cdate.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }) +
+		cdate.toLocaleTimeString(locale, { hour: "2-digit", minute: "2-digit" }) +
 		" " +
-		cdate.toLocaleDateString([], {
-			year: "numeric",
+		cdate.toLocaleDateString(locale, {
+			year: "2-digit",
 			month: "2-digit",
 			day: "2-digit",
 		});
@@ -210,10 +214,10 @@ function get_timestamps(created_at, edited_at) {
 		edate.setTime(edited_at);
 		t_string +=
 			" (✎ " +
-			edate.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }) +
+			edate.toLocaleTimeString(locale, { hour: "2-digit", minute: "2-digit" }) +
 			" " +
-			edate.toLocaleDateString([], {
-				year: "numeric",
+			edate.toLocaleDateString(locale, {
+				year: "2-digit",
 				month: "2-digit",
 				day: "2-digit",
 			}) +
