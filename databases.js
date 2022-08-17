@@ -203,8 +203,8 @@ function get_timestamps(created_at, edited_at, locale = "en-GB") {
 	cdate.setTime(created_at);
 	if (!locale || !(typeof locale === "string")) {
 		locale = "en-GB";
-	console.log(locale);
 	}
+	console.log(locale);
 	t_string +=
 		cdate.toLocaleTimeString(locale, { hour: "2-digit", minute: "2-digit" }) +
 		" " +
