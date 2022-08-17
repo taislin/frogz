@@ -201,7 +201,7 @@ function get_timestamps(created_at, edited_at, locale = "en-GB") {
 	let t_string = "";
 	let cdate = new Date();
 	cdate.setTime(created_at);
-	if (!locale) {
+	if (!locale || !(typeof locale === "string")) {
 		locale = "en-GB";
 	}
 	t_string +=
