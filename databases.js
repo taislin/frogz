@@ -175,6 +175,8 @@ function renderPage(req, res, foundContent, _pageid, sub = undefined) {
 		let locale = "en-GB";
 		if (req.headers["accept-language"]) {
 			locale = req.headers["accept-language"];
+			locale = locale.split(",")[0];
+			locale = locale.split(";")[0];
 		}
 		let timestamps = get_timestamps(foundContent.created_at, foundContent.edited_at, locale);
 		let style = "/css/styles/classic.css";
@@ -204,7 +206,6 @@ function get_timestamps(created_at, edited_at, locale = "en-GB") {
 	if (!locale || !(typeof locale === "string")) {
 		locale = "en-GB";
 	}
-	console.log(locale);
 	t_string +=
 		cdate.toLocaleTimeString(locale, { hour: "2-digit", minute: "2-digit" }) +
 		" " +
