@@ -201,6 +201,9 @@ function get_timestamps(created_at, edited_at, locale = "en-GB") {
 	let t_string = "";
 	let cdate = new Date();
 	cdate.setTime(created_at);
+	if (!locale) {
+		locale = "en-GB";
+	}
 	t_string +=
 		cdate.toLocaleTimeString(locale, { hour: "2-digit", minute: "2-digit" }) +
 		" " +

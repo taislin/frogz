@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1" name="viewport" />
   <title>Frogz - <%= it.action %> a Page</title>
   <link rel="stylesheet" type="text/css" href="/css/frontpage.css">
   <link rel="stylesheet" type="text/css" href="/css/edit.css">
@@ -9,8 +10,9 @@
 </head>
 <body>
   <p class="errors"><%~ it.errors %></p>
+  <div id="bigbox">
+  <div class="edit">
   <form action="/<%= it.action %>" method="POST">
-    <p>
       <label for="pageid">Page Name (URL)</label><br/>
       <% if (it.pageid) { %>
         <input type="text" name="pageid" value="<%= it.pageid %>" readonly></input>
@@ -33,9 +35,12 @@
       <textarea name="content" autofocus><% if (it._content) { %><%= it._content %><% } %></textarea>
       <p>
         <input type="submit" value="save"></input>
+        <input type="submit" name="preview" value="preview"></input>
       </p>
-    </p>
   </form>
+  </div>
+  <div class="preview"><h2 style="text-align:center">Preview:</h2><hr><%~ it.preview %></div>
+  </div>
   <br>
   <hr>
   <p style="font-style: italic">

@@ -1,6 +1,5 @@
 body {
 	margin: 0 auto;
-	max-width: 900px;
 	padding: 1em;
 	font-family: sans-serif;
 	font-size: 16px;
@@ -52,4 +51,29 @@ button,
 input[type="submit"]:hover {
 	border: 1px solid rgb(255, 255, 255);
 	background: rgb(127, 127, 127);
+}
+div.preview,
+div.edit {
+	flex: 45%;
+	border-radius: 2px;
+	border: 2px solid gray;
+	padding: 10px;
+}
+#bigbox {
+	display: flex;
+	flex-wrap: wrap;
+}
+/* mobile small */
+@media (max-width: 700px) {
+	body {
+		padding: 0.5em;
+	}
+	div.preview,
+	div.edit {
+		flex: 100%;
+		padding: 5px;
+	}
+	#bigbox {
+		display: block;
+	}
 }

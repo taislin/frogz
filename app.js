@@ -1,5 +1,6 @@
 const express = require("express");
 const path = require("path");
+const snarkdown = require("snarkdown");
 require("dotenv").config();
 
 const { createTable, editExistingPage, processEdit, findPage, submitPage, randomPage } = require("./databases.js");
@@ -58,16 +59,21 @@ app.get("/:master/:pgpr/edit", function (req, res) {
 	editExistingPage(req, res, req.params.master);
 });
 app.post("/submit", (req, res) => {
-	let _action = "submit";
-	let errormsg = "<strong>Errors:</strong><br>";
-	errormsg = doValidations(req, errormsg);
-	if (errormsg != "<strong>Errors:</strong><br>") {
-		reRenderPage(req, res, _action, errormsg);
+	if (req.body.preview) {
+		let cdate = new Date();
+		let rend = cdate.toLocaleTimeString("en-GB", { hour: "2-digit", minute: "2-digit" });
+		reRenderPage(req, res, "submit", "Preview rendered at " + rend, true);
 	} else {
-		submitPage(req, res);
+		let _action = "submit";
+		let errormsg = "<strong>Errors:</strong><br>";
+		errormsg = doValidations(req, errormsg);
+		if (errormsg != "<strong>Errors:</strong><br>") {
+			reRenderPage(req, res, _action, errormsg);
+		} else {
+			submitPage(req, res);
+		}
 	}
 });
-
 app.post("/edit", (req, res) => {
 	let _action = "edit";
 	let errormsg = "<strong>Errors:</strong><br>";
@@ -122,7 +128,11 @@ function doValidations(req, errormsg = "") {
 	return errormsg;
 }
 
-function reRenderPage(req, res, _action, errormsg) {
+function reRenderPage(req, res, _action, errormsg, _preview = false) {
+	let dopreview = "";
+	if (_preview && req.body.content) {
+		dopreview = snarkdown(req.body.content);
+	}
 	res.render("new", {
 		_content: req.body.content,
 		pageid: req.body.pageid,
@@ -131,5 +141,6 @@ function reRenderPage(req, res, _action, errormsg) {
 		style: req.body.style,
 		Styles: Styles,
 		action: _action,
+		preview: dopreview,
 	});
 }
