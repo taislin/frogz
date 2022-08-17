@@ -25,10 +25,10 @@ app.get("/", function (_req, res) {
 	res.render("index");
 });
 app.get("/new", function (_req, res) {
-	res.render("new", { errors: "", pageid: "", Styles: Styles, action: "submit" });
+	res.render("new", { errors: "", pageid: "", Styles: Styles, action: "submit", preview: "" });
 });
 app.get("/edit", function (_req, res) {
-	res.render("new", { errors: "", pageid: "", Styles: Styles, action: "edit" });
+	res.render("new", { errors: "", pageid: "", Styles: Styles, action: "edit", preview: "" });
 });
 app.get("/terms", function (_req, res) {
 	res.render("terms");
