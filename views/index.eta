@@ -14,7 +14,7 @@
 <h3>Click <a href="/new">here</a> to create a page!</h3>
 <hr>
 <div class="boxed-container">
-  <div class="boxed" id="features">
+  <div class="boxed" id="menu">
     <h2>Info</h2>
     <p><strong><a href="news">News</a></strong></p>
     <p><strong><a href="about">About</a></strong></p>
