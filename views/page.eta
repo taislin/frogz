@@ -4,8 +4,7 @@
   <meta charset="utf-8">
   <title>Frogz</title>
   <meta content="width=device-width, initial-scale=1" name="viewport" />
-  <link rel="stylesheet" type="text/css" href="/css/basic.css">
-  <link rel="stylesheet" type="text/css" href="<%= it.styling %>">
+  <% if (it.styling != "no css") { %> <link rel="stylesheet" type="text/css" href="/css/basic.css"><link rel="stylesheet" type="text/css" href="<%= it.styling %>"> <% } %>
   <link rel="icon" type="image/png" href="favicon.png">
 </head>
 
