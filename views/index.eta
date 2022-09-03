@@ -11,7 +11,10 @@
 <h1 class="shimmer title">FROGZ</h1><img src="apu_band.gif" alt="frogz">
 <p>Welcome to <strong>Frogz</strong>! Frogz is a micro-hosting website that aims to help everyone create their own internet presence.</p>
 <p>You can easily create your own pages using <strong>plain text</strong>, <strong>MarkDown</strong> or <strong>HTML</strong>. No registration required.</p>
-<h3>Click <a href="/new">here</a> to create a page!</h3>
+<div class="boxed-container" style="font-size: 1.17em;font-weight: bold;">
+  <div class="boxed" id="new"><img src="computer.png" alt="new page" style="width:3em;">&nbsp;<a href="/new" style="color:#c4ce2d;">Create a Page</a></div>
+  <div class="boxed" id="random"><img src="sherlock.png" alt="random" style="width:3em;">&nbsp;<a href="/random" style="color:#c4ce2d;">Random Page</a></div>
+</div><br>
 <hr>
 <div class="boxed-container">
   <div class="boxed" id="menu">

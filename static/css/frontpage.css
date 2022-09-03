@@ -163,7 +163,9 @@ hr {
 	}
 	.boxed {
 		flex: 100%;
-		border-bottom: 2px solid gray;
+	}
+	.boxed#menu {
+		border-bottom: 1px dashed gray;
 	}
 	img {
 		max-width: 90%;

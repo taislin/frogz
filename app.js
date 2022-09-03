@@ -43,9 +43,9 @@ app.post("/styles", (req, res) => {
 	res.render("styles", { partials: { styledemo: "styledemo" }, Styles: Styles, style: req.body.style });
 });
 //
-//app.get("/random", function (_req, res) {
-//	randomPage(res);
-//});
+app.get("/random", function (_req, res) {
+	randomPage(res);
+});
 app.get("/:pgpr", function (req, res) {
 	findPage(req, res);
 });

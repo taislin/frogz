@@ -3,13 +3,13 @@
     "author": "taislin",
     "version": "1.0.0",
     "description": "Hosting service for simple webpages, with markdown.",
-    "homepage": "",
+    "homepage": "https://frogz.club",
     "files": [],
     "repository": {
         "type": "git",
         "url": "git+https://github.com/taislin/frogz.git"
     },
-    "license": "MIT",
+    "license": "AGPL-3.0",
     "dependencies": {
         "bcryptjs": "^2.4.3",
         "dotenv": "^16.0.1",
