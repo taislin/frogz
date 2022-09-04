@@ -11,21 +11,25 @@ function createTable() {
 		"CREATE TABLE IF NOT EXISTS documents (id TEXT, content TEXT, created_at BIGINT, edited_at BIGINT, hash TEXT, style TEXT, indexed INTEGER);";
 	pool.query(querystring);
 }
-function createPage(content, pageid, date, hash, style) {
+function createPage(content, pageid, date, hash, style, indexable) {
 	pool.query(
-		"INSERT INTO documents (id, content, created_at, edited_at, hash, style, indexed) VALUES ($1,$2,$3,$3,$4,$5,1)",
-		[pageid, content, date, hash, style]
+		"INSERT INTO documents (id, content, created_at, edited_at, hash, style, indexed) VALUES ($1,$2,$3,$3,$4,$5,$6)",
+		[pageid, content, date, hash, style, indexable]
 	);
 }
 
 function editPage(req, res) {
 	let date = new Date().getTime();
-
-	pool.query("UPDATE documents SET content=$1, edited_at=$2, style=$4 WHERE id=$3", [
+	let _indexed = 0;
+	if (req.body.indexable) {
+		_indexed = 1;
+	}
+	pool.query("UPDATE documents SET content=$1, edited_at=$2, style=$4, indexed=$5 WHERE id=$3", [
 		req.body.content,
 		date,
 		req.body.pageid,
 		req.body.style,
+		_indexed,
 	]);
 
 	res.redirect(`/${req.body.pageid}`);
@@ -60,6 +64,7 @@ function editExistingPage(req, res, sub = undefined) {
 				style: foundContent.style,
 				Styles: Styles,
 				action: "edit",
+				indexed: foundContent.indexed,
 			});
 		} else {
 			if (_pageid.includes("/") && sub) {
@@ -113,6 +118,10 @@ function bcryptCheckEdit(req, res, foundContent, errormsg = "", newpage = false)
 	bcrypt.compare(req.body.password, foundContent.hash, function (_err, bres) {
 		if (!bres) {
 			errormsg += "Incorrect password!<br>";
+			let _indexed = false;
+			if (req.body.indexable) {
+				_indexed = true;
+			}
 			res.render("new", {
 				_content: req.body.content,
 				pageid: req.body.pageid,
@@ -121,6 +130,7 @@ function bcryptCheckEdit(req, res, foundContent, errormsg = "", newpage = false)
 				style: req.body.style,
 				Styles: Styles,
 				action: "edit",
+				indexed: _indexed,
 			});
 		} else {
 			if (newpage) {
@@ -133,6 +143,10 @@ function bcryptCheckEdit(req, res, foundContent, errormsg = "", newpage = false)
 }
 function pageDoesNotExist(req, res, errormsg) {
 	errormsg += "This page does not exist!<br>";
+	let _indexed = false;
+	if (req.body.indexable) {
+		_indexed = true;
+	}
 	res.render("new", {
 		_content: req.body.content,
 		pageid: req.body.pageid,
@@ -141,11 +155,16 @@ function pageDoesNotExist(req, res, errormsg) {
 		style: req.body.style,
 		Styles: Styles,
 		action: "submit",
+		indexed: _indexed,
 	});
 }
 
 function pageAlreadyExists(req, res, errormsg = "") {
 	errormsg += "This page already exists!<br>";
+	let _indexed = false;
+	if (req.body.indexable) {
+		_indexed = true;
+	}
 	res.render("new", {
 		_content: req.body.content,
 		pageid: req.body.pageid,
@@ -154,6 +173,7 @@ function pageAlreadyExists(req, res, errormsg = "") {
 		style: req.body.style,
 		Styles: Styles,
 		action: "submit",
+		indexed: _indexed,
 	});
 }
 function renderPage(req, res, foundContent, _pageid, sub = undefined) {
@@ -193,7 +213,11 @@ function savePage(req, res) {
 		if (err) {
 			console.error(err);
 		} else {
-			createPage(req.body.content, req.body.pageid, new Date().getTime(), bhash, req.body.style);
+			let indexable = 0;
+			if (req.body.indexable) {
+				indexable = 1;
+			}
+			createPage(req.body.content, req.body.pageid, new Date().getTime(), bhash, req.body.style, indexable);
 		}
 		res.redirect(`/${req.body.pageid}`);
 	});

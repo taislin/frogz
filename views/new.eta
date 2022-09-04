@@ -30,10 +30,12 @@
           <% } else { %>
             <option value="<%= it.Styles[stl] %>"><%= it.Styles[stl] %></option>
         <% }} %>
-      </select>&nbsp;<a href='/styles' target='_blank' rel='noopener'>(view)</a>
+      </select>&nbsp;<a href='/styles' target='_blank' rel='noopener'>(view)</a><br>
+      <label for="indexable">Indexable: </label>
+      <input type="checkbox" name="indexable" <% if (it.indexed) { %> checked <% } %> > </input><br>
       <br/><br/>
       <label for="content">Content (markdown/html supported):</label>
-      <textarea name="content" autofocus><% if (it._content) { %><%= it._content %><% } %></textarea>
+      <textarea name="content" autofocus> <% if (it._content) { %><%= it._content %><% } %></textarea>
       <p>
         <input type="submit" value="save"></input>
         <input type="submit" name="preview" value="preview"></input>

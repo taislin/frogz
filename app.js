@@ -25,10 +25,10 @@ app.get("/", function (_req, res) {
 	res.render("index");
 });
 app.get("/new", function (_req, res) {
-	res.render("new", { errors: "", pageid: "", Styles: Styles, action: "submit", preview: "" });
+	res.render("new", { errors: "", pageid: "", Styles: Styles, action: "submit", preview: "", indexable: true });
 });
 app.get("/edit", function (_req, res) {
-	res.render("new", { errors: "", pageid: "", Styles: Styles, action: "edit", preview: "" });
+	res.render("new", { errors: "", pageid: "", Styles: Styles, action: "edit", preview: "", indexable: true });
 });
 app.get("/terms", function (_req, res) {
 	res.render("terms");
@@ -133,6 +133,11 @@ function reRenderPage(req, res, _action, errormsg, _preview = false) {
 	if (_preview && req.body.content) {
 		dopreview = snarkdown(req.body.content);
 	}
+	let _indexed = false;
+	if (req.body.indexable) {
+		_indexed = true;
+	}
+
 	res.render("new", {
 		_content: req.body.content,
 		pageid: req.body.pageid,
@@ -142,5 +147,6 @@ function reRenderPage(req, res, _action, errormsg, _preview = false) {
 		Styles: Styles,
 		action: _action,
 		preview: dopreview,
+		indexed: _indexed,
 	});
 }
