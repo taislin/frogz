@@ -192,6 +192,7 @@ function renderPage(req, res, foundContent, _pageid, sub = undefined) {
 		}
 	} else {
 		let convContent = snarkdown(foundContent.content);
+		convContent = convContent.replace(/(?:\r\n|\r|\n)/g, "<br>");
 		let locale = "en-GB";
 		if (req.headers["accept-language"]) {
 			locale = req.headers["accept-language"];
