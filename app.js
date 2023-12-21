@@ -121,8 +121,8 @@ function doValidations(req, errormsg = "") {
 	if (!validateLength(req.body.password, 0, 50)) {
 		errormsg += "The Password needs to be under 50 characters!<br>";
 	}
-	if (!validateLength(req.body.content, 1, 10000)) {
-		errormsg += "The Content cannot be empty and needs to be under 10,000 characters!<br>";
+	if (!validateLength(req.body.content, 1, 50000)) {
+		errormsg += "The Content cannot be empty and needs to be under 50,000 characters!<br>";
 	}
 
 	return errormsg;
