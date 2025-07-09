@@ -1,0 +1,231 @@
+/* static/css/mailbox.css */
+
+/* General containers */
+.page-main {
+	padding: var(--spacing-lg);
+	max-width: 700px;
+	margin: var(--spacing-lg) auto;
+	background-color: var(--bg-color);
+	border: 1px solid var(--border-color-light);
+	border-radius: var(--border-radius-md);
+	box-shadow: var(--box-shadow-subtle);
+	color: var(--text-color);
+}
+
+.page-title {
+	text-align: center;
+	margin-bottom: var(--spacing-lg);
+	color: var(--heading1-color);
+	font-size: 2.5em; /* Larger title for main pages */
+}
+
+.mailbox-id-display {
+	color: var(--heading2-color);
+	word-break: break-all; /* Prevent long IDs from overflowing */
+}
+
+/* Info and Error Messages */
+.message-box {
+	padding: var(--spacing-md);
+	margin-bottom: var(--spacing-lg);
+	border-radius: var(--border-radius-sm);
+	line-height: 1.5;
+}
+
+.message-info {
+	background-color: rgba(0, 123, 255, 0.1); /* Light blue background */
+	border: 1px solid var(--link-color);
+	color: var(--text-color);
+}
+.message-info strong {
+	color: var(--link-color);
+}
+.final-warning {
+	font-weight: var(--font-weight-bold);
+	color: #cc0000;
+}
+
+.message-error {
+	background-color: #ffe0e0; /* Light red background */
+	border: 1px solid red;
+	color: #cc0000;
+}
+.message-error strong {
+	color: #cc0000;
+}
+
+.message-success {
+	background-color: #e6ffe6; /* Light green background */
+	border: 1px solid green;
+	color: #008000;
+}
+
+/* Forms */
+.mailbox-form {
+	background-color: rgba(0, 0, 0, 0.1); /* Subtle dark background */
+	padding: var(--spacing-lg);
+	border-radius: var(--border-radius-md);
+	margin-bottom: var(--spacing-lg);
+}
+
+.form-group {
+	margin-bottom: var(--spacing-md);
+}
+
+.form-group label {
+	display: block;
+	margin-bottom: var(--spacing-xs);
+	font-weight: var(--font-weight-bold);
+	color: var(--heading3-color);
+}
+
+.form-group input[type="text"],
+.form-group input[type="password"],
+.form-group textarea {
+	width: 100%;
+	padding: var(--spacing-sm);
+	border: 1px solid var(--border-color-dark);
+	border-radius: var(--border-radius-sm);
+	background-color: var(--bg-color); /* Inherit from theme */
+	color: var(--text-color); /* Inherit from theme */
+	font-size: 1em;
+	font-family: var(--font-family-sans);
+	transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.form-group input[type="text"]:focus,
+.form-group input[type="password"]:focus,
+.form-group textarea:focus {
+	outline: none;
+	border-color: var(--focus-outline-color);
+	box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.2);
+}
+
+.form-group textarea {
+	min-height: 150px;
+	resize: vertical;
+}
+
+.form-group small {
+	display: block;
+	margin-top: var(--spacing-xs);
+	font-size: 0.8em;
+	color: darkgray;
+}
+
+.form-actions {
+	text-align: center;
+	margin-top: var(--spacing-lg);
+}
+
+/* Buttons */
+.btn {
+	padding: var(--spacing-sm) var(--spacing-md);
+	font-size: 1.1em;
+	border: 1px solid var(--border-color-dark);
+	border-radius: var(--border-radius-sm);
+	background-color: var(--link-color);
+	color: white;
+	cursor: pointer;
+	transition: background-color 0.2s ease, transform 0.1s ease;
+}
+
+.btn:hover {
+	background-color: var(--link-hover-color);
+	transform: translateY(-1px);
+	box-shadow: var(--box-shadow-subtle);
+}
+.btn:disabled {
+	opacity: 0.6;
+	cursor: not-allowed;
+}
+
+/* Spinner */
+.spinner {
+	border: 3px solid rgba(255, 255, 255, 0.3);
+	border-top: 3px solid #fff;
+	border-radius: 50%;
+	width: 1em;
+	height: 1em;
+	animation: spin 1s linear infinite;
+	display: inline-block;
+	vertical-align: middle;
+	margin-left: 0.5em;
+}
+
+@keyframes spin {
+	0% {
+		transform: rotate(0deg);
+	}
+	100% {
+		transform: rotate(360deg);
+	}
+}
+
+/* Messages Display */
+.messages-container {
+	padding: var(--spacing-lg);
+	background-color: rgba(0, 0, 0, 0.1);
+	border: 1px solid var(--border-color-light);
+	border-radius: var(--border-radius-md);
+	box-shadow: var(--box-shadow-subtle);
+}
+
+.messages-container .section-heading {
+	text-align: center;
+	margin-bottom: var(--spacing-lg);
+	color: var(--heading1-color);
+}
+
+.message-list {
+	list-style: none;
+	padding: 0;
+}
+
+.message-item {
+	background-color: var(--bg-color);
+	border: 1px solid var(--border-color-dark);
+	border-radius: var(--border-radius-sm);
+	padding: var(--spacing-md);
+	margin-bottom: var(--spacing-md);
+	box-shadow: var(--box-shadow-subtle);
+}
+
+.message-item .message-meta {
+	font-size: 0.8em;
+	color: darkgray;
+	margin-bottom: var(--spacing-xs);
+	text-align: right;
+}
+
+.message-item .message-content {
+	font-size: 1em;
+	line-height: 1.5;
+	white-space: pre-wrap; /* Preserve original formatting */
+	word-break: break-word; /* Prevent overflow */
+	color: var(--text-color);
+}
+
+.message-item.message-error {
+	background-color: #ffcccc;
+	border-color: #ff0000;
+	color: #cc0000;
+}
+
+.no-messages {
+	text-align: center;
+	font-style: italic;
+	color: darkgray;
+	padding: var(--spacing-lg);
+	border: 1px dashed var(--border-color-light);
+	border-radius: var(--border-radius-sm);
+}
+
+/* Return to Homepage */
+.return-home {
+	text-align: center;
+	margin-top: var(--spacing-lg);
+}
+.return-home p {
+	margin-bottom: 0; /* Remove extra margin */
+}

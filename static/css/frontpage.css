@@ -104,7 +104,7 @@ a:active {
 
 /* --- Specific styles for terms.eta (and potential other marketing pages) --- */
 .page-title {
-	font-size: 3em; /* Adjusted size for secondary page titles */
+	font-size: 2em; /* Adjusted size for secondary page titles */
 	color: var(--heading1-color); /* Use variable from basic.css */
 	text-align: center;
 	margin-bottom: 1em;
@@ -233,6 +233,52 @@ a:active {
 	border-top: 1px dashed var(--text-color); /* Use a theme-aware dashed line */
 	margin: 2em auto;
 }
+/* Service Highlights within Intro */
+.service-highlight {
+	margin-top: var(--spacing-lg);
+	padding: var(--spacing-md);
+	border: 1px solid var(--border-color-light);
+	border-radius: var(--border-radius-sm);
+	background-color: rgba(
+		0,
+		0,
+		0,
+		0.05
+	); /* Lighter background for highlights */
+	text-align: left;
+}
+.service-highlight:first-of-type {
+	margin-top: var(--spacing-lg); /* Space from paragraphs above */
+}
+.service-highlight:last-of-type {
+	margin-bottom: 0; /* No extra margin after last highlight */
+}
+.service-highlight h3 {
+	display: flex;
+	align-items: center;
+	gap: var(--spacing-sm);
+	margin-top: 0; /* Remove default heading margin */
+	margin-bottom: var(--spacing-sm);
+	color: var(--heading2-color); /* Slightly more prominent heading color */
+	font-size: 1.4em;
+}
+.service-highlight p {
+	margin-bottom: 0; /* No margin after last paragraph in highlight */
+}
+
+/* Service Icons (Frog and Mailbox) */
+.service-icon {
+	width: 2em; /* Adjust icon size */
+	height: auto;
+	display: block; /* Ensures proper sizing */
+}
+
+.mailbox-icon {
+	background-image: url("/mailbox.png"); /* Use the generated mailbox icon */
+	background-size: contain;
+	background-repeat: no-repeat;
+	background-position: center;
+}
 
 .page-footer {
 	text-align: right;
@@ -266,8 +312,9 @@ a:active {
 .frontpage-main {
 	max-width: 900px;
 	margin: 0 auto;
-	padding: 1em;
-	/* Other body styles from basic.css will apply */
+	padding: var(--spacing-lg); /* Use variable for consistent padding */
+	background-color: var(--bg-color); /* Inherit main background */
+	color: var(--text-color); /* Inherit main text color */
 }
 
 /* Hero image styling */
@@ -287,12 +334,36 @@ a:active {
 
 /* Intro section */
 .intro-section {
-	margin-bottom: 2em;
-	font-size: 1.2em; /* Make intro text slightly larger */
-	line-height: 1.6;
+	margin-bottom: var(--spacing-xl);
+	padding: var(--spacing-lg);
+	background-color: rgba(
+		0,
+		0,
+		0,
+		0.1
+	); /* Subtle background for distinction */
+	border-radius: var(--border-radius-md); /* Soft rounded corners */
+	box-shadow: var(--box-shadow-subtle); /* Gentle shadow for depth */
+}
+.intro-section .section-heading {
+	text-align: center;
+	margin-bottom: var(--spacing-lg);
 }
 .intro-section p {
-	margin-bottom: 1em; /* Space between intro paragraphs */
+	font-size: 1.1em;
+	line-height: 1.6;
+	margin-bottom: var(--spacing-md);
+	text-align: left; /* Align intro paragraphs left */
+}
+.hero-section {
+	text-align: center;
+	margin-bottom: var(--spacing-xl); /* More space below hero */
+}
+.tagline {
+	font-size: 1.2em; /* Slightly larger, more impactful */
+	color: var(--heading3-color); /* A bit more vibrant color */
+	margin-top: var(--spacing-md);
+	margin-bottom: var(--spacing-lg);
 }
 
 /* Action Buttons Container */
@@ -316,7 +387,63 @@ a:active {
 	margin-right: 0.5em; /* Space between icon and link */
 	display: inline-block; /* To allow vertical-align */
 }
+/* Action Section - Grid Layout */
+.action-section {
+	margin-bottom: var(--spacing-xl);
+	padding: var(--spacing-lg);
+	background-color: rgba(0, 0, 0, 0.15); /* Slightly darker background */
+	border-radius: var(--border-radius-md);
+	box-shadow: var(--box-shadow-subtle);
+	text-align: center;
+}
+.action-section .section-heading {
+	margin-bottom: var(--spacing-lg);
+}
 
+.action-buttons-grid {
+	display: grid;
+	grid-template-columns: repeat(
+		auto-fit,
+		minmax(200px, 1fr)
+	); /* Responsive grid */
+	gap: var(--spacing-md); /* Space between cards */
+	justify-content: center; /* Center items if they don't fill width */
+}
+.action-card {
+	background-color: var(--bg-color); /* Card background */
+	border: 1px solid var(--border-color-dark);
+	border-radius: var(--border-radius-md);
+	padding: var(--spacing-lg);
+	text-align: center;
+	box-shadow: var(--box-shadow-subtle);
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.action-card:hover {
+	transform: translateY(-5px); /* Lift effect on hover */
+	box-shadow: var(--box-shadow-strong); /* More pronounced shadow */
+}
+
+.action-card .action-icon {
+	width: 3em; /* Icon size */
+	height: auto;
+	margin-bottom: var(--spacing-sm);
+}
+
+.action-card .action-link {
+	font-size: 1.2em; /* Larger link text */
+	font-weight: var(--font-weight-bold);
+	color: var(--link-color);
+	text-decoration: none;
+}
+.action-card .action-link:hover {
+	text-decoration: underline;
+	color: var(--link-hover-color);
+}
 .action-link {
 	color: #c4ce2d; /* Original link color */
 	text-decoration: none; /* Remove underline */
@@ -471,9 +598,66 @@ a:active {
 	display: block;
 	margin: 1.5em auto;
 }
+/* Info and Features Grid (reusing .boxed-container now as .info-features-grid) */
+.info-features-grid {
+	display: grid; /* Change from flex to grid for better control */
+	grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+	gap: var(--spacing-lg);
+	margin-bottom: var(--spacing-xl);
+}
 
+.info-section,
+.features-section {
+	padding: var(--spacing-lg);
+	border: 1px solid var(--border-color-light);
+	border-radius: var(--border-radius-md);
+	box-shadow: var(--box-shadow-subtle);
+	background-color: rgba(
+		0,
+		0,
+		0,
+		0.05
+	); /* Lighter background for these boxes */
+}
+
+.info-section .section-heading,
+.features-section .section-heading {
+	text-align: center;
+	margin-top: 0; /* Remove top margin from new sections */
+	margin-bottom: var(--spacing-md);
+}
+
+.info-list,
+.features-list {
+	list-style: none; /* Remove default bullets */
+	padding: 0;
+	margin: 0;
+	text-align: left;
+	font-size: 1em;
+}
+
+.info-list li,
+.features-list li {
+	margin-bottom: var(--spacing-xs);
+	line-height: 1.4;
+}
+
+.info-list a,
+.features-list a {
+	color: var(--link-color);
+	font-weight: var(--font-weight-bold);
+	text-decoration: none;
+}
+.info-list a:hover,
+.features-list a:hover {
+	color: var(--link-hover-color);
+	text-decoration: underline;
+}
 /* Mobile responsiveness for frontpage and marketing pages */
 @media screen and (max-width: 700px) {
+	.frontpage-main {
+		padding: var(--spacing-md);
+	}
 	body {
 		max-width: 90%;
 		padding: 0.5em;
@@ -506,5 +690,25 @@ a:active {
 	.features-box {
 		width: 100%; /* Make info/features boxes full width */
 		padding: 0.8em;
+	}
+	.page-title {
+		font-size: 2em; /* Smaller on mobile */
+	}
+	.tagline {
+		font-size: 1em;
+	}
+	.intro-section,
+	.action-section,
+	.info-features-grid {
+		padding: var(--spacing-md); /* Reduce padding on mobile sections */
+		margin-bottom: var(--spacing-lg);
+	}
+	.action-buttons-grid,
+	.info-features-grid {
+		grid-template-columns: 1fr; /* Stack elements vertically */
+		gap: var(--spacing-md);
+	}
+	.action-card {
+		padding: var(--spacing-md);
 	}
 }

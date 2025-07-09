@@ -1,64 +1,84 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="FROGZ: The open-source, anti-bloat microhosting service for simple, private, and ad-free webpages. Create your internet presence with plain text, Markdown, or HTML.">
-  <title>FROGZ - The Anti-Bloat Microhosting Service</title>
-  
-  <!-- Load basic.css for core styles and CSS variables -->
+  <meta name="description" content="FROGZ: The open-source, anti-bloat microhosting service for simple, private, and ad-free webpages. Create your internet presence. Introducing The Anti-Mailbox for private, E2E encrypted messages.">
+  <title>FROGZ - Anti-Bloat Web Services</title>
+
   <link rel="stylesheet" type="text/css" href="/css/basic.css">
-  <!-- Load frontpage.css for specific landing page styles -->
   <link rel="stylesheet" type="text/css" href="/css/frontpage.css">
-  
+
   <link rel="icon" type="image/png" href="/favicon.png">
 </head>
+
 <body>
   <main class="frontpage-main">
-    <h1 class="shimmer title">FROGZ</h1>
-    <div class="flipper-container"> <!-- Added for animation context if needed -->
+    <header class="hero-section">
+      <h1 class="shimmer title">FROGZ</h1>
+      <div class="flipper-container">
         <img src="/apu_band.gif" alt="A group of frogs playing musical instruments" class="main-hero-image">
-    </div>
+      </div>
+      <p class="tagline">Your destination for <strong>anti-bloat web services</strong> – simple, private, and free.</p>
+    </header>
 
-    <section class="intro-section">
-      <p>Welcome to <strong>FROGZ</strong>! We are an **open-source, anti-bloat microhosting service** that empowers everyone to create their own internet presence without the modern web's unnecessary complexity.</p>
-      <p>You can easily create your own pages using <strong>plain text</strong>, **Markdown**, or **HTML**. Absolutely **no registration required** and **no bloat**.</p>
+    <section class="intro-section content-box">
+      <h2 class="section-heading">Welcome to the Lean Web.</h2>
+      <p>In an internet dominated by complexity and tracking, <strong>FROGZ</strong> offers a radical alternative. We champion <strong>simplicity, privacy, and user control</strong>, staunchly opposing the "soydev" trend of bloated web services.</p>
+
+      <div class="service-highlight">
+        <h3><span class="service-icon frog-icon"></span> <strong>FROGZ Web Pages</strong></h3>
+        <p>Create your own internet presence using just <strong>plain text</strong>, <strong>HTML</strong>, or even <strong>Markdown</strong>. Absolutely no registration required, no ads, and no client-side JavaScript on your published pages.</p>
+      </div>
+
+      <div class="service-highlight">
+        <h3><span class="service-icon mailbox-icon"></span> <strong>The Anti-Mailbox</strong></h3>
+        <p>Receive <strong>anonymous, end-to-end encrypted messages</strong> without email. Set up a private inbox, share its public link, and check for messages that automatically expire after one week. Total privacy for both sender and receiver.</p>
+      </div>
     </section>
 
-    <div class="action-buttons-container boxed-container">
-      <div class="boxed action-box" id="new-page-box">
-        <img src="/computer.png" alt="Computer icon" class="action-icon">
-        <a href="/new" class="action-link">Create a Page</a>
+    <section class="action-section content-box">
+      <h2 class="section-heading">Get Started Today</h2>
+      <div class="action-buttons-grid">
+        <div class="action-card">
+          <img src="/computer.png" alt="Computer icon" class="action-icon">
+          <a href="/new" class="action-link">Create a FROGZ Page</a>
+        </div>
+        <div class="action-card">
+          <img src="/mailbox.png" alt="Mailbox icon" class="action-icon">
+          <a href="/inbox/create" class="action-link">Create Your Anonymous Inbox</a>
+        </div>
+        <div class="action-card">
+          <img src="/sherlock.png" alt="Frog detective icon" class="action-icon">
+          <a href="/random" class="action-link">Explore a Random FROGZ Page</a>
+        </div>
       </div>
-      <div class="boxed action-box" id="random-page-box">
-        <img src="/sherlock.png" alt="Frog detective icon" class="action-icon">
-        <a href="/random" class="action-link">Random Page</a>
-      </div>
-    </div>
-    <br> <!-- Consider replacing with CSS margin if possible for better spacing -->
+    </section>
 
     <hr class="main-separator">
 
-    <div class="info-features-container boxed-container">
-      <section class="boxed info-box" id="info-menu">
-        <h2 class="section-heading">Info</h2>
+    <section class="info-features-grid content-box">
+      <div class="info-section">
+        <h2 class="section-heading">More Info</h2>
         <ul class="info-list">
-          <li><strong><a href="/news">News</a></strong></li>
-          <li><strong><a href="/about">About</a></strong></li>
-          <li><strong><a href="/terms">Terms &amp; Conditions</a></strong></li>
+          <li><a href="/news">News</a></li>
+          <li><a href="/about">About Us</a></li>
+          <li><a href="/terms">Terms &amp; Conditions</a></li>
         </ul>
-      </section>
-      <section class="boxed features-box" id="features-list">
-        <h2 class="section-heading">Features</h2>
+      </div>
+      <div class="features-section">
+        <h2 class="section-heading">Why FROGZ & Anti-Mailbox?</h2>
         <ul class="features-list">
-          <li>Absolutely <strong>FREE</strong> and <strong>NO ADS</strong>.</li>
-          <li>No coding knowledge required.</li>
-          <li>Totally anonymous - no accounts needed.</li>
-          <li>Pages are editable with a defined password.</li>
-          <li>We ❤️ Free Speech - check our <a href="/terms">Terms &amp; Conditions</a>.</li>
+          <li>Absolutely <strong>FREE</strong> and <strong>NO ADS</strong> (ever).</li>
+          <li>Totally <strong>anonymous</strong> - no accounts, no tracking.</li>
+          <li>Your data, your control - designed for <strong>privacy</strong>.</li>
+          <li><strong>Open-Source</strong> (AGPL3.0) and open to contributions.</li>
+          <li>Built to be <strong>bloat-free</strong> and lightning fast.</li>
         </ul>
-      </section>
-    </div>
+      </div>
+    </section>
   </main>
 </body>
+
 </html>

@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Create a new anonymous, private, and self-expiring inbox. Receive messages without email.">
+  <title>Create Inbox | Anti-Email Inbox</title>
+  <link rel="stylesheet" type="text/css" href="/css/basic.css">
+  <link rel="stylesheet" type="text/css" href="/css/mailbox.css">
+  <link rel="icon" type="image/png" href="/favicon.png">
+</head>
+
+<body>
+  <main class="page-main">
+    <h1 class="page-title">Create Your Anonymous Inbox</h1>
+
+    <div class="message-box message-info">
+      <p>This service provides a private, one-way message drop. People can send you messages anonymously without needing your email, and messages expire after one week.</p>
+      <p>To access your messages, you'll need the <b>password</b> you set below. We don't store your private key, so <span style="color:red;">if you lose your password, your messages become permanently unreadable.</span></p>
+    </div>
+
+    <% if (it.errors && it.errors.length > 0) { %>
+    <div class="message-box message-error" id="error-messages">
+      <strong>Errors:</strong>
+      <ul>
+        <% it.errors.forEach(function(error) { %>
+        <li><%= error %></li>
+        <% }); %>
+      </ul>
+    </div>
+    <% } %>
+
+    <form id="createInboxForm" class="mailbox-form">
+      <div class="form-group">
+        <label for="mailboxId">Inbox Name (URL):</label>
+        <input type="text" id="mailboxId" name="mailboxId" required pattern="[a-z0-9-]+" title="Lowercase letters, numbers, and hyphens only (e.g., my-project-feedback)" maxlength="50" placeholder="e.g., my-anonymous-mailbox" value="<%= it.mailboxId || '' %>">
+        <small>This will be part of your public URL: <code>/&lt;your-inbox-name&gt;/send</code></small>
+      </div>
+
+      <div class="form-group">
+        <label for="password">Your Inbox Password (do not lose!):</label>
+        <input type="password" id="password" name="password" required minlength="8" maxlength="50">
+        <small>Used to access your messages. Keep it secure.</small>
+      </div>
+
+      <div class="form-group">
+        <label for="passwordConfirm">Confirm Password:</label>
+        <input type="password" id="passwordConfirm" name="passwordConfirm" required minlength="8" maxlength="50">
+      </div>
+
+      <div class="form-actions">
+        <button type="submit" class="btn btn-primary" id="createButton">
+          Create Inbox
+          <span id="loadingSpinner" class="spinner" style="display:none;"></span>
+        </button>
+      </div>
+    </form>
+
+    <div id="successMessage" class="message-box message-success" style="display:none;">
+      <h2>Inbox Created Successfully!</h2>
+      <p>Your anonymous inbox has been set up. Please save these links carefully:</p>
+      <p><strong>Public Submission URL:</strong> <a id="publicUrl" href="#" target="_blank" rel="noopener"></a></p>
+      <p><strong>Private Read URL:</strong> <a id="readUrl" href="#" target="_blank" rel="noopener"></a></p>
+      <p class="final-warning">Remember: We don't store your private key. If you lose your password, your messages will be permanently unreadable.</p>
+    </div>
+
+    <div class="return-home">
+      <p><a href="/">Return to Homepage</a></p>
+    </div>
+  </main>
+
+  <script src="/js/create_inbox.js"></script>
+</body>
+
+</html>

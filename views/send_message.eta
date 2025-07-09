@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Send an anonymous, private, and encrypted message to <%= it.mailboxId %>. Messages expire after one week.">
+  <title>Send Message to <%= it.mailboxId %> | Anti-Email Inbox</title>
+  <link rel="stylesheet" type="text/css" href="/css/basic.css">
+  <link rel="stylesheet" type="text/css" href="/css/mailbox.css">
+  <link rel="icon" type="image/png" href="/favicon.png">
+  <!-- Public Key will be injected here by the server for client-side use -->
+  <script type="application/json" id="publicKeyJwk">
+    <%- it.publicKeyJwk %>
+  </script>
+</head>
+
+<body>
+  <main class="page-main">
+    <h1 class="page-title">Send a Message to <br><span class="mailbox-id-display"><%= it.mailboxId %></span></h1>
+
+    <div class="message-box message-info">
+      <p>Your message will be end-to-end encrypted in your browser before it leaves your device. The recipient's private key (which only they have) is needed to decrypt it.</p>
+      <p>We do not store your IP address or any identifying information. Messages will automatically expire after one week.</p>
+    </div>
+
+    <div class="message-box message-error" id="error-messages" style="display:none;">
+      <strong>Errors:</strong>
+      <ul id="error-list"></ul>
+    </div>
+    <div class="message-box message-success" id="success-message" style="display:none;">
+      <h2>Message Sent!</h2>
+      <p>Your message has been securely sent to the inbox. Thank you for your anonymous feedback.</p>
+      <p>You will not receive a reply from this service.</p>
+    </div>
+
+    <form id="sendMessageForm" class="mailbox-form">
+      <div class="form-group">
+        <label for="messageContent">Your Message:</label>
+        <textarea id="messageContent" name="messageContent" required minlength="5" maxlength="5000" rows="10" placeholder="Type your anonymous message here (e.g., feedback, suggestion, question)..."></textarea>
+        <small id="charCount">0 / 5000 characters</small>
+      </div>
+
+      <div class="form-actions">
+        <button type="submit" class="btn btn-primary" id="sendButton">
+          Send Message
+          <span id="loadingSpinner" class="spinner" style="display:none;"></span>
+        </button>
+      </div>
+    </form>
+
+    <div class="return-home">
+      <p><a href="/">Return to Homepage</a></p>
+    </div>
+  </main>
+
+  <script src="/js/send_message.js"></script>
+</body>
+
+</html>

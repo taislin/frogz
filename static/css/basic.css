@@ -1,21 +1,38 @@
 /* Modern CSS Reset */
-*, *::before, *::after {
-  box-sizing: border-box;
+*,
+*::before,
+*::after {
+	box-sizing: border-box;
 }
-body, h1, h2, h3, h4, h5, h6, p, ul, ol, li, figure, blockquote, pre, table {
-  margin: 0;
-  padding: 0;
+body,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+ul,
+ol,
+li,
+figure,
+blockquote,
+pre,
+table {
+	margin: 0;
+	padding: 0;
 }
-ul, ol {
-    list-style: none; /* Remove default list styling, re-add selectively */
+ul,
+ol {
+	list-style: none; /* Remove default list styling, re-add selectively */
 }
 a {
-    text-decoration: none; /* Remove default underline, add selectively on hover */
+	text-decoration: none; /* Remove default underline, add selectively on hover */
 }
 img {
-    display: block; /* Prevents extra space below images */
-    max-width: 100%; /* Ensures images are responsive */
-    height: auto;
+	display: block; /* Prevents extra space below images */
+	max-width: 100%; /* Ensures images are responsive */
+	height: auto;
 }
 
 /* 
@@ -23,254 +40,344 @@ img {
   Theme files (e.g., 'inverted.css') will override these.
 */
 :root {
-    /* Base Colors */
-    --bg-color: black;
-    --text-color: darkgray;
+	/* Base Colors */
+	--bg-color: black;
+	--text-color: darkgray;
 
-    /* Heading Colors */
-    --heading1-color: #47b932;
-    --heading2-color: #258814;
-    --heading3-color: #c4ce2d;
+	/* Heading Colors */
+	--heading1-color: #47b932;
+	--heading2-color: #258814;
+	--heading3-color: #c4ce2d;
 
-    /* Link Colors */
-    --link-color: #2fa31a;
-    --link-visited-color: #2fa31a;
-    --link-hover-color: #195a0e;
-    --link-active-color: yellow;
+	/* Link Colors */
+	--link-color: #2fa31a;
+	--link-visited-color: #2fa31a;
+	--link-hover-color: #195a0e;
+	--link-active-color: yellow;
 
-    /* Font Families */
-    --font-family-sans: sans-serif;
-    --font-family-mono: 'Courier New', monospace;
+	/* Font Families */
+	--font-family-sans: sans-serif;
+	--font-family-mono: "Courier New", monospace;
 
-    /* Spacing & Sizing */
-    --spacing-xs: 0.5em;
-    --spacing-sm: 1em;
-    --spacing-md: 1.5em;
-    --spacing-lg: 2em;
-    --spacing-xl: 3em;
+	/* Spacing & Sizing */
+	--spacing-xs: 0.5em;
+	--spacing-sm: 1em;
+	--spacing-md: 1.2em;
+	--spacing-lg: 1.5em;
+	--spacing-xl: 2em;
 
-    /* Borders & Shadows */
-    --border-radius-sm: 4px;
-    --border-radius-md: 8px;
-    --border-color-light: rgba(128, 128, 128, 0.4);
-    --border-color-dark: rgba(128, 128, 128, 0.8);
-    --box-shadow-subtle: 0px 2px 5px rgba(0, 0, 0, 0.2); /* For light themes */
-    --box-shadow-strong: 0px 4px 10px rgba(0, 0, 0, 0.4); /* For dark themes */
+	/* Borders & Shadows */
+	--border-radius-sm: 4px;
+	--border-radius-md: 8px;
+	--border-color-light: rgba(128, 128, 128, 0.4);
+	--border-color-dark: rgba(128, 128, 128, 0.8);
+	--box-shadow-subtle: 0px 2px 5px rgba(0, 0, 0, 0.2); /* For light themes */
+	--box-shadow-strong: 0px 4px 10px rgba(0, 0, 0, 0.4); /* For dark themes */
 
-    /* Font Weights */
-    --font-weight-normal: 400;
-    --font-weight-bold: 700;
-    --font-weight-bolder: 900; /* For extra emphasis */
+	/* Font Weights */
+	--font-weight-normal: 400;
+	--font-weight-bold: 700;
+	--font-weight-bolder: 900; /* For extra emphasis */
 
-    /* Interactive states */
-    --focus-outline-color: #007bff; /* Standard blue for accessibility */
+	/* Interactive states */
+	--focus-outline-color: #007bff; /* Standard blue for accessibility */
 }
 
 /* Global Body Styles */
 body {
-    margin: 0 auto;
-    max-width: 900px;
-    padding: var(--spacing-sm); /* Using variable */
-    font-family: var(--font-family-sans); /* Using variable */
-    font-size: 1.5em; /* Base font size, em allows scaling relative to browser default */
-    background-color: var(--bg-color); /* Using variable */
-    color: var(--text-color); /* Using variable */
-    line-height: 1.6; /* Improved paragraph readability */
-    font-weight: var(--font-weight-normal);
-    -webkit-font-smoothing: antialiased; /* Smoother fonts on Webkit */
-    -moz-osx-font-smoothing: grayscale; /* Smoother fonts on Firefox */
+	margin: 0 auto;
+	max-width: 900px;
+	padding: var(--spacing-sm); /* Using variable */
+	font-family: var(--font-family-sans); /* Using variable */
+	font-size: 1.25em; /* Base font size, em allows scaling relative to browser default */
+	background-color: var(--bg-color); /* Using variable */
+	color: var(--text-color); /* Using variable */
+	line-height: 1.6; /* Improved paragraph readability */
+	font-weight: var(--font-weight-normal);
+	-webkit-font-smoothing: antialiased; /* Smoother fonts on Webkit */
+	-moz-osx-font-smoothing: grayscale; /* Smoother fonts on Firefox */
 }
 
 /* Global Heading Styles */
-h1, h2, h3, h4, h5, h6 {
-    line-height: 1.2; /* Tighter line height for headings */
-    margin-top: var(--spacing-lg); /* Consistent top margin for headings */
-    margin-bottom: var(--spacing-sm); /* Consistent bottom margin */
-    font-weight: var(--font-weight-bold); /* Using variable */
-    color: var(--heading1-color); /* Default to H1 color, individual elements override */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+	line-height: 1.2; /* Tighter line height for headings */
+	margin-top: var(--spacing-md); /* Consistent top margin for headings */
+	margin-bottom: var(--spacing-sm); /* Consistent bottom margin */
+	font-weight: var(--font-weight-bold); /* Using variable */
+	color: var(
+		--heading1-color
+	); /* Default to H1 color, individual elements override */
 }
-h1 { font-size: 2em; color: var(--heading1-color); }
-h2 { font-size: 1.75em; color: var(--heading2-color); }
-h3 { font-size: 1.5em; color: var(--heading3-color); }
-h4 { font-size: 1.25em; color: var(--heading3-color); } /* H4+ will often reuse H3 color */
-h5 { font-size: 1em; color: var(--heading3-color); }
-h6 { font-size: 0.9em; color: var(--heading3-color); }
+h1 {
+	font-size: 2em;
+	color: var(--heading1-color);
+}
+h2 {
+	font-size: 1.75em;
+	color: var(--heading2-color);
+}
+h3 {
+	font-size: 1.5em;
+	color: var(--heading3-color);
+}
+h4 {
+	font-size: 1.25em;
+	color: var(--heading3-color);
+} /* H4+ will often reuse H3 color */
+h5 {
+	font-size: 1em;
+	color: var(--heading3-color);
+}
+h6 {
+	font-size: 0.9em;
+	color: var(--heading3-color);
+}
 
 /* Global Paragraph Styles */
 p {
-    margin-bottom: var(--spacing-md); /* Consistent spacing between paragraphs */
+	margin-bottom: var(
+		--spacing-md
+	); /* Consistent spacing between paragraphs */
 }
 
 /* Global Link Styles */
 a {
-    color: var(--link-color); /* Using variable */
-    transition: color 0.2s ease, text-decoration 0.2s ease; /* Smooth transitions */
+	color: var(--link-color); /* Using variable */
+	transition: color 0.2s ease, text-decoration 0.2s ease; /* Smooth transitions */
 }
-a:link { text-decoration: none; } /* Default to no underline */
-a:visited { color: var(--link-visited-color); } /* Using variable */
-a:hover { color: var(--link-hover-color); text-decoration: underline; } /* Underline on hover */
-a:active { color: var(--link-active-color); } /* Using variable */
+a:link {
+	text-decoration: none;
+} /* Default to no underline */
+a:visited {
+	color: var(--link-visited-color);
+} /* Using variable */
+a:hover {
+	color: var(--link-hover-color);
+	text-decoration: underline;
+} /* Underline on hover */
+a:active {
+	color: var(--link-active-color);
+} /* Using variable */
 a:focus {
-    outline: 2px solid var(--focus-outline-color); /* Clear focus indicator for accessibility */
-    outline-offset: 2px;
+	outline: 2px solid var(--focus-outline-color); /* Clear focus indicator for accessibility */
+	outline-offset: 2px;
 }
 
 /* Powered By Footer Styling */
 .page-footer #powered_by {
-    text-align: right;
-    font-size: 0.75em;
-    margin-top: var(--spacing-sm);
-    color: var(--text-color);
+	text-align: right;
+	font-size: 0.75em;
+	margin-top: var(--spacing-sm);
+	color: var(--text-color);
 }
 .page-footer .frogz-link {
-    color: var(--link-color);
-    font-weight: var(--font-weight-bold);
-    text-decoration: none;
-    font-size: 1em; /* Relative to parent .75em */
+	color: var(--link-color);
+	font-weight: var(--font-weight-bold);
+	text-decoration: none;
+	font-size: 1em; /* Relative to parent .75em */
 }
 .page-footer .frogz-link:hover {
-    color: var(--link-hover-color);
-    text-decoration: underline;
+	color: var(--link-hover-color);
+	text-decoration: underline;
 }
 .page-footer .download-link {
-    color: var(--link-color);
-    font-weight: var(--font-weight-bold);
-    text-decoration: none;
-    font-size: 1em;
-    margin-right: var(--spacing-xs);
+	color: var(--link-color);
+	font-weight: var(--font-weight-bold);
+	text-decoration: none;
+	font-size: 1em;
+	margin-right: var(--spacing-xs);
 }
 .page-footer .download-link:hover {
-    color: var(--link-hover-color);
-    text-decoration: underline;
+	color: var(--link-hover-color);
+	text-decoration: underline;
 }
 
 /* Content Separator (HR) */
 .content-separator {
-    width: 85%; /* Or 100% depending on preference */
-    border: none;
-    border-top: 1px dashed var(--border-color-light); /* Lighter, theme-aware */
-    margin: var(--spacing-lg) auto; /* Consistent margin */
+	width: 85%; /* Or 100% depending on preference */
+	border: none;
+	border-top: 1px dashed var(--border-color-light); /* Lighter, theme-aware */
+	margin: var(--spacing-lg) auto; /* Consistent margin */
 }
 
 /* --- User Content Styles (for Markdown/HTML output) --- */
 .user-content {
-    white-space: pre-wrap;   /* Preserves whitespace and line breaks from markdown */
-    word-wrap: break-word;   /* Breaks long words to prevent overflow */
-    line-height: inherit;    /* Inherit from body for consistency */
-    font-size: 1em;          /* Base font size for content */
-    margin-bottom: var(--spacing-lg); /* Space before footer/separator */
+	white-space: pre-wrap; /* Preserves whitespace and line breaks from markdown */
+	word-wrap: break-word; /* Breaks long words to prevent overflow */
+	line-height: inherit; /* Inherit from body for consistency */
+	font-size: 1em; /* Base font size for content */
+	margin-bottom: var(--spacing-lg); /* Space before footer/separator */
 }
 
 /* Headings within user content (reiterate general styles to ensure they apply) */
-.user-content h1 { font-size: 2em; color: var(--heading1-color); margin-top: var(--spacing-lg); margin-bottom: var(--spacing-sm); }
-.user-content h2 { font-size: 1.75em; color: var(--heading2-color); margin-top: var(--spacing-lg); margin-bottom: var(--spacing-sm); }
-.user-content h3 { font-size: 1.5em; color: var(--heading3-color); margin-top: var(--spacing-lg); margin-bottom: var(--spacing-sm); }
-.user-content h4 { font-size: 1.25em; color: var(--heading3-color); margin-top: var(--spacing-md); margin-bottom: var(--spacing-xs); }
-.user-content h5 { font-size: 1em; color: var(--heading3-color); margin-top: var(--spacing-md); margin-bottom: var(--spacing-xs); }
-.user-content h6 { font-size: 0.9em; color: var(--heading3-color); margin-top: var(--spacing-md); margin-bottom: var(--spacing-xs); }
+.user-content h1 {
+	font-size: 2em;
+	color: var(--heading1-color);
+	margin-top: var(--spacing-lg);
+	margin-bottom: var(--spacing-sm);
+}
+.user-content h2 {
+	font-size: 1.75em;
+	color: var(--heading2-color);
+	margin-top: var(--spacing-lg);
+	margin-bottom: var(--spacing-sm);
+}
+.user-content h3 {
+	font-size: 1.5em;
+	color: var(--heading3-color);
+	margin-top: var(--spacing-lg);
+	margin-bottom: var(--spacing-sm);
+}
+.user-content h4 {
+	font-size: 1.25em;
+	color: var(--heading3-color);
+	margin-top: var(--spacing-md);
+	margin-bottom: var(--spacing-xs);
+}
+.user-content h5 {
+	font-size: 1em;
+	color: var(--heading3-color);
+	margin-top: var(--spacing-md);
+	margin-bottom: var(--spacing-xs);
+}
+.user-content h6 {
+	font-size: 0.9em;
+	color: var(--heading3-color);
+	margin-top: var(--spacing-md);
+	margin-bottom: var(--spacing-xs);
+}
 
 /* Paragraphs within user content */
 .user-content p {
-    margin-bottom: var(--spacing-sm); /* Slightly tighter spacing in content blocks */
+	margin-bottom: var(
+		--spacing-sm
+	); /* Slightly tighter spacing in content blocks */
 }
 
 /* Lists within user content */
 .user-content ul,
 .user-content ol {
-    margin-left: var(--spacing-lg); /* Indent lists */
-    margin-bottom: var(--spacing-md);
-    padding: 0;
+	margin-left: var(--spacing-lg); /* Indent lists */
+	margin-bottom: var(--spacing-md);
+	padding: 0;
 }
-.user-content ul { list-style: disc; } /* Re-add disc for unordered */
-.user-content ol { list-style: decimal; } /* Re-add decimal for ordered */
+.user-content ul {
+	list-style: disc;
+} /* Re-add disc for unordered */
+.user-content ol {
+	list-style: decimal;
+} /* Re-add decimal for ordered */
 .user-content li {
-    margin-bottom: var(--spacing-xs);
+	margin-bottom: var(--spacing-xs);
 }
 
 /* Links within user content */
-.user-content a:link { text-decoration: underline; } /* Underline links in content */
+.user-content a:link {
+	text-decoration: underline;
+} /* Underline links in content */
 
 /* Blockquotes */
 .user-content blockquote {
-    margin: var(--spacing-md) 0;
-    padding: var(--spacing-sm) var(--spacing-md);
-    border-left: 4px solid var(--heading2-color); /* Theme-aware border */
-    background-color: rgba(0, 0, 0, 0.1); /* Subtle background */
-    font-style: italic;
-    color: var(--text-color);
+	margin: var(--spacing-md) 0;
+	padding: var(--spacing-sm) var(--spacing-md);
+	border-left: 4px solid var(--heading2-color); /* Theme-aware border */
+	background-color: rgba(0, 0, 0, 0.1); /* Subtle background */
+	font-style: italic;
+	color: var(--text-color);
 }
 .user-content blockquote blockquote {
-    margin-top: var(--spacing-xs); /* Space for nested blockquotes */
-    border-left-color: var(--heading3-color); /* Different color for nested */
+	margin-top: var(--spacing-xs); /* Space for nested blockquotes */
+	border-left-color: var(--heading3-color); /* Different color for nested */
 }
 
 /* Code Blocks (`pre` tags) */
 .user-content pre {
-    background-color: rgba(0, 0, 0, 0.3); /* Slightly darker background than page */
-    border: 1px solid var(--border-color-light); /* Theme-aware border */
-    padding: var(--spacing-sm);
-    border-radius: var(--border-radius-sm);
-    overflow-x: auto; /* Enable horizontal scrolling for long lines */
-    font-family: var(--font-family-mono);
-    font-size: 0.9em;
-    line-height: 1.4;
-    margin-bottom: var(--spacing-md);
-    color: #32cd32; /* Default green for code (can be overridden by themes) */
+	background-color: rgba(
+		0,
+		0,
+		0,
+		0.3
+	); /* Slightly darker background than page */
+	border: 1px solid var(--border-color-light); /* Theme-aware border */
+	padding: var(--spacing-sm);
+	border-radius: var(--border-radius-sm);
+	overflow-x: auto; /* Enable horizontal scrolling for long lines */
+	font-family: var(--font-family-mono);
+	font-size: 0.9em;
+	line-height: 1.4;
+	margin-bottom: var(--spacing-md);
+	color: #32cd32; /* Default green for code (can be overridden by themes) */
 }
 
 /* Inline Code (`code` tags) */
 .user-content code {
-    background-color: rgba(128, 128, 128, 0.2);
-    padding: 0.2em 0.4em;
-    border-radius: 3px;
-    font-family: var(--font-family-mono);
-    font-size: 0.9em;
-    color: #6b8e23; /* A distinct color for inline code */
+	background-color: rgba(128, 128, 128, 0.2);
+	padding: 0.2em 0.4em;
+	border-radius: 3px;
+	font-family: var(--font-family-mono);
+	font-size: 0.9em;
+	color: #6b8e23; /* A distinct color for inline code */
 }
 
 /* Tables */
 .user-content table {
-    width: 100%;
-    border-collapse: collapse; /* For cleaner borders */
-    margin-bottom: var(--spacing-md);
-    font-size: 0.9em;
-    color: var(--text-color);
+	width: 100%;
+	border-collapse: collapse; /* For cleaner borders */
+	margin-bottom: var(--spacing-md);
+	font-size: 0.9em;
+	color: var(--text-color);
 }
 .user-content th,
 .user-content td {
-    border: 1px solid var(--border-color-light); /* Theme-aware border for cells */
-    padding: 0.8em;
-    text-align: left;
+	border: 1px solid var(--border-color-light); /* Theme-aware border for cells */
+	padding: 0.8em;
+	text-align: left;
 }
 .user-content th {
-    background-color: rgba(0, 0, 0, 0.2); /* Slightly darker header background */
-    font-weight: var(--font-weight-bold);
-    color: var(--heading3-color); /* Theme-aware header text color */
+	background-color: rgba(
+		0,
+		0,
+		0,
+		0.2
+	); /* Slightly darker header background */
+	font-weight: var(--font-weight-bold);
+	color: var(--heading3-color); /* Theme-aware header text color */
 }
 /* Alternating row colors for readability */
 .user-content tbody tr:nth-child(odd) {
-    background-color: rgba(0, 0, 0, 0.05); /* Very subtle striping */
+	background-color: rgba(0, 0, 0, 0.05); /* Very subtle striping */
 }
 
 /* Images */
 .user-content img {
-    margin: var(--spacing-md) auto; /* Center images and add vertical space */
-    border: 1px solid var(--border-color-light); /* Subtle border for images */
-    border-radius: var(--border-radius-sm);
-    box-shadow: var(--box-shadow-subtle); /* Subtle shadow for user images */
+	margin: var(--spacing-md) auto; /* Center images and add vertical space */
+	border: 1px solid var(--border-color-light); /* Subtle border for images */
+	border-radius: var(--border-radius-sm);
+	box-shadow: var(--box-shadow-subtle); /* Subtle shadow for user images */
 }
 
 /* Mobile small */
 @media screen and (max-width: 700px) {
-    body {
-        max-width: 90%;
-        padding: var(--spacing-xs);
-        font-size: 1.2em; /* Adjust base font size for smaller screens */
-    }
-    h1 { font-size: 1.8em; }
-    h2 { font-size: 1.5em; }
-    h3 { font-size: 1.3em; }
-    .user-content {
-        font-size: 1em; /* User content base remains readable */
-    }
+	body {
+		max-width: 90%;
+		padding: var(--spacing-xs);
+		font-size: 1.2em; /* Adjust base font size for smaller screens */
+	}
+	h1 {
+		font-size: 1.8em;
+	}
+	h2 {
+		font-size: 1.5em;
+	}
+	h3 {
+		font-size: 1.3em;
+	}
+	.user-content {
+		font-size: 1em; /* User content base remains readable */
+	}
 }

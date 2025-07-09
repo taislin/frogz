@@ -1,29 +1,30 @@
-// ADDED: JSDOM and DOMPurify to sanitize HTML and prevent XSS attacks. This is a critical security fix.
+// databases/frogz_db.js (Renamed from original databases.js)
+// Make sure to create a 'databases' directory and move this file there.
+
+const pool = require("./../postgres.js");
+require("dotenv").config();
+const bcrypt = require("bcryptjs");
+const snarkdown = require("snarkdown");
+const { get_timestamps } = require("./../utils.js"); // Make sure utils.js is in the parent directory
+
 const { JSDOM } = require("jsdom");
 const createDOMPurify = require("dompurify");
 const window = new JSDOM("").window;
 const DOMPurify = createDOMPurify(window);
 
-const pool = require("./postgres.js");
-require("dotenv").config();
+// Styles is not directly used here but was previously
+// const Styles = require("../styles.json"); // Remove if not strictly needed here
 
-const bcrypt = require("bcryptjs");
-const snarkdown = require("snarkdown");
-
-const Styles = require("./styles.json");
-
-// CHANGED: Converted to an async function for modern error handling.
 async function createTable() {
+	// Renamed from createTable to createFrogzTable in app.js import
 	try {
 		const querystring =
 			"CREATE TABLE IF NOT EXISTS documents (id TEXT, content TEXT, created_at BIGINT, edited_at BIGINT, hash TEXT, style TEXT, indexed INTEGER);";
 		await pool.query(querystring);
 	} catch (err) {
-		console.error("Error creating table:", err);
+		console.error("Error creating FROGZ table:", err);
 	}
 }
-
-// CHANGED: Converted to async. No functional change, just modern syntax.
 async function createPage(content, pageid, date, hash, style, indexable) {
 	await pool.query(
 		"INSERT INTO documents (id, content, created_at, edited_at, hash, style, indexed) VALUES ($1,$2,$3,$3,$4,$5,$6)",
@@ -31,7 +32,6 @@ async function createPage(content, pageid, date, hash, style, indexable) {
 	);
 }
 
-// CHANGED: Converted to async for consistency and error handling.
 async function editPage(req, res) {
 	try {
 		const date = new Date().getTime();
@@ -42,14 +42,13 @@ async function editPage(req, res) {
 		);
 		res.redirect(`/${req.body.pageid}`);
 	} catch (err) {
-		console.error("Error editing page:", err);
+		console.error("Error editing FROGZ page:", err);
 		res.status(500).send(
-			"An internal server error occurred while editing the page."
+			"An internal server error occurred while editing the FROGZ page."
 		);
 	}
 }
 
-// CHANGED: Converted to async to avoid callback nesting.
 async function findPage(req, res, sub = undefined) {
 	try {
 		let pageURL = sub ? `${sub}/${req.params.pgpr}` : req.params.pgpr;
@@ -62,14 +61,12 @@ async function findPage(req, res, sub = undefined) {
 
 		renderPage(req, res, foundContent, pageURL, sub);
 	} catch (err) {
-		console.error("Error finding page:", err);
+		console.error("Error finding FROGZ page:", err);
 		res.status(500).send(
-			"An internal server error occurred while finding the page."
+			"An internal server error occurred while finding the FROGZ page."
 		);
 	}
 }
-
-// CHANGED: Converted to async.
 async function editExistingPage(req, res, sub = undefined) {
 	try {
 		const pageURL = sub
@@ -88,74 +85,66 @@ async function editExistingPage(req, res, sub = undefined) {
 				pageid: pageURL,
 				_content: foundContent.content,
 				style: foundContent.style,
-				Styles: Styles,
+				Styles: require("../styles.json"), // Load Styles here
 				action: "edit",
 				indexed: foundContent.indexed,
 			});
 		} else {
-			// This logic is complex and can probably be simplified, but for now it is preserved.
 			let _pageid = pageURL;
 			if (_pageid.includes("/") && sub) {
 				res.render("new", {
 					errors: "<strong>Errors:</strong><br>This subpage does not exist! You can create it if you have the master page's password.<br>",
 					pageid: pageURL,
 					_content: "",
-					Styles: Styles,
+					Styles: require("../styles.json"), // Load Styles here
 					action: "submit",
 				});
 			} else {
-				// Redirect to a clean 'new' page if a top-level page doesn't exist.
 				res.redirect("/new");
 			}
 		}
 	} catch (err) {
-		console.error("Error in editExistingPage:", err);
+		console.error("Error in editExistingFROGZPage:", err);
 		res.status(500).send("An internal server error occurred.");
 	}
 }
-
-// CHANGED: Major refactor to async/await, removing nested callbacks.
 async function submitPage(req, res) {
 	try {
-		const { pageid } = req.body;
+		const pageId = req.body.pageid;
 
-		const { rows: existingPage } = await pool.query(
+		const { rows: pageRows } = await pool.query(
 			"SELECT * FROM documents WHERE id = $1",
-			[pageid]
+			[pageId]
 		);
 
-		if (existingPage.length > 0) {
+		if (pageRows.length > 0) {
 			return pageAlreadyExists(req, res);
 		}
 
-		const masterId = pageid.split("/")[0];
-		// If this is a subpage creation attempt
-		if (masterId !== pageid) {
-			const { rows: masterPage } = await pool.query(
+		const subdomain = pageId.split("/")[0];
+		if (subdomain !== pageId) {
+			const { rows: masterRows } = await pool.query(
 				"SELECT * FROM documents WHERE id = $1",
-				[masterId]
+				[subdomain]
 			);
-			if (masterPage.length > 0) {
-				// Master page exists, so we check its password to authorize subpage creation
-				return await bcryptCheck(req, res, masterPage[0], "", true); // isNewPage = true
+			if (masterRows.length > 0) {
+				return await bcryptCheck(req, res, masterRows[0], "", true);
 			}
 		}
 
-		// If it's a new top-level page or a subpage with no existing master, save it directly.
 		await savePage(req, res);
 	} catch (err) {
-		console.error("Error submitting page:", err);
+		console.error("Error submitting FROGZ page:", err);
 		res.status(500).send(
-			"An internal server error occurred while submitting the page."
+			"An internal server error occurred while submitting the FROGZ page."
 		);
 	}
 }
 
-// CHANGED: Refactored to async/await.
 async function processEdit(req, res, errormsg = "") {
 	try {
 		const pageid = req.body.pageid;
-		const masterId = pageid.split("/")[0]; // An edit always refers to a master page.
+		const masterId = pageid.split("/")[0];
 
 		const { rows } = await pool.query(
 			"SELECT * FROM documents WHERE id = $1",
@@ -164,19 +153,18 @@ async function processEdit(req, res, errormsg = "") {
 		const foundContent = rows[0];
 
 		if (foundContent) {
-			await bcryptCheck(req, res, foundContent, errormsg, false); // isNewPage = false
+			await bcryptCheck(req, res, foundContent, errormsg, false);
 		} else {
 			pageDoesNotExist(req, res, errormsg);
 		}
 	} catch (err) {
-		console.error("Error processing edit:", err);
+		console.error("Error processing FROGZ edit:", err);
 		res.status(500).send(
-			"An internal server error occurred while processing the edit."
+			"An internal server error occurred while processing the FROGZ edit."
 		);
 	}
 }
 
-// CHANGED: Renamed from bcryptCheckEdit to be more generic. Converted to use async/await with bcrypt.
 async function bcryptCheck(
 	req,
 	res,
@@ -192,14 +180,14 @@ async function bcryptCheck(
 
 		if (!match) {
 			errormsg += "Incorrect password!<br>";
-			const _indexed = !!req.body.indexable; // simpler boolean conversion
+			const _indexed = !!req.body.indexable;
 			return res.render("new", {
 				_content: req.body.content,
 				pageid: req.body.pageid,
 				password: "",
 				errors: errormsg,
 				style: req.body.style,
-				Styles: Styles,
+				Styles: require("../styles.json"), // Load Styles here
 				action: "edit",
 				indexed: _indexed,
 			});
@@ -208,20 +196,18 @@ async function bcryptCheck(
 		if (isNewPage) {
 			await savePage(req, res);
 		} else {
-			await editPage(req, res);
+			editPage(req, res);
 		}
 	} catch (err) {
-		console.error("Error during bcrypt check:", err);
+		console.error("Error during bcrypt check (FROGZ):", err);
 		res.status(500).send(
-			"An internal server error occurred during authentication."
+			"An internal server error occurred during FROGZ authentication."
 		);
 	}
 }
 
-// ADDED: Logic for saving a new page refactored into its own async function.
 async function savePage(req, res) {
 	try {
-		// bcrypt.hash is async, so we await it
 		const bhash = await bcrypt.hash(req.body.password, 10);
 		const indexable = req.body.indexable ? 1 : 0;
 		await createPage(
@@ -234,9 +220,9 @@ async function savePage(req, res) {
 		);
 		res.redirect(`/${req.body.pageid}`);
 	} catch (err) {
-		console.error("Error saving page:", err);
+		console.error("Error saving FROGZ page:", err);
 		res.status(500).send(
-			"An internal server error occurred while saving the page."
+			"An internal server error occurred while saving the FROGZ page."
 		);
 	}
 }
@@ -249,7 +235,7 @@ function pageDoesNotExist(req, res, errormsg) {
 		password: "",
 		errors: errormsg,
 		style: req.body.style,
-		Styles: Styles,
+		Styles: require("../styles.json"),
 		action: "submit",
 		indexed: !!req.body.indexable,
 	});
@@ -263,7 +249,7 @@ function pageAlreadyExists(req, res, errormsg = "") {
 		password: req.body.password,
 		errors: errormsg,
 		style: req.body.style,
-		Styles: Styles,
+		Styles: require("../styles.json"),
 		action: "submit",
 		indexed: !!req.body.indexable,
 	});
@@ -271,24 +257,9 @@ function pageAlreadyExists(req, res, errormsg = "") {
 
 function renderPage(req, res, foundContent, _pageid, sub = undefined) {
 	if (!foundContent) {
-		if (_pageid.includes("/") && sub) {
-			res.render("new", {
-				errors: "<strong>Errors:</strong><br>This subpage does not exist! You can create it if you have the master page's password.<br>",
-				pageid: _pageid,
-				_content: "",
-				Styles: Styles,
-				action: "submit",
-			});
-			res.status(404);
-			return;
-		} else {
-			res.render("new", {
-				errors: "",
-				pageid: _pageid,
-				Styles: Styles,
-				action: "submit",
-			});
-		}
+		// Do NOT render 'new' page here. Let the 404 middleware handle it.
+		res.status(404).render("404"); // Explicitly render 404 for non-existent FROGZ pages
+		return;
 	} else {
 		const dirtyHTML = snarkdown(foundContent.content);
 		const cleanHTML = DOMPurify.sanitize(dirtyHTML);
@@ -315,29 +286,6 @@ function renderPage(req, res, foundContent, _pageid, sub = undefined) {
 	}
 }
 
-function get_timestamps(created_at, edited_at, locale = "en-GB") {
-	// This synchronous function is fine as is.
-	let t_string = "";
-	const cdate = new Date(created_at);
-	const dateOptions = { year: "2-digit", month: "2-digit", day: "2-digit" };
-	const timeOptions = { hour: "2-digit", minute: "2-digit" };
-
-	t_string +=
-		cdate.toLocaleTimeString(locale, timeOptions) +
-		" " +
-		cdate.toLocaleDateString(locale, dateOptions);
-
-	if (created_at !== edited_at && edited_at) {
-		const edate = new Date(edited_at);
-		t_string += ` (✎ ${edate.toLocaleTimeString(
-			locale,
-			timeOptions
-		)} ${edate.toLocaleDateString(locale, dateOptions)})`;
-	}
-	return t_string;
-}
-
-// CHANGED: Converted to async.
 async function randomPage(res) {
 	try {
 		const { rows } = await pool.query(
@@ -348,12 +296,11 @@ async function randomPage(res) {
 		if (foundContent) {
 			res.redirect("/" + foundContent.id);
 		} else {
-			// Redirect to a known page if no indexable pages are found.
 			res.redirect("/");
 		}
 	} catch (err) {
-		console.error("Error fetching random page:", err);
-		res.redirect("/"); // Fail gracefully
+		console.error("Error fetching random FROGZ page:", err);
+		res.redirect("/");
 	}
 }
 
@@ -364,5 +311,4 @@ module.exports = {
 	findPage,
 	submitPage,
 	randomPage,
-	get_timestamps,
 };
