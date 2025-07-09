@@ -1,16 +1,25 @@
+/* inverted.css */
+
 :root {
-	--bg-color: #17490e;
-	--text-color: lightgray;
-	--heading1-color: #c4ce2d;
-	--heading2-color: #abb42d;
-	--heading3-color: #9da52a;
-	--link-color: yellow;
-	--link-visited-color: orange;
-	--link-hover-color: gold;
-	--link-active-color: yellowgreen;
+    --bg-color: #17490e;
+    --text-color: lightgray;
+    --heading1-color: #c4ce2d;
+    --heading2-color: #abb42d;
+    --heading3-color: #9da52a;
+    --link-color: yellow;
+    --link-visited-color: orange;
+    --link-hover-color: gold;
+    --link-active-color: yellowgreen;
+
+    /* Adjust border/shadow/focus colors for light-on-dark theme */
+    --border-color-light: rgba(255, 255, 255, 0.2);
+    --border-color-dark: rgba(255, 255, 255, 0.5);
+    --box-shadow-subtle: 0px 2px 5px rgba(255, 255, 255, 0.1);
+    --box-shadow-strong: 0px 4px 10px rgba(255, 255, 255, 0.2);
+    --focus-outline-color: #8affc2; /* Brighter focus for dark background */
 }
 
 /* Specific overrides for this theme, if any */
-#powered_by a {
-	color: #ffffff;
+.page-footer .frogz-link { /* Example of an override if it diverges from link-color */
+    color: #ffffff;
 }

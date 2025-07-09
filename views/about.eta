@@ -1,40 +1,42 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="Learn more about FROGZ: Our mission to provide anti-bloat, private, open-source microhosting with a focus on simplicity and user control.">
   <title>Frogz - About Us</title>
-  
+
   <!-- Load basic.css for core styles and CSS variables -->
   <link rel="stylesheet" type="text/css" href="/css/basic.css">
   <!-- Load frontpage.css for specific marketing page styles -->
   <link rel="stylesheet" type="text/css" href="/css/frontpage.css">
-  
+
   <link rel="icon" type="image/png" href="/favicon.png">
 </head>
+
 <body>
   <main class="frontpage-main">
     <h1 class="shimmer page-title">About FROGZ</h1>
     <div class="about-hero-image-container">
-        <img class="main-hero-image" src="/favicon.png" alt="A green frog mascot, representing Frogz">
+      <img class="main-hero-image" src="/favicon.png" alt="A green frog mascot, representing Frogz">
     </div>
 
     <section class="about-intro text-left">
       <p>
-        <strong>FROGZ</strong> is an **open-source, anti-bloat microhosting service**. We actively oppose the modern "soydev" trend of ultra-complex and bloated webpages, advocating for simplicity and privacy.
+        <strong>FROGZ</strong> is an <i>open-source, anti-bloat microhosting service</i>. We actively oppose the modern "soydev" trend of ultra-complex and bloated webpages, advocating for simplicity and privacy.
       </p>
       <p>
-        For most websites, simple static HTML and CSS files are perfectly sufficient. However, publishing them can be challenging for those without extensive experience. Our core aim is to help everyone create their own internet presence, making this process as simple as possible. With **FROGZ**, you can publish a page with just plain text.
+        For most websites, simple static HTML and CSS files are perfectly sufficient. However, publishing them can be challenging for those without extensive experience. Our core aim is to help everyone create their own internet presence, making this process as simple as possible. With <b>FROGZ</b>, you can publish a page with just plain text.
       </p>
       <p>
-        **FROGZ** is also an excellent tool for learning web development. You can start with a purely plaintext page, then incrementally add basic HTML, integrate CSS, introduce scripts (on client pages if you choose), and so on, building your skills step-by-step.
+        <b>FROGZ</b> is also an excellent tool for learning web development. You can start with a purely plaintext page, then incrementally add basic HTML, integrate CSS, introduce scripts (on client pages if you choose), and so on, building your skills step-by-step.
       </p>
       <p>
         You can create your own pages using only a password. Subpages can be seamlessly added to a page; for example, if you control `frogz.club/mypage`, you can create unlimited subpages like `frogz.club/mypage/mysubpage`, all managed by the same master password.
       </p>
       <p>
-        You can contact us at `contact [at] frogz [dot] club` (Please replace `[at]` with `@` and `[dot]` with `.` to use the email address).
+        You can contact us at <b>contact [at] frogz [dot] club</b> (Please replace [at] with @ and [dot] with . to use the email address).
       </p>
     </section>
 
@@ -51,10 +53,11 @@
         <li>Backend uses <a href="https://nodejs.org/" target="_blank" rel="noopener">Node.JS</a>, served by <a href="https://expressjs.com/" target="_blank" rel="noopener">Express</a> and using <a href="https://eta.js.org/" target="_blank" rel="noopener">Eta</a> as a template engine. The database uses <a href="https://www.postgresql.org/" target="_blank" rel="noopener">PostgreSQL</a>.</li>
       </ul>
     </section>
-    
+
     <div class="return-home">
       <h3><a href="/">Return to Homepage</a></h3>
     </div>
   </main>
 </body>
+
 </html>

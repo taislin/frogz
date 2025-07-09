@@ -41,24 +41,50 @@ textarea,
 input,
 select {
 	mix-blend-mode: exclusion;
+	border: 1px solid var(--border-color-light); /* Use variable */
+	border-radius: var(--border-radius-sm); /* Use variable */
+	padding: 0.8em; /* Consistent padding */
+	font-size: 1rem; /* Unified font size */
+	transition: border-color 0.2s ease, box-shadow 0.2s ease; /* Smooth transitions */
 }
 
 button,
 input[type="submit"] {
 	font-size: 1rem; /* 16px */
 	text-align: center;
-	border: 1px solid #ccc;
-	border-radius: 8px;
-	padding: 8px;
 	background: rgb(66, 66, 66);
+	border: 1px solid var(--border-color-dark); /* Use variable */
+	border-radius: var(--border-radius-sm); /* Use variable */
+	padding: 0.8em 1.5em; /* Consistent padding */
+	cursor: pointer;
+	transition: background-color 0.2s ease, border-color 0.2s ease,
+		transform 0.1s ease;
 }
 
 button:hover,
 input[type="submit"]:hover {
-	border: 1px solid rgb(255, 255, 255);
-	background: rgb(127, 127, 127);
+	transform: translateY(-1px); /* Subtle lift on hover */
+	box-shadow: var(--box-shadow-subtle); /* Add subtle shadow */
 }
 
+button:active,
+input[type="submit"]:active {
+	transform: translateY(0); /* Press effect */
+}
+
+button:focus,
+input[type="submit"]:focus {
+	outline: 2px solid var(--focus-outline-color);
+	outline-offset: 2px;
+}
+input[type="text"]:focus,
+input[type="password"]:focus,
+select:focus,
+textarea:focus {
+	outline: none; /* Remove default outline */
+	border-color: var(--focus-outline-color); /* Highlight border on focus */
+	box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.2); /* Subtle glow on focus */
+}
 div.preview,
 div.edit {
 	flex: 45%;
@@ -96,10 +122,28 @@ div.edit {
 	background-color: #ffe6e6;
 	border: 1px solid red;
 	padding: 1em;
-	margin-bottom: 1.5em;
 	border-radius: 5px;
+	border-left: 5px solid red; /* More prominent left border */
+	padding: var(--spacing-sm) var(--spacing-md);
+	margin-bottom: var(--spacing-md);
+}
+.form-and-preview-container {
+	gap: var(--spacing-md); /* Use variable for gap */
 }
 
+.edit-form-section,
+.preview-section {
+	border: 1px solid var(--border-color-light); /* Lighter border for clean look */
+	border-radius: var(--border-radius-md); /* Softer corners */
+	padding: var(--spacing-md); /* Consistent padding */
+	box-shadow: var(--box-shadow-subtle); /* Subtle shadow */
+}
+/* Separators */
+hr {
+	border: none;
+	border-top: 1px dashed var(--border-color-light); /* Lighter, theme-aware */
+	margin: var(--spacing-lg) auto; /* Consistent margin */
+}
 /* General form element grouping */
 .form-group {
 	margin-bottom: 1.5em; /* Space between form groups */
@@ -268,7 +312,20 @@ div.edit {
 .markdown-info a:hover {
 	color: var(--link-hover-color);
 }
+.lost-password-warning {
+	background-color: #fce4ec; /* Light red/pink background */
+	color: #c2185b; /* Darker red text */
+	border: 1px solid #c2185b;
+	padding: 0.8em 1em;
+	border-radius: 5px;
+	margin-top: 1em; /* Space from the password input */
+	font-size: 0.9em;
+	line-height: 1.4;
+}
 
+.lost-password-warning strong {
+	color: #c2185b; /* Ensure strong text matches warning color */
+}
 /* Mobile adjustments (adjust these to fit your specific break points) */
 @media (max-width: 700px) {
 	.page-main {

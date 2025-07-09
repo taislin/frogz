@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Page not found on Frogz - The anti-bloat microhosting service.">
+  <title>404 - Page Not Found | Frogz</title>
+  <link rel="stylesheet" type="text/css" href="/css/basic.css">
+  <link rel="stylesheet" type="text/css" href="/css/frontpage.css"> <!-- Re-use general marketing styles -->
+  <link rel="icon" type="image/png" href="/favicon.png">
+</head>
+
+<body>
+  <main class="frontpage-main text-center">
+    <h1 class="page-title">404 - Page Not Found</h1>
+    <img src="/pepe_thinking.png" alt="Thinking Pepe the Frog" class="error-image">
+    <p class="intro-section">
+      Oops! It looks like the page you're looking for doesn't exist or has been removed.
+      Perhaps you mistyped the URL, or the frog hopped to another lily pad.
+    </p>
+    <div class="action-buttons-container">
+      <div class="boxed action-box">
+        <a href="/" class="action-link">Return to Homepage</a>
+      </div>
+      <div class="boxed action-box">
+        <a href="/random" class="action-link">Find a Random Page</a>
+      </div>
+    </div>
+  </main>
+</body>
+
+</html>

@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Explore recently created public pages on Frogz, the anti-bloat microhosting service.">
+  <title>Explore Pages | Frogz</title>
+  <link rel="stylesheet" type="text/css" href="/css/basic.css">
+  <link rel="stylesheet" type="text/css" href="/css/frontpage.css">
+  <link rel="icon" type="image/png" href="/favicon.png">
+</head>
+<body>
+  <main class="frontpage-main">
+    <h1 class="page-title">Explore Public Pages</h1>
+    
+    <section class="explore-list-section">
+      <% if (it.pages && it.pages.length > 0) { %>
+        <ul class="explore-page-list">
+          <% for (let i = 0; i < it.pages.length; i++) { %>
+            <li>
+                <a href="/<%= it.pages[i].id %>"><%= it.pages[i].id %></a> 
+                <span class="page-meta">(Created: <%= it.pages[i].created_at_readable %>)</span>
+            </li>
+          <% } %>
+        </ul>
+      <% } else { %>
+        <p class="no-pages-message">No public pages to explore yet. Be the first to create one!</p>
+      <% } %>
+    </section>
+
+    <div class="return-home">
+      <h3><a href="/">Return to Homepage</a></h3>
+    </div>
+  </main>
+</body>
+</html>

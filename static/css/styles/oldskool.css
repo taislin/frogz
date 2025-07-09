@@ -1,41 +1,66 @@
+/* oldskool.css */
+
 :root {
-	--bg-color: black;
-	--text-color: #32cd32;
-	--heading2-color: #2e8b57;
-	--heading3-color: #006400;
-	--link-color: #2fa31a;
-	--link-hover-color: #3cb371;
-	--font-family: monospace;
+    --bg-color: black;
+    --text-color: #32cd32; /* Classic green text */
+    --heading1-color: #32cd32; /* Use main text color for H1 as well */
+    --heading2-color: #2e8b57; /* Darker green for H2 */
+    --heading3-color: #006400; /* Even darker green for H3 */
+    --link-color: #2fa31a;
+    --link-visited-color: #2fa31a; /* Visited links same color */
+    --link-hover-color: #3cb371; /* Lighter green on hover */
+    --link-active-color: #9acd32; /* Yellow-green on active */
+    --font-family-sans: var(--font-family-mono); /* Force monospace for the whole page */
+    
+    /* Adjust border/shadow/focus colors for this theme */
+    --border-color-light: rgba(50, 205, 50, 0.4); /* Green tint */
+    --border-color-dark: rgba(50, 205, 50, 0.8);
+    --box-shadow-subtle: none; /* No shadows for oldskool */
+    --box-shadow-strong: none;
+    --focus-outline-color: #00ff00; /* Bright green focus */
 }
 
-/* Styles unique to oldskool theme */
-h2, h3, h4 {
-	text-align: center;
+/* Specific styles for oldskool theme - these do not use variables directly as they are unique rules */
+body {
+    font-family: var(--font-family-mono); /* Ensure monospace */
+}
+h1, h2, h3, h4 {
+    text-align: center;
 }
 h2 {
-	font-style: italic;
+    font-style: italic;
 }
 strong {
-	font-weight: 700;
-	color: #6b8e23;
+    font-weight: var(--font-weight-bold);
+    color: #6b8e23; /* Olive green */
 }
 em, cite {
-	color: #006400;
+    color: #006400; /* Dark green */
 }
 q, blockquote {
-	font-style: italic;
-	color: #228b22;
+    font-style: italic;
+    color: #228b22; /* Forest green */
 }
-table {
-	border: solid 1px #f8f8f8;
+.user-content table {
+    border: solid 1px var(--text-color); /* Table border from text-color var */
 }
-td {
-	border: solid 1px #f8f8f8;
-	padding: 0 8px;
-	background-color: #006400;
-	color: #eeefee;
+.user-content th,
+.user-content td {
+    border: solid 1px var(--text-color); /* Cell borders from text-color var */
+    padding: 0px 8px; /* Original padding */
+    background-color: #006400; /* Dark green background for cells */
+    color: #eeefee; /* Light text in cells */
 }
-p {
-	margin-left: 10px;
-	margin-right: 10px;
+.user-content p {
+    margin-left: 10px;
+    margin-right: 10px;
+}
+.user-content pre {
+    background-color: #003300; /* Even darker background for pre */
+    color: #32cd32; /* Green text */
+    border: 1px solid #32cd32;
+}
+.user-content code {
+    background-color: #004d00;
+    color: #9acd32;
 }

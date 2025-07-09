@@ -3,10 +3,10 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <!-- ADDED: Meta description for SEO -->
-  <meta name="description" content="A Frogz page - <%= it.content.substring(0, 150).replace(/<[^>]*>?/gm, '') %>"> 
-  <!-- TODO: Dynamically generate a better title, maybe from pageid -->
-  <title>Frogz Page</title>
+  <!-- ADDED: Dynamic page title from it.pageid -->
+  <title><%= it.pageid ? it.pageid + ' | Frogz' : 'Frogz Page' %></title>
+  <!-- ADDED: Meta description for SEO, now pulling from content and pageid -->
+  <meta name="description" content="A Frogz page hosted at <%= it.pageid %>: <%= it.content.substring(0, 150).replace(/<[^>]*>?/gm, '') %>"> 
   
   <!-- Consolidated and cleaned up CSS links. Loads basic.css always, then the specific theme. -->
   <link rel="stylesheet" type="text/css" href="/css/basic.css">
@@ -25,13 +25,16 @@
       <%~ it.content %>
     </div>
     
-    <hr class="content-separator"> <!-- Added a class for styling consistency -->
+    <hr class="content-separator"> 
     
     <footer class="page-footer">
-      <!-- REMOVED: Duplicate ID, now #powered_by is only on the p tag, a tag gets a class -->
-      <p id="powered_by"><%= it.times %> | <a class="frogz-link" href='/'>FROGZ</a></p>
+      <p id="powered_by">
+        <%= it.times %> | 
+        <!-- ADDED: Download raw content link -->
+        <a class="download-link" href="/<%= it.pageid %>/raw">Download</a> | 
+        <a class="frogz-link" href='/'>FROGZ</a>
+      </p>
     </footer>
   </main>
 </body>
-<!-- REMOVED: Duplicate </body> and </html> tags -->
 </html>

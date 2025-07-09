@@ -220,7 +220,13 @@ a:active {
 	word-wrap: break-word; /* Prevents long words from overflowing */
 	margin-bottom: 2em; /* Space before the hr */
 }
-
+.user-content ul,
+.user-content ol {
+	margin-bottom: var(--spacing-md);
+}
+.user-content li {
+	padding-left: 0; /* Remove default padding from list items */
+}
 .content-separator {
 	width: 85%; /* Or 100% */
 	border: 0;
@@ -252,7 +258,9 @@ a:active {
 	max-width: 100%;
 	height: auto;
 	display: block; /* Prevents extra space below images */
-	margin: 1em auto; /* Center images and add vertical space */
+	margin: var(--spacing-md) auto; /* Consistent margin */
+	border-radius: var(--border-radius-sm); /* Consistent border-radius */
+	box-shadow: var(--box-shadow-subtle); /* Subtle shadow for user images */
 }
 /* Overall main container for the front page */
 .frontpage-main {
@@ -269,10 +277,12 @@ a:active {
 	margin-bottom: 2em; /* Space below the image */
 }
 .main-hero-image {
-	max-width: 100%; /* Ensure image is responsive */
+	max-width: 100%;
 	height: auto;
-	display: inline-block; /* Or block depending on desired layout */
-	/* If you still want the flipper animation on this image, ensure the .flipper class is applied to the img */
+	display: block;
+	margin: var(--spacing-xl) auto; /* More distinct spacing for hero image */
+	border-radius: var(--border-radius-md); /* Soften corners */
+	box-shadow: var(--box-shadow-subtle); /* Subtle lift */
 }
 
 /* Intro section */
@@ -406,6 +416,62 @@ a:active {
 .about-features-section .features-list li {
 	margin-bottom: 0.8em; /* Space between list items */
 }
+.explore-list-section {
+	margin-bottom: 2em;
+	text-align: left; /* Align list left */
+}
+
+.explore-page-list {
+	list-style: none; /* No default bullets */
+	padding: 0;
+	margin: 0;
+}
+
+.explore-page-list li {
+	margin-bottom: 0.8em;
+	border-bottom: 1px dotted rgba(128, 128, 128, 0.3); /* Subtle separator */
+	padding-bottom: 0.5em;
+}
+
+.explore-page-list li:last-child {
+	border-bottom: none;
+}
+
+.explore-page-list a {
+	font-weight: bold;
+	color: var(--link-color);
+	text-decoration: none;
+	font-size: 1.2em; /* Make page links stand out */
+}
+
+.explore-page-list a:hover {
+	text-decoration: underline;
+	color: var(--link-hover-color);
+}
+
+.page-meta {
+	font-size: 0.8em;
+	color: darkgray;
+	margin-left: 1em;
+}
+
+.no-pages-message {
+	text-align: center;
+	font-style: italic;
+	color: var(--text-color);
+	padding: 2em;
+	border: 1px dashed var(--text-color);
+	border-radius: 5px;
+}
+
+.error-image {
+	/* For the 404 page */
+	max-width: 250px;
+	height: auto;
+	display: block;
+	margin: 1.5em auto;
+}
+
 /* Mobile responsiveness for frontpage and marketing pages */
 @media screen and (max-width: 700px) {
 	body {

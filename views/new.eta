@@ -1,28 +1,30 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="FROGZ: <%= it.action.charAt(0).toUpperCase() + it.action.slice(1) %> your anti-bloat page. Create or edit content with Markdown or HTML.">
   <title>Frogz - <%= it.action.charAt(0).toUpperCase() + it.action.slice(1) %> a Page</title>
-  
+
   <!-- Load basic.css first for core styles and CSS variables -->
   <link rel="stylesheet" type="text/css" href="/css/basic.css">
   <!-- Then load edit.css for specific form/layout styles -->
   <link rel="stylesheet" type="text/css" href="/css/edit.css">
   <!-- Finally, load the selected content style for the preview, if applicable -->
-  <% if (it.style && it.style !== "no css") { %> 
-    <link rel="stylesheet" type="text/css" href="/css/styles/<%= it.style %>.css"> 
+  <% if (it.style && it.style !== "no css") { %>
+  <link rel="stylesheet" type="text/css" href="/css/styles/<%= it.style %>.css">
   <% } %>
-  
+
   <link rel="icon" type="image/png" href="/favicon.png">
 </head>
+
 <body>
   <main class="page-main">
     <% if (it.errors && it.errors !== "<strong>Errors:</strong><br>") { %>
-      <div class="error-messages">
-        <%~ it.errors %>
-      </div>
+    <div class="error-messages">
+      <%~ it.errors %>
+    </div>
     <% } %>
 
     <div id="bigbox" class="form-and-preview-container">
@@ -32,9 +34,9 @@
           <div class="form-group">
             <label for="pageid-input">Page Name (URL)</label><br>
             <% if (it.action === "edit" && it.pageid) { %>
-              <input type="text" name="pageid" id="pageid-input" value="<%= it.pageid %>" readonly class="form-input readonly-input">
+            <input type="text" name="pageid" id="pageid-input" value="<%= it.pageid %>" readonly class="form-input readonly-input">
             <% } else { %>
-              <input type="text" name="pageid" id="pageid-input" value="<%= it.pageid %>" class="form-input" <%= it.action === "submit" && it.pageid ? 'autofocus' : '' %>>
+            <input type="text" name="pageid" id="pageid-input" value="<%= it.pageid %>" class="form-input" <%= it.action === "submit" && it.pageid ? 'autofocus' : '' %>>
             <% } %>
           </div>
 
@@ -42,15 +44,17 @@
             <label for="password-input">Editing password <em>(do not lose this!)</em></label><br>
             <input type="password" name="password" id="password-input" value="<%= it.password || '' %>" class="form-input">
           </div>
-
+          <div class="lost-password-warning">
+            <strong>Important:</strong> We do not store your password. If you lose it, access to your page will be lost permanently.
+          </div>
           <div class="form-group inline-group">
             <label for="style-select">Style:</label>
             <select name='style' id='style-select' class="form-select">
               <% for (let i = 0; i < it.Styles.length; i++) { %>
-                <% const currentStyle = it.Styles[i]; %>
-                <option value="<%= currentStyle %>" <%= currentStyle === it.style ? 'selected' : '' %>>
-                  <%= currentStyle %>
-                </option>
+              <% const currentStyle = it.Styles[i]; %>
+              <option value="<%= currentStyle %>" <%= currentStyle === it.style ? 'selected' : '' %>>
+                <%= currentStyle %>
+              </option>
               <% } %>
             </select>
             <a href='/styles' target='_blank' rel='noopener' class="view-styles-link">(view)</a>
@@ -91,4 +95,5 @@
     </footer>
   </main>
 </body>
+
 </html>

@@ -1,11 +1,20 @@
+/* sharkgrey.css */
+
 :root {
-	--bg-color: #4e4f51;
-	--text-color: lightgray;
-	--heading1-color: #cdcecf;
-	--heading2-color: #b4b5b7;
-	--heading3-color: #b4b5b7;
-	--link-color: gold;
-	--link-visited-color: goldenrod;
-	--link-hover-color: #000000;
-	--link-active-color: lightgray;
+    --bg-color: #4e4f51;
+    --text-color: lightgray;
+    --heading1-color: #cdcecf;
+    --heading2-color: #b4b5b7;
+    --heading3-color: #b4b5b7;
+    --link-color: gold;
+    --link-visited-color: goldenrod;
+    --link-hover-color: #000000;
+    --link-active-color: lightgray;
+
+    /* Adjust border/shadow/focus colors for this theme */
+    --border-color-light: rgba(255, 255, 255, 0.3);
+    --border-color-dark: rgba(255, 255, 255, 0.6);
+    --box-shadow-subtle: 0px 2px 5px rgba(0, 0, 0, 0.3);
+    --box-shadow-strong: 0px 4px 10px rgba(0, 0, 0, 0.5);
+    --focus-outline-color: #ffcc00; /* Yellow focus */
 }

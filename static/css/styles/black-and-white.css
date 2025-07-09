@@ -1,16 +1,26 @@
+/* black-and-white.css */
+
 :root {
-	--bg-color: white;
-	--text-color: black;
-	--heading1-color: black;
-	--heading2-color: #1f1f1f;
-	--heading3-color: #1f1f1f;
-	--link-color: blue;
-	--link-visited-color: blueviolet;
-	--link-hover-color: darkblue;
-	--link-active-color: lightblue;
+    --bg-color: white;
+    --text-color: black;
+    --heading1-color: black;
+    --heading2-color: #1f1f1f;
+    --heading3-color: #1f1f1f;
+    --link-color: blue;
+    --link-visited-color: blueviolet;
+    --link-hover-color: darkblue;
+    --link-active-color: lightblue;
+
+    /* Adjust border/shadow/focus colors for this theme (white background) */
+    --border-color-light: rgba(0, 0, 0, 0.2);
+    --border-color-dark: rgba(0, 0, 0, 0.4);
+    --box-shadow-subtle: 0px 2px 5px rgba(0, 0, 0, 0.1);
+    --box-shadow-strong: 0px 4px 10px rgba(0, 0, 0, 0.3);
+    --focus-outline-color: #007bff; /* Standard blue focus, good for light themes */
 }
 
 /* Unique overrides */
-h1, h2, h3 {
-	font-weight: bold;
+h1, h2, h3, h4, h5, h6 { /* Apply to all headings for consistency */
+	font-weight: var(--font-weight-bold);
 }
+.user-content a:link { text-decoration: underline; } /* Ensure links are underlined */
