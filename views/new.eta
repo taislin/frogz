@@ -2,52 +2,93 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <meta content="width=device-width, initial-scale=1" name="viewport" />
-  <title>Frogz - <%= it.action %> a Page</title>
-  <link rel="stylesheet" type="text/css" href="/css/frontpage.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="FROGZ: <%= it.action.charAt(0).toUpperCase() + it.action.slice(1) %> your anti-bloat page. Create or edit content with Markdown or HTML.">
+  <title>Frogz - <%= it.action.charAt(0).toUpperCase() + it.action.slice(1) %> a Page</title>
+  
+  <!-- Load basic.css first for core styles and CSS variables -->
+  <link rel="stylesheet" type="text/css" href="/css/basic.css">
+  <!-- Then load edit.css for specific form/layout styles -->
   <link rel="stylesheet" type="text/css" href="/css/edit.css">
-  <% if (it.style && it.style != "/css/styles/no css.css") { %> <link rel="stylesheet" type="text/css" href="/css/styles/<%= it.style %>.css"> <% } %>
+  <!-- Finally, load the selected content style for the preview, if applicable -->
+  <% if (it.style && it.style !== "no css") { %> 
+    <link rel="stylesheet" type="text/css" href="/css/styles/<%= it.style %>.css"> 
+  <% } %>
+  
   <link rel="icon" type="image/png" href="/favicon.png">
 </head>
 <body>
-  <p class="errors"><%~ it.errors %></p>
-  <div id="bigbox">
-  <div class="edit">
-  <form action="/<%= it.action %>" method="POST">
-      <label for="pageid">Page Name (URL)</label><br/>
-      <% if (it.pageid) { %>
-        <input type="text" name="pageid" value="<%= it.pageid %>" readonly></input>
-      <% } else { %>
-        <input type="text" name="pageid" value="<%= it.pageid %>"></input>
-      <% } %>
-      <br/><br/>
-      <label for="password">Editing password <em>(do not lose this!)</em></label><br/>
-      <input type="password" name="password" value="<% if (it.password) { %><%= it.password %><% } %>"></input><br/><br/>
-      <label for="style">Style: </label>
-      <select name='style' id='styles'>
-        <% for (stl in it.Styles) {if (it.Styles[stl] == it.style) { %>
-            <option selected value="<%= it.Styles[stl] %>"><%= it.Styles[stl] %></option>
-          <% } else { %>
-            <option value="<%= it.Styles[stl] %>"><%= it.Styles[stl] %></option>
-        <% }} %>
-      </select>&nbsp;<a href='/styles' target='_blank' rel='noopener'>(view)</a><br>
-      <label for="indexable">Indexable: </label>
-      <input type="checkbox" name="indexable" <% if (it.indexed) { %> checked <% } %> > </input><br>
-      <br/><br/>
-      <label for="content">Content (markdown/html supported):</label>
-      <textarea name="content" autofocus> <% if (it._content) { %><%= it._content %><% } %></textarea>
-      <p>
-        <input type="submit" value="save"></input>
-        <input type="submit" name="preview" value="preview"></input>
+  <main class="page-main">
+    <% if (it.errors && it.errors !== "<strong>Errors:</strong><br>") { %>
+      <div class="error-messages">
+        <%~ it.errors %>
+      </div>
+    <% } %>
+
+    <div id="bigbox" class="form-and-preview-container">
+      <section class="edit-form-section">
+        <h2 class="section-title"><%= it.action.charAt(0).toUpperCase() + it.action.slice(1) %> Page</h2>
+        <form action="/<%= it.action %>" method="POST" class="page-form">
+          <div class="form-group">
+            <label for="pageid-input">Page Name (URL)</label><br>
+            <% if (it.action === "edit" && it.pageid) { %>
+              <input type="text" name="pageid" id="pageid-input" value="<%= it.pageid %>" readonly class="form-input readonly-input">
+            <% } else { %>
+              <input type="text" name="pageid" id="pageid-input" value="<%= it.pageid %>" class="form-input" <%= it.action === "submit" && it.pageid ? 'autofocus' : '' %>>
+            <% } %>
+          </div>
+
+          <div class="form-group">
+            <label for="password-input">Editing password <em>(do not lose this!)</em></label><br>
+            <input type="password" name="password" id="password-input" value="<%= it.password || '' %>" class="form-input">
+          </div>
+
+          <div class="form-group inline-group">
+            <label for="style-select">Style:</label>
+            <select name='style' id='style-select' class="form-select">
+              <% for (let i = 0; i < it.Styles.length; i++) { %>
+                <% const currentStyle = it.Styles[i]; %>
+                <option value="<%= currentStyle %>" <%= currentStyle === it.style ? 'selected' : '' %>>
+                  <%= currentStyle %>
+                </option>
+              <% } %>
+            </select>
+            <a href='/styles' target='_blank' rel='noopener' class="view-styles-link">(view)</a>
+          </div>
+
+          <div class="form-group inline-group">
+            <label for="indexable-checkbox">Indexable:</label>
+            <input type="checkbox" name="indexable" id="indexable-checkbox" <%= it.indexed ? 'checked' : '' %>>
+          </div>
+
+          <div class="form-group">
+            <label for="content-textarea">Content (Markdown/HTML supported):</label>
+            <textarea name="content" id="content-textarea" class="form-textarea" autofocus><% if (it._content) { %><%= it._content %><% } %></textarea>
+          </div>
+
+          <div class="form-actions">
+            <input type="submit" value="Save" class="btn btn-primary">
+            <input type="submit" name="preview" value="Preview" class="btn btn-secondary">
+          </div>
+        </form>
+      </section>
+
+      <section class="preview-section">
+        <h2 class="section-title preview-title">Preview:</h2>
+        <hr class="preview-separator">
+        <div class="preview-content user-content">
+          <%~ it.preview %>
+        </div>
+      </section>
+    </div>
+
+    <hr class="main-separator">
+
+    <footer class="info-footer">
+      <p class="markdown-info">
+        <strong>Markdown:</strong> You can use <a href='https://www.markdownguide.org/cheat-sheet/' target='_blank' rel='noopener'>this guide</a> to learn Markdown.
       </p>
-  </form>
-  </div>
-  <div class="preview"><h2 style="text-align:center">Preview:</h2><hr><%~ it.preview %></div>
-  </div>
-  <br>
-  <hr>
-  <p style="font-style: italic">
-    <strong>Markdown:</strong> You can use <a href='https://www.markdownguide.org/cheat-sheet/' target='_blank' rel='noopener'>this guide</a> to learn MarkDown.
-  </p>
+    </footer>
+  </main>
 </body>
 </html>

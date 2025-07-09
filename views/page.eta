@@ -2,19 +2,36 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <title>Frogz</title>
-  <meta content="width=device-width, initial-scale=1" name="viewport" />
-  <% if (it.styling != "/css/styles/no css.css") { %> <link rel="stylesheet" type="text/css" href="/css/basic.css"><link rel="stylesheet" type="text/css" href="<%= it.styling %>"> <% } %>
-  <link rel="icon" type="image/png" href="favicon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- ADDED: Meta description for SEO -->
+  <meta name="description" content="A Frogz page - <%= it.content.substring(0, 150).replace(/<[^>]*>?/gm, '') %>"> 
+  <!-- TODO: Dynamically generate a better title, maybe from pageid -->
+  <title>Frogz Page</title>
+  
+  <!-- Consolidated and cleaned up CSS links. Loads basic.css always, then the specific theme. -->
+  <link rel="stylesheet" type="text/css" href="/css/basic.css">
+  <% if (it.styling && it.styling !== "/css/styles/no css.css") { %>
+    <link rel="stylesheet" type="text/css" href="<%= it.styling %>">
+  <% } %>
+  
+  <!-- Corrected favicon path -->
+  <link rel="icon" type="image/png" href="/favicon.png">
 </head>
 
 <body>
-  <%~ it.content %>
-  <hr>
-  <p id="powered_by"><%= it.times %><a id='powered_by' href='/'>FROGZ</a></p>
+  <main class="page-container">
+    <!-- ADDED: A div to wrap the content for consistent styling -->
+    <div class="user-content">
+      <%~ it.content %>
+    </div>
+    
+    <hr class="content-separator"> <!-- Added a class for styling consistency -->
+    
+    <footer class="page-footer">
+      <!-- REMOVED: Duplicate ID, now #powered_by is only on the p tag, a tag gets a class -->
+      <p id="powered_by"><%= it.times %> | <a class="frogz-link" href='/'>FROGZ</a></p>
+    </footer>
+  </main>
 </body>
-
-</html>
-</body>
-
+<!-- REMOVED: Duplicate </body> and </html> tags -->
 </html>

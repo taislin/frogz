@@ -1,32 +1,38 @@
+/* frontpage.css - Specific styles for the landing page and other marketing pages */
+
+/* Core layout and typography are handled by basic.css */
 body {
-	margin: 0 auto;
-	max-width: 900px;
-	padding: 1em;
-	font-family: sans-serif;
-	font-size: 1rem; /* Base size */
+	font-size: 1rem; /* Base size; basic.css sets the overall em scaling */
 	background-color: black;
 	color: darkgray;
 	text-align: center;
 }
+
 h1 {
 	color: #47b932;
-	font-size: 4em;
+	font-size: 4em; /* Relative to body's font-size, so 4 * 1.5 = 6rem if basic.css body is 1.5em */
 	margin-block-start: 0.2em;
 	margin-block-end: 0em;
 }
+
 .title {
-	font-size: 6em;
+	font-size: 6em; /* Even larger for the main title */
 	filter: drop-shadow(-5px 5px 3px #2fa31a);
 }
+
 h2 {
 	color: #2fa31a;
 }
+
 h3 {
 	color: #c4ce2d;
 }
+
 li {
 	margin-bottom: 10px;
 }
+
+/* Link styling for frontpage */
 a:link,
 a:visited {
 	color: #2fa31a;
@@ -40,40 +46,54 @@ a:active {
 }
 
 .crop {
-	margin: -30px 0 -25px 0;
-	overflow: hidden;
+	margin: -30px 0 -25px 0; /* Specific margin for the frog image */
+	overflow: hidden; /* To ensure the crop effect */
 }
 
+/* --- Animations --- */
 @keyframes flip {
-	0% { transform: rotateY(0deg); }
-	50% { transform: rotateY(180deg); }
-	100% { transform: rotateY(0deg); }
+	0% {
+		transform: rotateY(0deg);
+	}
+	50% {
+		transform: rotateY(180deg);
+	}
+	100% {
+		transform: rotateY(0deg);
+	}
 }
 .flipper {
 	animation: flip 4s infinite;
 }
 
-hr {
-	width: 85%;
-	border: 1px dashed gray;
+@keyframes shimmer {
+	0% {
+		background-position: 200% 0;
+	} /* Start off-screen right */
+	100% {
+		background-position: -200% 0;
+	} /* End off-screen left */
 }
-
 .shimmer {
 	color: rgba(255, 255, 255, 0.1);
-	background: linear-gradient(to right, #47b932, #47b932, #fff 50%, #47b932, #47b932);
-	background-size: 200% 100%; /* Changed for smoother animation */
+	/* Background gradient for the shimmer effect */
+	background: linear-gradient(
+		to right,
+		#47b932,
+		#47b932 40%,
+		#fff 50%,
+		#47b932 60%,
+		#47b932
+	);
+	background-size: 200% 100%; /* Double the size for the gradient to move across */
+	-webkit-background-clip: text; /* Clip background to text shape */
 	background-clip: text;
-	animation: shimmer 3s infinite linear; /* Changed duration/timing */
+	animation: shimmer 3s infinite linear; /* Apply the animation */
 	background-repeat: no-repeat;
-	background-position: 100% 0; /* Start from the right */
-	background-color: #47b932;
+	background-color: #47b932; /* Fallback background color */
 }
 
-@keyframes shimmer {
-	0% { background-position: 200% 0; }
-	100% { background-position: -200% 0; }
-}
-
+/* --- Layout for boxed sections on frontpage --- */
 .boxed {
 	flex: 50%;
 }
@@ -82,7 +102,311 @@ hr {
 	flex-wrap: wrap;
 }
 
-/* mobile small */
+/* --- Specific styles for terms.eta (and potential other marketing pages) --- */
+.page-title {
+	font-size: 3em; /* Adjusted size for secondary page titles */
+	color: var(--heading1-color); /* Use variable from basic.css */
+	text-align: center;
+	margin-bottom: 1em;
+}
+
+.terms-section {
+	margin-bottom: 2em; /* Space between sections on terms page */
+}
+
+.section-heading {
+	display: flex;
+	align-items: center;
+	gap: 15px; /* Space between image and text */
+	margin-bottom: 1em; /* Space below the heading */
+}
+
+.pepe-icon {
+	height: 80px; /* Specific height for the Pepe icons */
+	width: auto; /* Maintain aspect ratio */
+	display: block; /* Remove extra space below image */
+}
+
+.text-left {
+	text-align: left;
+}
+
+.text-justify {
+	text-align: justify;
+}
+
+/* Spacing for paragraphs and lists within these text blocks */
+.text-justify p,
+.text-left p {
+	margin-bottom: 1em; /* Consistent spacing below paragraphs */
+}
+.text-left ul {
+	margin-left: 1.5em; /* Indent list */
+	padding: 0;
+	list-style: disc; /* Ensure bullet points */
+}
+.text-left ul li {
+	margin-bottom: 0.5em; /* Space out list items */
+}
+
+.return-home {
+	text-align: center; /* Center the "Return to Homepage" link */
+	margin-top: 2em; /* Space above it */
+}
+.style-demo-content {
+	/* Example: Add some overall padding and maybe a background */
+	padding: 1.5em;
+	background-color: var(--bg-color); /* Inherit from theme */
+	color: var(--text-color); /* Inherit from theme */
+	border-radius: 8px;
+	border: 1px solid var(--text-color); /* Subtle border for the demo box */
+	margin-top: 2em; /* Space from the style selection form */
+}
+
+.style-demo-content section {
+	margin-bottom: 2em; /* Space between each demo section */
+	padding-bottom: 1em; /* Add padding at the bottom of each section */
+	border-bottom: 1px dashed var(--text-color); /* Visual separator between sections */
+}
+
+.style-demo-content section:last-child {
+	border-bottom: none; /* No separator after the last section */
+	margin-bottom: 0;
+	padding-bottom: 0;
+}
+
+/* Ensure code blocks look distinct */
+.style-demo-content pre {
+	background-color: rgba(0, 0, 0, 0.4); /* Slightly darker background */
+	padding: 1em;
+	border-radius: 5px;
+	overflow-x: auto; /* Allow horizontal scrolling for long lines */
+}
+
+.style-demo-content code {
+	font-size: 0.9em; /* Slightly smaller font for code */
+}
+
+.style-demo-content table {
+	width: 100%; /* Make tables span full width of container */
+	border-collapse: collapse; /* For cleaner table borders */
+}
+
+.style-demo-content table th,
+.style-demo-content table td {
+	padding: 0.8em; /* More padding for table cells */
+	text-align: left; /* Align text left */
+	border: 1px solid var(--text-color); /* Use theme text color for borders */
+}
+
+.style-demo-content table thead th {
+	background-color: rgba(
+		0,
+		0,
+		0,
+		0.2
+	); /* Slightly darker header background */
+}
+
+.style-demo-content blockquote {
+	margin-left: 1.5em; /* Standard blockquote indent */
+	padding-left: 1em;
+	border-left: 4px solid var(--heading2-color); /* Highlight with a theme color */
+	font-style: italic;
+	color: var(--text-color);
+}
+.user-content {
+	white-space: pre-wrap; /* This is CRUCIAL for preserving line breaks from markdown */
+	word-wrap: break-word; /* Prevents long words from overflowing */
+	margin-bottom: 2em; /* Space before the hr */
+}
+
+.content-separator {
+	width: 85%; /* Or 100% */
+	border: 0;
+	border-top: 1px dashed var(--text-color); /* Use a theme-aware dashed line */
+	margin: 2em auto;
+}
+
+.page-footer {
+	text-align: right;
+	font-size: 0.75em;
+	margin-top: 1em; /* Space between HR and footer */
+}
+
+.page-footer #powered_by {
+	/* Styles for the whole paragraph */
+	color: var(--text-color); /* Ensure text color matches theme */
+}
+
+.page-footer .frogz-link {
+	/* Styles specifically for the FROGZ link in the footer */
+	color: var(--link-color); /* Use theme's link color */
+	font-weight: bold;
+	text-decoration: none;
+	font-size: 0.9em;
+}
+
+/* Ensure images within user content are responsive */
+.user-content img {
+	max-width: 100%;
+	height: auto;
+	display: block; /* Prevents extra space below images */
+	margin: 1em auto; /* Center images and add vertical space */
+}
+/* Overall main container for the front page */
+.frontpage-main {
+	max-width: 900px;
+	margin: 0 auto;
+	padding: 1em;
+	/* Other body styles from basic.css will apply */
+}
+
+/* Hero image styling */
+.flipper-container {
+	/* If you want to center or add specific layout for the main frog image */
+	text-align: center;
+	margin-bottom: 2em; /* Space below the image */
+}
+.main-hero-image {
+	max-width: 100%; /* Ensure image is responsive */
+	height: auto;
+	display: inline-block; /* Or block depending on desired layout */
+	/* If you still want the flipper animation on this image, ensure the .flipper class is applied to the img */
+}
+
+/* Intro section */
+.intro-section {
+	margin-bottom: 2em;
+	font-size: 1.2em; /* Make intro text slightly larger */
+	line-height: 1.6;
+}
+.intro-section p {
+	margin-bottom: 1em; /* Space between intro paragraphs */
+}
+
+/* Action Buttons Container */
+.action-buttons-container {
+	/* Inherits from .boxed-container (display: flex, flex-wrap: wrap) */
+	margin-bottom: 2em; /* Space below the action buttons */
+	/* Adjust font size/weight here if needed, or on the .action-link */
+	font-size: 1.17em; /* Original size, now on the container */
+	font-weight: bold;
+}
+
+.action-box {
+	text-align: center;
+	padding: 1em; /* Add some padding inside the boxes */
+}
+
+.action-icon {
+	width: 3em; /* Original size */
+	height: auto;
+	vertical-align: middle; /* Align icon with text */
+	margin-right: 0.5em; /* Space between icon and link */
+	display: inline-block; /* To allow vertical-align */
+}
+
+.action-link {
+	color: #c4ce2d; /* Original link color */
+	text-decoration: none; /* Remove underline */
+	display: inline-block; /* Allows padding/margins if needed */
+}
+.action-link:hover {
+	color: #ffd700; /* Example hover color for this link type */
+	text-decoration: underline; /* Add underline on hover */
+}
+
+/* Main separator */
+.main-separator {
+	width: 85%;
+	border: 0;
+	border-top: 1px dashed gray;
+	margin: 2em auto; /* Space above and below separator */
+}
+
+/* Info and Features Container */
+.info-features-container {
+	/* Inherits from .boxed-container */
+	margin-bottom: 2em; /* Space below this section */
+}
+
+.info-box,
+.features-box {
+	text-align: center; /* Default text alignment */
+	padding: 1em; /* Add padding to these boxes */
+}
+
+.section-heading {
+	color: var(--heading1-color); /* Use a consistent heading color */
+	margin-bottom: 1em; /* Space below heading */
+}
+
+.info-list,
+.features-list {
+	list-style: none; /* Remove default bullets if desired */
+	padding: 0;
+	margin: 0;
+	text-align: left; /* Specific alignment for feature list */
+}
+
+.info-list li,
+.features-list li {
+	margin-bottom: 0.5em; /* Space between list items */
+}
+
+.features-list a,
+.info-list a {
+	color: var(--link-color); /* General link color for lists */
+	font-weight: bold;
+	text-decoration: none;
+}
+.features-list a:hover,
+.info-list a:hover {
+	color: var(--link-hover-color);
+	text-decoration: underline;
+}
+/* About Page Specific Layout */
+.about-hero-image-container {
+	text-align: center; /* Center the image */
+	margin: 2em auto; /* Space above and below the image */
+	max-width: 200px; /* Adjust size as needed, perhaps make it larger than favicon default */
+	border-radius: 50%; /* If you want it circular */
+	overflow: hidden; /* To ensure border-radius works */
+}
+
+/* Ensure the image inside this container is responsive */
+.about-hero-image-container .main-hero-image {
+	width: 100%;
+	height: auto;
+	display: block; /* Remove extra space below the image */
+}
+
+.about-intro {
+	margin-bottom: 2em; /* Space after intro section */
+	line-height: 1.6; /* Improve readability */
+	font-size: 1.1em; /* Slightly larger text for main content */
+	/* text-align: left is now handled by .text-left */
+}
+
+.about-intro p {
+	margin-bottom: 1em; /* Consistent spacing between paragraphs */
+}
+
+.about-features-section {
+	margin-bottom: 2em; /* Space after features section */
+}
+
+/* Specific styling for the features list on the about page */
+.about-features-section .features-list {
+	list-style: disc; /* Ensure bullet points are visible */
+	margin-left: 1.5em; /* Indent the list */
+	padding: 0;
+}
+.about-features-section .features-list li {
+	margin-bottom: 0.8em; /* Space between list items */
+}
+/* Mobile responsiveness for frontpage and marketing pages */
 @media screen and (max-width: 700px) {
 	body {
 		max-width: 90%;
@@ -95,9 +419,26 @@ hr {
 		border-bottom: 1px dashed gray;
 	}
 	img {
-		max-width: 90%;
+		max-width: 90%; /* Ensure images don't overflow on small screens */
 	}
 	.title {
-		font-size: 4em;
+		font-size: 4em; /* Adjust main title size for mobile */
+	}
+	.action-buttons-container {
+		flex-direction: column; /* Stack action buttons on mobile */
+		gap: 1em;
+	}
+	.action-box {
+		width: 100%; /* Make action boxes full width */
+		padding: 0.8em;
+	}
+	.info-features-container {
+		flex-direction: column; /* Stack info and features on mobile */
+		gap: 1em;
+	}
+	.info-box,
+	.features-box {
+		width: 100%; /* Make info/features boxes full width */
+		padding: 0.8em;
 	}
 }

@@ -2,26 +2,43 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <meta content="width=device-width, initial-scale=1" name="viewport" />
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Explore different page styles available on FROGZ, the anti-bloat microhosting service.">
   <title>Frogz - Page Styles</title>
+  <!-- Load basic.css first for core styles and CSS variables, then the selected theme. -->
   <link rel="stylesheet" type="text/css" href="/css/basic.css">
-  <link rel="stylesheet" type="text/css" href="css/styles/<%= it.style %>.css">
-  <link rel="icon" type="image/png" href="favicon.png">
+  <% if (it.style && it.style !== "no css") { %>
+    <link rel="stylesheet" type="text/css" href="/css/styles/<%= it.style %>.css">
+  <% } %>
+  <link rel="icon" type="image/png" href="/favicon.png">
 </head>
 <body>
-  <form action="/styles" method="POST">
-  <label for="style">Style: </label>
-  <select name='style' id='styles'>
-    <% for (stl in it.Styles) {if (it.Styles[stl] == it.style) { %>
-        <option selected value="<%= it.Styles[stl] %>"><%= it.Styles[stl] %></option>
-      <% } else { %>
-        <option value="<%= it.Styles[stl] %>"><%= it.Styles[stl] %></option>
-    <% }} %>
-  </select>
-  <p><input type="submit" value="update"></input></p>
+<main>
+  <h1 class="page-title">Explore Page Styles</h1>
+
+  <form action="/styles" method="POST" class="style-selector-form">
+    <label for="style-select" class="form-label">Choose a Style:</label>
+    <select name="style" id="style-select" class="style-dropdown">
+      <% for (let i = 0; i < it.Styles.length; i++) { %>
+        <% const currentStyle = it.Styles[i]; %>
+        <option value="<%= currentStyle %>" <%= currentStyle === it.style ? 'selected' : '' %>>
+          <%= currentStyle %>
+        </option>
+      <% } %>
+    </select>
+    <p><input type="submit" value="Apply Style" class="submit-button"></p>
   </form>
-  <br/>
-  <hr/>
+
+  <hr class="separator"/>
+
+  <section class="style-demo-section">
+    <h2 class="section-heading">Live Style Preview</h2>
     <%~ includeFile("styledemo.eta") %>
+  </section>
+
+  <div class="return-home">
+    <h3><a href="/">Return to Homepage</a></h3>
+  </div>
+</main>
 </body>
 </html>

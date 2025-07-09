@@ -84,3 +84,216 @@ div.edit {
 		display: block;
 	}
 }
+.page-main {
+	max-width: 900px; /* Consistent with other pages */
+	margin: 0 auto;
+	padding: 1em;
+}
+
+/* Error messages styling */
+.error-messages {
+	color: red;
+	background-color: #ffe6e6;
+	border: 1px solid red;
+	padding: 1em;
+	margin-bottom: 1.5em;
+	border-radius: 5px;
+}
+
+/* General form element grouping */
+.form-group {
+	margin-bottom: 1.5em; /* Space between form groups */
+}
+
+.form-group label {
+	display: block; /* Ensures label is on its own line */
+	margin-bottom: 0.5em; /* Space between label and input */
+	font-size: 1.2em; /* Slightly larger label text */
+	color: var(--text-color); /* Use theme color */
+}
+
+/* Input/textarea/select general styling */
+.form-input,
+.form-textarea,
+.form-select {
+	display: block;
+	box-sizing: border-box;
+	width: 100%;
+	padding: 0.8em;
+	border: 1px solid var(--text-color); /* Use theme text color for border */
+	border-radius: 8px;
+	background-color: var(--bg-color); /* Use theme background */
+	color: var(--text-color); /* Use theme text color */
+	font-size: 1rem;
+	font-family: sans-serif;
+	mix-blend-mode: exclusion; /* Keep the cool blend effect */
+}
+
+.form-textarea {
+	min-height: 30vh;
+	font-family: "Courier New", monospace; /* Monospaced for code editing */
+}
+
+.readonly-input {
+	background-color: rgba(
+		66,
+		66,
+		66,
+		0.5
+	); /* Slightly different background for readonly */
+	opacity: 0.8;
+}
+
+/* Inline groups for checkbox and dropdown */
+.inline-group {
+	display: flex;
+	align-items: center;
+	gap: 10px; /* Space between label and input/select */
+	margin-bottom: 1.5em;
+}
+.inline-group label {
+	margin-bottom: 0; /* Remove bottom margin if items are inline */
+}
+.inline-group input[type="checkbox"] {
+	width: auto; /* Allow checkbox to be its natural size */
+}
+
+/* View styles link next to dropdown */
+.view-styles-link {
+	font-size: 0.9em;
+	color: var(--link-color); /* Use theme link color */
+	text-decoration: underline;
+	margin-left: 0.5em;
+}
+.view-styles-link:hover {
+	color: var(--link-hover-color);
+}
+
+/* Section titles */
+.section-title {
+	text-align: center;
+	margin-bottom: 1em;
+	color: var(--heading1-color); /* Use a primary heading color */
+}
+
+/* Form actions (buttons) */
+.form-actions {
+	display: flex;
+	justify-content: center; /* Center buttons */
+	gap: 15px; /* Space between buttons */
+	margin-top: 2em;
+}
+
+.btn {
+	font-size: 1rem;
+	text-align: center;
+	border: 1px solid var(--text-color); /* Use theme text color for border */
+	border-radius: 8px;
+	padding: 0.8em 1.5em;
+	cursor: pointer;
+	transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+.btn-primary {
+	background: rgb(66, 66, 66);
+	color: white;
+}
+
+.btn-secondary {
+	background: rgba(66, 66, 66, 0.7);
+	color: lightgray;
+}
+
+.btn:hover {
+	border-color: rgb(255, 255, 255);
+	background: rgb(127, 127, 127);
+}
+
+/* Form and Preview Container */
+.form-and-preview-container {
+	display: flex;
+	flex-wrap: wrap; /* Allows wrapping on smaller screens */
+	gap: 20px; /* Space between form and preview */
+}
+
+.edit-form-section,
+.preview-section {
+	flex: 1; /* Both take equal space */
+	min-width: 300px; /* Minimum width before wrapping */
+	border: 2px solid gray;
+	border-radius: 2px;
+	padding: 15px;
+	background-color: var(--bg-color); /* Inherit background */
+	color: var(--text-color); /* Inherit text color */
+}
+
+/* Specific preview section styling */
+.preview-title {
+	margin-bottom: 0.5em; /* Closer to the HR */
+}
+
+.preview-separator {
+	width: 100%;
+	border: 0;
+	border-top: 1px dashed gray;
+	margin-bottom: 1em;
+}
+
+/* User content in preview (should match page.eta user-content) */
+.preview-content {
+	white-space: pre-wrap; /* Preserve formatting for preview */
+	word-wrap: break-word;
+}
+
+/* Separator at the bottom of the page */
+.main-separator {
+	width: 85%;
+	border: 0;
+	border-top: 1px dashed gray;
+	margin: 2em auto;
+}
+
+/* Info footer (for markdown guide link) */
+.info-footer {
+	text-align: center;
+	font-size: 0.9em;
+	margin-top: 1em;
+	color: var(--text-color);
+}
+.markdown-info a {
+	color: var(--link-color); /* Use theme link color */
+	font-weight: bold;
+	text-decoration: underline;
+}
+.markdown-info a:hover {
+	color: var(--link-hover-color);
+}
+
+/* Mobile adjustments (adjust these to fit your specific break points) */
+@media (max-width: 700px) {
+	.page-main {
+		padding: 0.5em; /* Reduce padding on mobile */
+	}
+	.form-and-preview-container {
+		flex-direction: column; /* Stack form and preview vertically */
+		gap: 1em;
+	}
+	.edit-form-section,
+	.preview-section {
+		min-width: unset; /* Remove min-width on small screens */
+		padding: 10px;
+	}
+	.form-input,
+	.form-textarea,
+	.form-select {
+		font-size: 0.9rem; /* Slightly smaller font for inputs on mobile */
+		padding: 0.6em;
+	}
+	.form-group label {
+		font-size: 1em;
+	}
+	.btn {
+		padding: 0.6em 1.2em;
+		font-size: 0.9rem;
+	}
+}
