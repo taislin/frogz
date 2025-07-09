@@ -2,14 +2,14 @@ body {
 	margin: 0 auto;
 	padding: 1em;
 	font-family: sans-serif;
-	font-size: 16px;
+	font-size: 1rem; /* Base size: 16px */
 	background-color: black;
 	color: darkgray;
 	text-align: left;
 }
 
 label {
-	font-size: 24px;
+	font-size: 1.5rem; /* 24px */
 }
 
 textarea {
@@ -22,7 +22,7 @@ textarea {
 	padding: 8px;
 	background-color: black;
 	color: white;
-	font-size: 16px;
+	font-size: 1rem; /* 16px */
 	font-family: "Courier New", monospace;
 }
 
@@ -34,7 +34,7 @@ input,
 select {
 	background-color: black;
 	color: white;
-	font-size: 24px;
+	font-size: 1.5rem; /* 24px */
 }
 
 textarea,
@@ -45,7 +45,7 @@ select {
 
 button,
 input[type="submit"] {
-	font-size: 16px;
+	font-size: 1rem; /* 16px */
 	text-align: center;
 	border: 1px solid #ccc;
 	border-radius: 8px;
@@ -53,11 +53,12 @@ input[type="submit"] {
 	background: rgb(66, 66, 66);
 }
 
-button,
+button:hover,
 input[type="submit"]:hover {
 	border: 1px solid rgb(255, 255, 255);
 	background: rgb(127, 127, 127);
 }
+
 div.preview,
 div.edit {
 	flex: 45%;

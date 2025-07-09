@@ -1,36 +1,16 @@
-body {
-	font-family: sans-serif;
-	background-color: white;
-	color: black;
-}
-h1 {
-	color: black;
-	font-weight: bold;
-}
-h2 {
-	color: #1f1f1f;
-	font-weight: bold;
-}
-h3 {
-	color: #1f1f1f;
-	font-weight: bold;
-}
-/* unvisited link */
-a:link {
-	color: blue;
+:root {
+	--bg-color: white;
+	--text-color: black;
+	--heading1-color: black;
+	--heading2-color: #1f1f1f;
+	--heading3-color: #1f1f1f;
+	--link-color: blue;
+	--link-visited-color: blueviolet;
+	--link-hover-color: darkblue;
+	--link-active-color: lightblue;
 }
 
-/* visited link */
-a:visited {
-	color: blueviolet;
-}
-
-/* mouse over link */
-a:hover {
-	color: darkblue;
-}
-
-/* selected link */
-a:active {
-	color: lightblue;
+/* Unique overrides */
+h1, h2, h3 {
+	font-weight: bold;
 }

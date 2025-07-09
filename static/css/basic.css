@@ -1,18 +1,60 @@
+/* Modern CSS Reset */
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+body, h1, h2, h3 {
+  margin: 0;
+}
+
+/* 
+  Default theme variables (matches 'classic.css').
+  Theme files will override these.
+*/
+:root {
+	--bg-color: black;
+	--text-color: darkgray;
+	--heading1-color: #47b932;
+	--heading2-color: #258814;
+	--heading3-color: #c4ce2d;
+	--link-color: #2fa31a;
+	--link-visited-color: #2fa31a;
+	--link-hover-color: #195a0e;
+	--link-active-color: yellow;
+	--font-family: sans-serif;
+}
+
 body {
 	margin: 0 auto;
 	max-width: 900px;
 	padding: 1em;
-	font-family: sans-serif;
-	font-size: 1.5em;
+	font-family: var(--font-family);
+	font-size: 1.5em; /* This can be adjusted, but using em allows scaling */
+	background-color: var(--bg-color);
+	color: var(--text-color);
 }
 h1 {
 	font-size: 2em;
+	color: var(--heading1-color);
 }
 h2 {
 	font-size: 1.75em;
+	color: var(--heading2-color);
 }
 h3 {
 	font-size: 1.5em;
+	color: var(--heading3-color);
+}
+a:link {
+	color: var(--link-color);
+}
+a:visited {
+	color: var(--link-visited-color);
+}
+a:hover {
+	color: var(--link-hover-color);
+}
+a:active {
+	color: var(--link-active-color);
 }
 
 #powered_by {
@@ -25,6 +67,7 @@ h3 {
 	text-decoration: none;
 	font-size: 0.9em;
 }
+
 /* mobile small */
 @media screen and (max-width: 700px) {
 	body {

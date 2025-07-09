@@ -1,33 +1,15 @@
-body {
-	font-family: sans-serif;
-	background-color: black;
-	color: darkgray;
-}
-h1 {
-	color: #47b932;
-}
-h2 {
-	color: #258814;
-}
-h3 {
-	color: #c4ce2d;
-}
-/* unvisited link */
-a:link {
-	color: #2fa31a;
-}
-
-/* visited link */
-a:visited {
-	color: #2fa31a;
-}
-
-/* mouse over link */
-a:hover {
-	color: #195a0e;
-}
-
-/* selected link */
-a:active {
-	color: yellow;
+/* The 'classic' theme is now the default in basic.css. */
+/* This file is kept for theme-switching logic but can be empty. */
+/* Or, explicitly set the variables if you prefer. */
+:root {
+	--bg-color: black;
+	--text-color: darkgray;
+	--heading1-color: #47b932;
+	--heading2-color: #258814;
+	--heading3-color: #c4ce2d;
+	--link-color: #2fa31a;
+	--link-visited-color: #2fa31a;
+	--link-hover-color: #195a0e;
+	--link-active-color: yellow;
+	--font-family: sans-serif;
 }

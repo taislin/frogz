@@ -1,36 +1,16 @@
-body {
-	font-family: sans-serif;
-	background-color: #17490e;
-	color: lightgray;
-}
-h1 {
-	color: #c4ce2d;
-}
-h2 {
-	color: #abb42d;
-}
-h3 {
-	color: #9da52a;
-}
-/* unvisited link */
-a:link {
-	color: yellow;
-}
-/* visited link */
-a:visited {
-	color: orange;
-}
-/* mouse over link */
-a:hover {
-	color: gold;
-}
-/* selected link */
-a:active {
-	color: yellowgreen;
+:root {
+	--bg-color: #17490e;
+	--text-color: lightgray;
+	--heading1-color: #c4ce2d;
+	--heading2-color: #abb42d;
+	--heading3-color: #9da52a;
+	--link-color: yellow;
+	--link-visited-color: orange;
+	--link-hover-color: gold;
+	--link-active-color: yellowgreen;
 }
 
+/* Specific overrides for this theme, if any */
 #powered_by a {
 	color: #ffffff;
-	font-weight: bold;
-	text-decoration: none;
 }

@@ -1,61 +1,40 @@
-body {
-	font-family: monospace;
-	background-color: black;
-	color: #32cd32;
+:root {
+	--bg-color: black;
+	--text-color: #32cd32;
+	--heading2-color: #2e8b57;
+	--heading3-color: #006400;
+	--link-color: #2fa31a;
+	--link-hover-color: #3cb371;
+	--font-family: monospace;
+}
+
+/* Styles unique to oldskool theme */
+h2, h3, h4 {
+	text-align: center;
 }
 h2 {
-	text-align: center;
 	font-style: italic;
-	color: #2e8b57;
 }
-
-h3 {
-	text-align: center;
-	color: #006400;
-}
-h4 {
-	text-align: center;
-	color: #006400;
-}
-/* unvisited link */
-a:link {
-	color: #2fa31a;
-}
-
-/* mouse over link */
-a:hover {
-	color: #3cb371;
-}
-
 strong {
 	font-weight: 700;
 	color: #6b8e23;
 }
-
-em,
-cite {
+em, cite {
 	color: #006400;
 }
-
-q,
-blockquote {
+q, blockquote {
 	font-style: italic;
 	color: #228b22;
 }
-
 table {
 	border: solid 1px #f8f8f8;
 }
 td {
 	border: solid 1px #f8f8f8;
-	padding-left: 8px;
-	padding-right: 8px;
-	padding-top: 0px;
-	padding-bottom: 0px;
+	padding: 0 8px;
 	background-color: #006400;
 	color: #eeefee;
 }
-
 p {
 	margin-left: 10px;
 	margin-right: 10px;

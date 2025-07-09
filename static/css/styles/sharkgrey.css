@@ -1,33 +1,11 @@
-body {
-	font-family: sans-serif;
-	background-color: #4e4f51;
-	color: lightgray;
-}
-h1 {
-	color: #cdcecf;
-}
-h2 {
-	color: #b4b5b7;
-}
-h3 {
-	color: #b4b5b7;
-}
-/* unvisited link */
-a:link {
-	color: gold;
-}
-
-/* visited link */
-a:visited {
-	color: goldenrod;
-}
-
-/* mouse over link */
-a:hover {
-	color: #000000;
-}
-
-/* selected link */
-a:active {
-	color: lightgray;
+:root {
+	--bg-color: #4e4f51;
+	--text-color: lightgray;
+	--heading1-color: #cdcecf;
+	--heading2-color: #b4b5b7;
+	--heading3-color: #b4b5b7;
+	--link-color: gold;
+	--link-visited-color: goldenrod;
+	--link-hover-color: #000000;
+	--link-active-color: lightgray;
 }
