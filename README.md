@@ -1,4 +1,4 @@
-# 🐸 FROGZ & The Anti-Mailbox 📬
+# 🐸 FROGZ & The FrogPost 📬
 
 [![Website Status](https://img.shields.io/website?down_color=red&down_message=offline&up_color=green&up_message=online&url=https%3A%2F%2Ffrogz.club)](https://frogz.club)
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=taislin_frogz&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=taislin_frogz)
@@ -9,7 +9,7 @@
 
 ---
 
-In an internet dominated by bloat, complexity, and pervasive tracking, **FROGZ** and **The Anti-Mailbox** offer a radical alternative. We champion **simplicity, privacy, and user control**, staunchly opposing the "soydev" trend of ultra-complex, data-hungry web services.
+In an internet dominated by bloat, complexity, and pervasive tracking, **FROGZ** and **The FrogPost** offer a radical alternative. We champion **simplicity, privacy, and user control**, staunchly opposing the "soydev" trend of ultra-complex, data-hungry web services.
 
 Our mission is to empower everyone to establish their internet presence and communicate privately with minimal friction.
 
@@ -32,11 +32,11 @@ Our mission is to empower everyone to establish their internet presence and comm
 
 ---
 
-## 📬 The Anti-Mailbox: Private, Ephemeral, E2E Encrypted Inbox
+## 📬 The FrogPost: Private, Ephemeral, E2E Encrypted Inbox
 
-**The Anti-Mailbox** is a revolutionary way to receive anonymous, one-way messages without compromising privacy or relying on email. It's an end-to-end encrypted message drop where messages self-destruct after a set period.
+**The FrogPost** is a revolutionary way to receive anonymous, one-way messages without compromising privacy or relying on email. It's an end-to-end encrypted message drop where messages self-destruct after a set period.
 
-### Key Anti-Mailbox Features:
+### Key FrogPost Features:
 
 -   **End-to-End Encrypted (E2EE):** Messages are encrypted in the sender's browser and can only be decrypted by the inbox owner's password-derived private key. Your server never sees plaintext messages or private keys.
 -   **Absolute Sender Anonymity:** No IP logging, no cookies, no personal information collected from senders.
@@ -61,7 +61,7 @@ Both services run on a robust and efficient backend, carefully chosen to align w
 ## Get Started
 
 -   **Start with FROGZ:** **[Visit frogz.club](https://frogz.club)** to create your first anti-bloat web page!
--   **Create an Anti-Mailbox:** **[Start your anonymous inbox here!](https://frogz.club/inbox/create)**
+-   **Create an FrogPost:** **[Start your anonymous inbox here!](https://frogz.club/inbox/create)**
 
 ## Contribute
 
@@ -79,7 +79,7 @@ You can reach us at `contact [at] frogz [dot] club`.
 **Summary of `README.md` Changes:**
 
 -   Updated title and initial description to reflect both services.
--   Created dedicated sections for FROGZ and The Anti-Mailbox, detailing their unique features.
+-   Created dedicated sections for FROGZ and The FrogPost, detailing their unique features.
 -   Updated the "Technology Stack" to mention the encryption tools.
 -   Added clear "Get Started" calls to action for both services.
 
@@ -87,7 +87,7 @@ You can reach us at `contact [at] frogz [dot] club`.
 
 ### 3. `index.eta` (Regenerated with Inbox Link)
 
-This updates the main FROGZ homepage to include a prominent link to the new Anti-Email Inbox service.
+This updates the main FROGZ homepage to include a prominent link to the new FrogPost service.
 
 ```html
 <!DOCTYPE html>
@@ -97,7 +97,7 @@ This updates the main FROGZ homepage to include a prominent link to the new Anti
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
 		<meta
 			name="description"
-			content="FROGZ: The open-source, anti-bloat microhosting service for simple, private, and ad-free webpages. Create your internet presence with plain text, Markdown, or HTML. Also introducing The Anti-Mailbox for private, E2E encrypted messages." />
+			content="FROGZ: The open-source, anti-bloat microhosting service for simple, private, and ad-free webpages. Create your internet presence with plain text, Markdown, or HTML. Also introducing The FrogPost for private, E2E encrypted messages." />
 		<title>FROGZ - The Anti-Bloat Microhosting Service</title>
 
 		<link rel="stylesheet" type="text/css" href="/css/basic.css" />
@@ -144,7 +144,7 @@ This updates the main FROGZ homepage to include a prominent link to the new Anti
 						class="action-icon" />
 					<a href="/random" class="action-link">Random Page</a>
 				</div>
-				<!-- ADDED: Link to the Anti-Email Inbox -->
+				<!-- ADDED: Link to the FrogPost -->
 				<div class="boxed action-box" id="inbox-link-box">
 					<img
 						src="/mailbox.png"

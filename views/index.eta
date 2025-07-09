@@ -4,7 +4,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="FROGZ: The open-source, anti-bloat microhosting service for simple, private, and ad-free webpages. Create your internet presence. Introducing The Anti-Mailbox for private, E2E encrypted messages.">
+  <meta name="description" content="FROGZ: The open-source, anti-bloat microhosting service for simple, private, and ad-free webpages. Create your internet presence. Introducing The FrogPost for private, E2E encrypted messages.">
   <title>FROGZ - Anti-Bloat Web Services</title>
 
   <link rel="stylesheet" type="text/css" href="/css/basic.css">
@@ -20,7 +20,7 @@
       <div class="flipper-container">
         <img src="/apu_band.gif" alt="A group of frogs playing musical instruments" class="main-hero-image">
       </div>
-      <p class="tagline">Your destination for <strong>anti-bloat web services</strong> – simple, private, and free.</p>
+      <p class="tagline"><i>Your destination for <strong>anti-bloat web services</strong> – simple, private, and free.</i></p>
     </header>
 
     <section class="intro-section content-box">
@@ -28,12 +28,12 @@
       <p>In an internet dominated by complexity and tracking, <strong>FROGZ</strong> offers a radical alternative. We champion <strong>simplicity, privacy, and user control</strong>, staunchly opposing the "soydev" trend of bloated web services.</p>
 
       <div class="service-highlight">
-        <h3><span class="service-icon frog-icon"></span> <strong>FROGZ Web Pages</strong></h3>
+        <h3><span class="service-icon pages-icon"></span> <strong>FROGZ Web Pages</strong></h3>
         <p>Create your own internet presence using just <strong>plain text</strong>, <strong>HTML</strong>, or even <strong>Markdown</strong>. Absolutely no registration required, no ads, and no client-side JavaScript on your published pages.</p>
       </div>
 
       <div class="service-highlight">
-        <h3><span class="service-icon mailbox-icon"></span> <strong>The Anti-Mailbox</strong></h3>
+        <h3><span class="service-icon mailbox-icon"></span> <strong>The FrogPost</strong></h3>
         <p>Receive <strong>anonymous, end-to-end encrypted messages</strong> without email. Set up a private inbox, share its public link, and check for messages that automatically expire after one week. Total privacy for both sender and receiver.</p>
       </div>
     </section>
@@ -42,11 +42,11 @@
       <h2 class="section-heading">Get Started Today</h2>
       <div class="action-buttons-grid">
         <div class="action-card">
-          <img src="/computer.png" alt="Computer icon" class="action-icon">
+          <img src="/pages.png" alt="Frogz Pages icon" class="action-icon">
           <a href="/new" class="action-link">Create a FROGZ Page</a>
         </div>
         <div class="action-card">
-          <img src="/mailbox.png" alt="Mailbox icon" class="action-icon">
+          <img src="/mailbox.png" alt="FrogPost icon" class="action-icon">
           <a href="/inbox/create" class="action-link">Create Your Anonymous Inbox</a>
         </div>
         <div class="action-card">
@@ -68,7 +68,7 @@
         </ul>
       </div>
       <div class="features-section">
-        <h2 class="section-heading">Why FROGZ & Anti-Mailbox?</h2>
+        <h2 class="section-heading">Why FROGZ & FrogPost?</h2>
         <ul class="features-list">
           <li>Absolutely <strong>FREE</strong> and <strong>NO ADS</strong> (ever).</li>
           <li>Totally <strong>anonymous</strong> - no accounts, no tracking.</li>

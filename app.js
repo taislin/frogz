@@ -1,4 +1,4 @@
-// app.js (Combined for FROGZ and Anti-Email Inbox)
+// app.js (Combined and Regenerated, CRITICAL Routing Order Fix)
 
 const express = require("express");
 const path = require("path");
@@ -7,13 +7,13 @@ const cron = require("node-cron");
 
 const rateLimit = require("express-rate-limit");
 const pool = require("./postgres.js");
-const { get_timestamps } = require("./utils.js");
+const { get_timestamps, escapeHtml } = require("./utils.js");
 const bcrypt = require("bcryptjs");
+const snarkdown = require("snarkdown"); // Ensure snarkdown is imported here for reRenderPage
 
-// Load FROGZ specific styles.json
 const Styles = require("./styles.json");
 
-// FROGZ Database Functions (ensure these paths are correct, assuming 'databases' directory)
+// FROGZ Database Functions
 const {
 	createTable: createFrogzTable,
 	editExistingPage,
@@ -23,7 +23,7 @@ const {
 	randomPage,
 } = require("./databases/frogz_db.js");
 
-// Inbox Database Functions (ensure these paths are correct)
+// Inbox Database Functions
 const {
 	createTables: createInboxTables,
 	createMailbox,
@@ -48,8 +48,6 @@ createFrogzTable();
 createInboxTables();
 
 // === MIDDLEWARE ===
-
-// HTTP Security Headers
 app.use((req, res, next) => {
 	res.setHeader("X-Content-Type-Options", "nosniff");
 	res.setHeader("X-Frame-Options", "DENY");
@@ -70,7 +68,6 @@ app.use(express.static(path.join(__dirname, "static")));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
-// Rate Limiter Configuration (applied globally to all POSTs for now)
 const apiLimiter = rateLimit({
 	windowMs: 15 * 60 * 1000,
 	max: 100,
@@ -80,24 +77,16 @@ const apiLimiter = rateLimit({
 		"Too many requests from this IP, please try again after 15 minutes.",
 });
 
-// === COMMON/GLOBAL ROUTES (e.g., health check) ===
-app.get("/health", apiLimiter, async (_req, res) => {
-	try {
-		await pool.query("SELECT 1"); // Simple DB connection test
-		res.status(200).send("OK");
-	} catch (error) {
-		console.error("Health check failed:", error);
-		res.status(500).send("Database connection failed");
-	}
-});
+// ==========================================================
+// IMPORTANT: ROUTING ORDER IS CRITICAL!
+// Specific API routes (return JSON) should come FIRST.
+// Then specific HTML render routes.
+// Then general dynamic HTML render routes (like /:pgpr).
+// ==========================================================
 
-// === ANTI-EMAIL INBOX ROUTES (All prefixed with /inbox) ===
-// THESE MUST COME BEFORE GENERAL FROGZ ROUTES (/:pgpr)
+// === API ENDPOINTS (RETURN JSON - MUST BE FIRST) ===
 
-app.get("/inbox/create", apiLimiter, (req, res) => {
-	res.render("create_inbox", { errors: null, mailboxId: null });
-});
-
+// 1. Inbox API Endpoints (POST requests typically return JSON)
 app.post("/inbox/create-inbox", apiLimiter, async (req, res) => {
 	const {
 		mailboxId,
@@ -121,7 +110,7 @@ app.post("/inbox/create-inbox", apiLimiter, async (req, res) => {
 		"css",
 		"inbox",
 		"frogz",
-	]; // Added 'frogz'
+	];
 	if (
 		!mailboxId ||
 		mailboxId.length < 3 ||
@@ -142,7 +131,9 @@ app.post("/inbox/create-inbox", apiLimiter, async (req, res) => {
 		!privateKeyIv ||
 		!kdfSalt
 	) {
-		errors.push("Missing encryption parameters. Client-side error?");
+		errors.push(
+			"Missing encryption parameters. Client-side error? (Try refreshing)"
+		);
 	}
 
 	if (errors.length > 0) {
@@ -168,66 +159,66 @@ app.post("/inbox/create-inbox", apiLimiter, async (req, res) => {
 			)}/inbox/${createdId}/read`,
 		});
 	} catch (error) {
-		console.error("Error creating inbox mailbox:", error);
-		res.status(409).json({ success: false, errors: [error.message] });
-	}
-});
-
-app.get("/inbox/:mailboxId/send", apiLimiter, async (req, res) => {
-	const mailboxId = req.params.mailboxId;
-	try {
-		const publicKeyJwk = await getMailboxPublicKey(mailboxId);
-		if (!publicKeyJwk) {
-			return res.status(404).render("404");
+		console.error("Error creating FrogPost mailbox:", error);
+		if (error.message === "Mailbox ID already exists.") {
+			return res.status(409).json({
+				success: false,
+				errors: [
+					"This Mailbox ID is already taken. Please choose another.",
+				],
+			});
 		}
-		res.render("send_message", {
-			mailboxId: mailboxId,
-			publicKeyJwk: publicKeyJwk,
+		res.status(500).json({
+			success: false,
+			errors: ["Failed to create mailbox due to a server error."],
 		});
-	} catch (error) {
-		console.error("Error rendering send message page:", error);
-		res.status(500).send("An internal server error occurred.");
 	}
 });
 
 app.post("/inbox/:mailboxId/send-message", apiLimiter, async (req, res) => {
+	console.log("[DEBUG send-message] Route hit for:", req.params.mailboxId);
+	console.log("[DEBUG send-message] Request Body:", req.body); // This should show your encrypted data
+
 	const mailboxId = req.params.mailboxId;
 	const { encryptedContent, messageIv, encryptedSymmetricKey } = req.body;
 
 	if (!encryptedContent || !messageIv || !encryptedSymmetricKey) {
-		return res
-			.status(400)
-			.json({
-				success: false,
-				errors: ["Missing encrypted message data."],
-			});
+		console.log("[DEBUG send-message] Validation failed: Missing data.");
+		// Ensure this sends JSON
+		return res.status(400).json({
+			success: false,
+			errors: ["Missing encrypted message data."],
+		});
 	}
 
 	try {
+		console.log(
+			"[DEBUG send-message] Attempting to store message in DB..."
+		);
 		const messageId = await storeMessage(
 			mailboxId,
 			encryptedContent,
 			messageIv,
 			encryptedSymmetricKey
 		);
+		console.log(
+			"[DEBUG send-message] Message stored successfully with ID:",
+			messageId
+		);
+		// Ensure this sends JSON
 		res.json({ success: true, messageId: messageId });
 	} catch (error) {
-		console.error("Error storing message:", error);
+		// Log the actual server-side error here
+		console.error(
+			"[ERROR send-message] Server-side error during message storage:",
+			error
+		);
+		// Ensure this sends JSON
 		res.status(500).json({
 			success: false,
-			errors: ["Failed to send message."],
+			errors: ["Failed to send message due to a server error."],
 		});
 	}
-});
-
-app.get("/inbox/:mailboxId/read", apiLimiter, async (req, res) => {
-	const mailboxId = req.params.mailboxId;
-	res.render("read_messages", {
-		mailboxId: mailboxId,
-		errors: null,
-		messages: [],
-		mailboxDetails: null,
-	});
 });
 
 app.post(
@@ -249,12 +240,10 @@ app.post(
 				password
 			);
 			if (!mailboxDetails) {
-				return res
-					.status(401)
-					.json({
-						success: false,
-						errors: ["Invalid mailbox ID or password."],
-					});
+				return res.status(401).json({
+					success: false,
+					errors: ["Invalid mailbox ID or password."],
+				});
 			}
 
 			const messages = await getMessagesForMailbox(mailboxId);
@@ -290,59 +279,40 @@ app.post(
 	}
 );
 
-// === FROGZ SPECIFIC ROUTES ===
-// These must come AFTER any specific routes (like /inbox/...)
-
-app.get("/", apiLimiter, function (_req, res) {
-	res.render("index");
+// 2. FROGZ API Endpoints (POST requests typically return JSON, raw content is text/plain)
+app.post("/submit", apiLimiter, (req, res) => {
+	// This is FROGZ page submission
+	if (req.body.preview) {
+		let cdate = new Date();
+		let rend = cdate.toLocaleTimeString("en-GB", {
+			hour: "2-digit",
+			minute: "2-digit",
+		});
+		reRenderPage(req, res, "submit", "Preview rendered at " + rend, true);
+	} else {
+		let _action = "submit";
+		let errormsg = "<strong>Errors:</strong><br>";
+		errormsg = doValidations(req, errormsg);
+		if (errormsg != "<strong>Errors:</strong><br>") {
+			reRenderPage(req, res, _action, errormsg);
+		} else {
+			submitPage(req, res);
+		}
+	}
 });
-app.get("/new", apiLimiter, function (_req, res) {
-	res.render("new", {
-		errors: "",
-		pageid: "",
-		Styles: Styles,
-		action: "submit",
-		preview: "",
-		indexable: true,
-	});
+app.post("/edit", apiLimiter, (req, res) => {
+	// This is FROGZ page edit
+	let _action = "edit";
+	let errormsg = "<strong>Errors:</strong><br>";
+	errormsg = doValidations(req, errormsg);
+	if (errormsg != "<strong>Errors:</strong><br>") {
+		reRenderPage(req, res, _action, errormsg);
+	} else {
+		processEdit(req, res, errormsg);
+	}
 });
-app.get("/edit", apiLimiter, function (_req, res) {
-	res.render("new", {
-		errors: "",
-		pageid: "",
-		Styles: Styles,
-		action: "edit",
-		preview: "",
-		indexable: true,
-	});
-});
-app.get("/terms", apiLimiter, function (_req, res) {
-	res.render("terms");
-});
-app.get("/about", apiLimiter, function (_req, res) {
-	res.render("about");
-});
-app.get("/styles", apiLimiter, function (_req, res) {
-	res.render("styles", {
-		partials: { styledemo: "styledemo" },
-		Styles: Styles,
-		style: "classic",
-	});
-});
-app.post("/styles", apiLimiter, (req, res) => {
-	res.render("styles", {
-		partials: { styledemo: "styledemo" },
-		Styles: Styles,
-		style: req.body.style,
-	});
-});
-
-app.get("/random", apiLimiter, function (_req, res) {
-	randomPage(res);
-});
-
-// FROGZ dynamic page routes (these are very broad and must be last in the FROGZ-specific section)
 app.get("/:pgpr/raw", apiLimiter, async (req, res) => {
+	// This is FROGZ raw content download
 	try {
 		const pageURL = req.params.pgpr;
 		const { rows } = await pool.query(
@@ -367,56 +337,173 @@ app.get("/:pgpr/raw", apiLimiter, async (req, res) => {
 	}
 });
 
-// Most general FROGZ routes must be at the very end of their section
+// 3. Admin Endpoint (JSON response)
+app.post("/admin/moderate", apiLimiter, async (req, res) => {
+	const { pageId, adminPassword, action } = req.body;
+	const expectedAdminPasswordHash = process.env.ADMIN_PASSWORD_HASH;
+
+	if (!adminPassword || !pageId || !action) {
+		return res.status(400).send("Missing parameters.");
+	}
+
+	const match = await bcrypt.compare(
+		adminPassword,
+		expectedAdminPasswordHash
+	);
+
+	if (!match) {
+		return res.status(401).send("Unauthorized.");
+	}
+
+	try {
+		if (action === "delete_frogz_page") {
+			await pool.query("DELETE FROM documents WHERE id = $1", [pageId]);
+			res.status(200).send(
+				`FROGZ Page '${pageId}' deleted successfully.`
+			);
+		} else if (action === "unindex_frogz_page") {
+			await pool.query("UPDATE documents SET indexed = 0 WHERE id = $1", [
+				pageId,
+			]);
+			res.status(200).send(
+				`FROGZ Page '${pageId}' unindexed successfully.`
+			);
+		} else if (action === "delete_inbox_mailbox") {
+			await pool.query("DELETE FROM mailboxes WHERE id = $1", [pageId]);
+			res.status(200).send(
+				`FrogPost Mailbox '${pageId}' and its messages deleted successfully.`
+			);
+		} else {
+			res.status(400).send("Invalid admin action.");
+		}
+	} catch (error) {
+		console.error("Admin moderation error:", error);
+		res.status(500).send("An error occurred during moderation.");
+	}
+});
+
+// === HTML PAGE RENDERING ROUTES (Order from specific to general) ===
+
+// Common/Marketing Pages
+app.get("/", apiLimiter, function (_req, res) {
+	res.render("index");
+});
+app.get("/terms", apiLimiter, function (_req, res) {
+	res.render("terms");
+});
+app.get("/about", apiLimiter, function (_req, res) {
+	res.render("about");
+});
+app.get("/styles", apiLimiter, function (_req, res) {
+	res.render("styles", {
+		partials: { styledemo: "styledemo" },
+		Styles: Styles,
+		style: "classic",
+	});
+});
+app.post("/styles", apiLimiter, (req, res) => {
+	res.render("styles", {
+		partials: { styledemo: "styledemo" },
+		Styles: Styles,
+		style: req.body.style,
+	});
+}); // This might be an API if it only changes data. Assuming it renders HTML here.
+app.get("/random", apiLimiter, function (_req, res) {
+	randomPage(res);
+}); // Redirects to a page, HTML
+
+// FrogPost HTML Pages
+app.get("/inbox/create", apiLimiter, (req, res) => {
+	res.render("create_inbox", { errors: null, mailboxId: null });
+});
+app.get("/inbox/:mailboxId/send", apiLimiter, async (req, res) => {
+	const mailboxId = req.params.mailboxId;
+	console.log(
+		"[APP DEBUG] Rendering send_message page for mailbox:",
+		mailboxId
+	);
+	try {
+		let publicKeyJwk = await getMailboxPublicKey(mailboxId);
+
+		if (publicKeyJwk === null) {
+			console.log(
+				"[APP DEBUG] Public Key JWK is NULL from DB, mailbox not found or key missing."
+			);
+			return res.status(404).render("404");
+		}
+
+		console.log(
+			"[APP DEBUG] Public Key JWK fetched and passed to template (truncated):",
+			publicKeyJwk ? publicKeyJwk.substring(0, 50) + "..." : "null"
+		);
+		console.log(
+			"[APP DEBUG] Type of publicKeyJwk passed to template:",
+			typeof publicKeyJwk
+		);
+
+		// CRITICAL FIX: Pass the escapeHtml function to the template context
+		res.render("send_message", {
+			mailboxId: mailboxId,
+			publicKeyJwk: publicKeyJwk,
+			escapeHtml: escapeHtml,
+		});
+	} catch (error) {
+		console.error("[APP ERROR] Error rendering send message page:", error);
+		res.status(500).send("An internal server error occurred.");
+	}
+});
+
+app.get("/inbox/:mailboxId/read", apiLimiter, async (req, res) => {
+	const mailboxId = req.params.mailboxId;
+	res.render("read_messages", {
+		mailboxId: mailboxId,
+		errors: null,
+		messages: [],
+		mailboxDetails: null,
+	});
+});
+
+// FROGZ HTML Pages (Specific then general dynamic ones)
+app.get("/new", apiLimiter, function (_req, res) {
+	// Frogz create new page form
+	res.render("new", {
+		errors: "",
+		pageid: "",
+		Styles: Styles,
+		action: "submit",
+		preview: "",
+		indexable: true,
+	});
+});
+app.get("/edit", apiLimiter, function (_req, res) {
+	// Frogz edit page form (for existing page by ID)
+	res.render("new", {
+		errors: "",
+		pageid: "",
+		Styles: Styles,
+		action: "edit",
+		preview: "",
+		indexable: true,
+	});
+});
 app.get("/:master/:pgpr/edit", apiLimiter, function (req, res) {
-	// Specific edit before general view
+	// Frogz subpage edit form
 	editExistingPage(req, res, req.params.master);
 });
 app.get("/:master/:pgpr", apiLimiter, function (req, res) {
-	// General subpage view
+	// Frogz general subpage view
 	findPage(req, res, req.params.master);
 });
 app.get("/:pgpr/edit", apiLimiter, function (req, res) {
-	// Specific edit before general view
+	// Frogz top-level page edit form
 	editExistingPage(req, res);
 });
 app.get("/:pgpr", apiLimiter, function (req, res) {
-	// General top-level page view
+	// Frogz general top-level page view
 	findPage(req, res);
 });
 
-// FROGZ POST routes (general form submissions)
-app.post("/submit", apiLimiter, (req, res) => {
-	if (req.body.preview) {
-		let cdate = new Date();
-		let rend = cdate.toLocaleTimeString("en-GB", {
-			hour: "2-digit",
-			minute: "2-digit",
-		});
-		reRenderPage(req, res, "submit", "Preview rendered at " + rend, true);
-	} else {
-		let _action = "submit";
-		let errormsg = "<strong>Errors:</strong><br>";
-		errormsg = doValidations(req, errormsg);
-		if (errormsg != "<strong>Errors:</strong><br>") {
-			reRenderPage(req, res, _action, errormsg);
-		} else {
-			submitPage(req, res);
-		}
-	}
-});
-app.post("/edit", apiLimiter, (req, res) => {
-	let _action = "edit";
-	let errormsg = "<strong>Errors:</strong><br>";
-	errormsg = doValidations(req, errormsg);
-	if (errormsg != "<strong>Errors:</strong><br>") {
-		reRenderPage(req, res, _action, errormsg);
-	} else {
-		processEdit(req, res, errormsg);
-	}
-});
-
-// FROGZ helper functions (moved from app.js for organization)
+// === FROGZ helper functions (moved from app.js for organization) ===
 function validateAlphanumeric(str) {
 	let regexp = /^[a-z0-9-_]+$/i;
 	return str.search(regexp) !== -1;
@@ -426,8 +513,6 @@ function validateLength(str, min = 0, max = 100) {
 	return !(strl < min || strl > max);
 }
 function doValidations(req, errormsg = "") {
-	// Note: Reserved IDs should ideally be checked within the database layer for uniqueness
-	// across both services if there's any chance of ID collision.
 	const reservedFrogzPageIds = [
 		"new",
 		"edit",
@@ -468,9 +553,12 @@ function doValidations(req, errormsg = "") {
 	return errormsg;
 }
 function reRenderPage(req, res, _action, errormsg, _preview = false) {
+	// This function requires snarkdown, ensure it's imported at the top of app.js
+	if (!snarkdown) {
+		const snarkdown = require("snarkdown");
+	} // Fallback if not global
 	let dopreview = "";
 	if (_preview && req.body.content) {
-		const snarkdown = require("snarkdown"); // Require locally if not global
 		dopreview = snarkdown(req.body.content);
 	}
 	let _indexed = false;
@@ -482,7 +570,7 @@ function reRenderPage(req, res, _action, errormsg, _preview = false) {
 		pageid: req.body.pageid,
 		password: req.body.password,
 		errors: errormsg,
-		style: req.body.style,
+		style: Styles, // Pass Styles directly, not req.body.style
 		Styles: Styles,
 		action: _action,
 		preview: dopreview,
@@ -491,7 +579,6 @@ function reRenderPage(req, res, _action, errormsg, _preview = false) {
 }
 
 // === SCHEDULED TASKS ===
-
 cron.schedule("0 3 * * *", async () => {
 	console.log("Running daily message deletion job...");
 	try {
@@ -509,7 +596,7 @@ app.use((req, res) => {
 
 // === START SERVER AND GRACEFUL SHUTDOWN ===
 const server = app.listen(port, () => {
-	console.log(`FROGZ & Anti-Email Inbox services running on port ${port}.`);
+	console.log(`FROGZ & FrogPost services running on port ${port}.`);
 });
 
 process.on("SIGINT", () => {

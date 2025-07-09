@@ -12,9 +12,12 @@ document.addEventListener('DOMContentLoaded', () => {
     const messageList = document.getElementById('messageList');
     const noMessagesParagraph = document.getElementById('noMessages');
 
-    const mailboxId = window.location.pathname.split('/')[1]; // Extract mailboxId from URL
+    const mailboxId = window.location.pathname.split('/')[2];
 
-    // Helper to convert Base64 string to ArrayBuffer
+    // Initialize encoders/decoders once
+    const textEncoder = new TextEncoder(); // For encoding strings to bytes
+    const textDecoder = new TextDecoder(); // For decoding bytes to strings
+
     function base64ToArrayBuffer(base64) {
         const binaryString = atob(base64);
         const len = binaryString.length;
@@ -25,7 +28,6 @@ document.addEventListener('DOMContentLoaded', () => {
         return bytes.buffer;
     }
 
-    // Helper to display errors
     function displayErrors(errors) {
         if (errorMessagesDiv && errorList) {
             errorList.innerHTML = '';
@@ -38,7 +40,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // Helper to clear messages
     function clearMessages() {
         if (errorMessagesDiv) {
             errorMessagesDiv.style.display = 'none';
@@ -46,31 +47,25 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // === Form Submission Handler for Password ===
     accessInboxForm.addEventListener('submit', async (event) => {
         event.preventDefault();
-        clearMessages(); // Clear previous errors
+        clearMessages();
 
         const password = passwordInput.value;
-
         if (password.length < 8) {
             displayErrors(["Password must be at least 8 characters long."]);
             return;
         }
 
-        // Show loading state
         accessButton.disabled = true;
         accessButton.textContent = 'Accessing...';
         loadingSpinner.style.display = 'inline-block';
         initialInfoDiv.style.display = 'none';
 
         try {
-            // === STEP 1: Fetch Mailbox Details and Encrypted Messages from Server ===
-            const response = await fetch(`/${mailboxId}/retrieve-messages`, {
+            const response = await fetch(`/inbox/${mailboxId}/retrieve-messages`, {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
+                headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ password: password }),
             });
 
@@ -81,122 +76,95 @@ document.addEventListener('DOMContentLoaded', () => {
                 return;
             }
 
-            // Server-side authentication was successful, now client-side decryption
             const { encryptedPrivateKeyBlob, privateKeyIv, kdfSalt, messages } = result;
 
-            // === STEP 2: Derive Symmetric Master Key from Password ===
-            const passwordEncoder = new TextEncoder();
-            const passwordBuffer = passwordEncoder.encode(password);
+            const passwordBuffer = textEncoder.encode(password); // Use textEncoder for password encoding
             const kdfSaltBuffer = base64ToArrayBuffer(kdfSalt);
 
             const kdfKey = await window.crypto.subtle.importKey(
-                "raw",
-                passwordBuffer,
-                { name: "PBKDF2" },
-                false,
-                ["deriveBits"]
+                "raw", passwordBuffer, { name: "PBKDF2" }, false, ["deriveBits"]
             );
 
             const derivedBits = await window.crypto.subtle.deriveBits(
                 {
-                    name: "PBKDF2",
-                    salt: kdfSaltBuffer,
-                    iterations: 310000, // Must match generation iterations
-                    hash: "SHA-256",
+                    name: "PBKDF2", salt: kdfSaltBuffer, iterations: 310000, hash: "SHA-256"
                 },
-                kdfKey,
-                256 // 256 bits for AES-GCM key
+                kdfKey, 256
             );
-
             const derivedSymmetricKey = await window.crypto.subtle.importKey(
-                "raw",
-                derivedBits,
-                { name: "AES-GCM" },
-                false,
-                ["encrypt", "decrypt"]
+                "raw", derivedBits, { name: "AES-GCM" }, false, ["encrypt", "decrypt"]
             );
 
-            // === STEP 3: Decrypt the Asymmetric Private Key ===
             const privateKeyIvBuffer = base64ToArrayBuffer(privateKeyIv);
             const encryptedPrivateKeyBlobBuffer = base64ToArrayBuffer(encryptedPrivateKeyBlob);
 
-            const decryptedPrivateKeyBuffer = await window.crypto.subtle.decrypt(
-                { name: "AES-GCM", iv: privateKeyIvBuffer },
-                derivedSymmetricKey,
-                encryptedPrivateKeyBlobBuffer
-            );
+            let decryptedPrivateKeyBuffer;
+            try {
+                decryptedPrivateKeyBuffer = await window.crypto.subtle.decrypt(
+                    { name: "AES-GCM", iv: privateKeyIvBuffer }, derivedSymmetricKey, encryptedPrivateKeyBlobBuffer
+                );
+            } catch (decryptionError) {
+                console.error("Failed to decrypt private key blob:", decryptionError);
+                displayErrors(["Incorrect password. (Private key decryption failed)"]);
+                return;
+            }
+            
+            // Use textDecoder for decoding the decrypted private key JWK string
+            const privateKeyJwk = textDecoder.decode(decryptedPrivateKeyBuffer);
+            let privateKey;
+            try {
+                privateKey = await window.crypto.subtle.importKey(
+                    "jwk", JSON.parse(privateKeyJwk), { name: "RSA-OAEP", hash: "SHA-256" }, false, ["decrypt"]
+                );
+            } catch (importError) {
+                console.error("Failed to import decrypted private key JWK:", importError);
+                displayErrors(["Corrupted private key data. Cannot decrypt messages."]);
+                return;
+            }
 
-            const privateKeyJwk = passwordEncoder.decode(decryptedPrivateKeyBuffer);
-            const privateKey = await window.crypto.subtle.importKey(
-                "jwk",
-                JSON.parse(privateKeyJwk),
-                { name: "RSA-OAEP", hash: "SHA-256" },
-                false, // not extractable, this is the final key to use
-                ["decrypt"]
-            );
-
-            // === STEP 4: Decrypt Each Message ===
-            messageList.innerHTML = ''; // Clear existing messages
+            messageList.innerHTML = '';
             if (messages.length === 0) {
                 noMessagesParagraph.style.display = 'block';
             } else {
                 noMessagesParagraph.style.display = 'none';
                 for (const msg of messages) {
+                    const li = document.createElement('li');
+                    li.className = 'message-item';
                     try {
                         const encryptedSymmetricKeyBuffer = base64ToArrayBuffer(msg.encrypted_symmetric_key);
                         const messageIvBuffer = base64ToArrayBuffer(msg.message_iv);
                         const encryptedContentBuffer = base64ToArrayBuffer(msg.encrypted_content);
 
-                        // Decrypt symmetric key with private key
                         const decryptedSymmetricKeyBuffer = await window.crypto.subtle.decrypt(
-                            { name: "RSA-OAEP" },
-                            privateKey,
-                            encryptedSymmetricKeyBuffer
+                            { name: "RSA-OAEP" }, privateKey, encryptedSymmetricKeyBuffer
                         );
-
                         const messageSymmetricKey = await window.crypto.subtle.importKey(
-                            "raw",
-                            decryptedSymmetricKeyBuffer,
-                            { name: "AES-GCM" },
-                            false,
-                            ["encrypt", "decrypt"]
+                            "raw", decryptedSymmetricKeyBuffer, { name: "AES-GCM" }, false, ["encrypt", "decrypt"]
                         );
-
-                        // Decrypt message content with symmetric key
                         const decryptedContentBuffer = await window.crypto.subtle.decrypt(
-                            { name: "AES-GCM", iv: messageIvBuffer },
-                            messageSymmetricKey,
-                            encryptedContentBuffer
+                            { name: "AES-GCM", iv: messageIvBuffer }, messageSymmetricKey, encryptedContentBuffer
                         );
-
-                        const decryptedMessage = passwordEncoder.decode(decryptedContentBuffer);
-
-                        // Display the decrypted message
-                        const li = document.createElement('li');
-                        li.className = 'message-item';
+                        // Use textDecoder for decoding the actual message content
+                        const decryptedMessage = textDecoder.decode(decryptedContentBuffer);
                         li.innerHTML = `
                             <div class="message-meta">Received: ${msg.created_at_readable}</div>
                             <div class="message-content">${decryptedMessage}</div>
                         `;
-                        messageList.appendChild(li);
-
                     } catch (msgError) {
-                        console.error("Error decrypting individual message:", msgError);
-                        const li = document.createElement('li');
-                        li.className = 'message-item message-error';
+                        console.error("Error decrypting individual message (might be password mismatch or corruption):", msgError);
+                        li.className += ' message-error';
                         li.innerHTML = `<div class="message-meta">Received: ${msg.created_at_readable}</div><div class="message-content"><em>Failed to decrypt this message. It might be corrupted or sent with an old/incorrect key.</em></div>`;
-                        messageList.appendChild(li);
                     }
+                    messageList.appendChild(li);
                 }
             }
-
-            // Show messages and hide form
             accessInboxForm.style.display = 'none';
             messagesDisplaySection.style.display = 'block';
 
         } catch (error) {
-            console.error("Overall decryption or fetch error:", error);
-            displayErrors(["Failed to access messages. Check your password or try again later."]);
+            console.error("Overall message retrieval/decryption error:", error);
+            // This catches server errors, initial password decryption failures
+            displayErrors(["Failed to access messages. Check your password or refresh and try again. Detailed: " + error.message]);
         } finally {
             accessButton.disabled = false;
             accessButton.textContent = 'Access Messages';

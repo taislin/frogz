@@ -9,20 +9,17 @@ document.addEventListener('DOMContentLoaded', () => {
     const loadingSpinner = document.getElementById('loadingSpinner');
     const successMessageDiv = document.getElementById('successMessage');
     const errorMessagesDiv = document.getElementById('error-messages');
-    const errorListUl = errorMessagesDiv ? errorMessagesDiv.querySelector('ul') : null; // Get the UL inside error div
+    const errorListUl = errorMessagesDiv ? errorMessagesDiv.querySelector('ul') : null;
 
-    // --- FIX START: Ensure initial state for messages ---
-    // Hide both success and error messages on page load.
-    // If the server *explicitly* rendered errors, the error div will be populated
-    // but we'll manage its visibility here.
+    // Initialize encoders/decoders once
+    const textEncoder = new TextEncoder();
+    // const textDecoder = new TextDecoder(); // Not directly used for decoding in this script, but good to note its existence.
+
     if (errorMessagesDiv) errorMessagesDiv.style.display = 'none';
     if (successMessageDiv) successMessageDiv.style.display = 'none';
-    // --- FIX END ---
 
     createInboxForm.addEventListener('submit', async (event) => {
         event.preventDefault();
-
-        // Clear previous messages and errors on new submission attempt
         clearFeedback();
 
         const mailboxId = mailboxIdInput.value.trim();
@@ -30,7 +27,6 @@ document.addEventListener('DOMContentLoaded', () => {
         const passwordConfirm = passwordConfirmInput.value;
 
         const clientErrors = [];
-
         if (!mailboxId || !/^[a-z0-9-]+$/.test(mailboxId) || mailboxId.length < 3 || mailboxId.length > 50) {
             clientErrors.push("Mailbox ID must be 3-50 lowercase alphanumeric characters or hyphens.");
         }
@@ -46,82 +42,43 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
-        // Show loading state
         createButton.disabled = true;
         createButton.textContent = 'Creating...';
         loadingSpinner.style.display = 'inline-block';
 
         try {
-            // ... (Your existing Web Crypto API logic for key generation and encryption) ...
-            // This part remains identical to your previous create_inbox.js logic
-            
-            // === STEP 1: Generate Asymmetric Key Pair (RSA-OAEP for encryption) ===
             const keyPair = await window.crypto.subtle.generateKey(
-                {
-                    name: "RSA-OAEP",
-                    modulusLength: 2048,
-                    publicExponent: new Uint8Array([0x01, 0x00, 0x01]),
-                    hash: "SHA-256",
-                },
-                true,
-                ["encrypt", "decrypt"]
+                { name: "RSA-OAEP", modulusLength: 2048, publicExponent: new Uint8Array([0x01, 0x00, 0x01]), hash: "SHA-256" },
+                true, ["encrypt", "decrypt"]
             );
-
             const publicKeyJwk = JSON.stringify(await window.crypto.subtle.exportKey("jwk", keyPair.publicKey));
             const privateKeyJwk = JSON.stringify(await window.crypto.subtle.exportKey("jwk", keyPair.privateKey));
             
-            // === STEP 2: Derive Symmetric Master Key from Password (PBKDF2) ===
             const salt = window.crypto.getRandomValues(new Uint8Array(16));
-            const passwordEncoder = new TextEncoder();
-            const passwordBuffer = passwordEncoder.encode(password);
+            const passwordBuffer = textEncoder.encode(password); // Use textEncoder here
 
-            const kdfKey = await window.crypto.subtle.importKey(
-                "raw",
-                passwordBuffer,
-                { name: "PBKDF2" },
-                false,
-                ["deriveBits"]
-            );
-
+            const kdfKey = await window.crypto.subtle.importKey("raw", passwordBuffer, { name: "PBKDF2" }, false, ["deriveBits"]);
             const derivedBits = await window.crypto.subtle.deriveBits(
-                {
-                    name: "PBKDF2",
-                    salt: salt,
-                    iterations: 310000,
-                    hash: "SHA-256",
-                },
-                kdfKey,
-                256
+                { name: "PBKDF2", salt: salt, iterations: 310000, hash: "SHA-256" },
+                kdfKey, 256
             );
-
             const derivedSymmetricKey = await window.crypto.subtle.importKey(
-                "raw",
-                derivedBits,
-                { name: "AES-GCM" },
-                false,
-                ["encrypt", "decrypt"]
+                "raw", derivedBits, { name: "AES-GCM" }, false, ["encrypt", "decrypt"]
             );
 
-            // === STEP 3: Encrypt the Private Key using the Derived Symmetric Key ===
             const privateKeyIv = window.crypto.getRandomValues(new Uint8Array(12));
-            const privateKeyBuffer = passwordEncoder.encode(privateKeyJwk);
-
+            const privateKeyBuffer = textEncoder.encode(privateKeyJwk); // Use textEncoder here
             const encryptedPrivateKeyBlobBuffer = await window.crypto.subtle.encrypt(
-                { name: "AES-GCM", iv: privateKeyIv },
-                derivedSymmetricKey,
-                privateKeyBuffer
+                { name: "AES-GCM", iv: privateKeyIv }, derivedSymmetricKey, privateKeyBuffer
             );
 
             const encryptedPrivateKeyBlob = btoa(String.fromCharCode(...new Uint8Array(encryptedPrivateKeyBlobBuffer)));
             const privateKeyIvBase64 = btoa(String.fromCharCode(...new Uint8Array(privateKeyIv)));
             const kdfSaltBase64 = btoa(String.fromCharCode(...new Uint8Array(salt)));
 
-            // === STEP 4: Send Encrypted Data to Server ===
             const response = await fetch('/inbox/create-inbox', {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
+                headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
                     mailboxId: mailboxId,
                     password: password,
@@ -135,21 +92,12 @@ document.addEventListener('DOMContentLoaded', () => {
             const result = await response.json();
 
             if (result.success) {
-                // Populate success message links
                 const publicUrlLink = document.getElementById('publicUrl');
                 const readUrlLink = document.getElementById('readUrl');
-                
-                if (publicUrlLink) {
-                    publicUrlLink.href = result.mailboxUrl;
-                    publicUrlLink.textContent = result.mailboxUrl;
-                }
-                if (readUrlLink) {
-                    readUrlLink.href = result.readUrl;
-                    readUrlLink.textContent = result.readUrl;
-                }
-                
+                if (publicUrlLink) { publicUrlLink.href = result.mailboxUrl; publicUrlLink.textContent = result.mailboxUrl; }
+                if (readUrlLink) { readUrlLink.href = result.readUrl; readUrlLink.textContent = result.readUrl; }
                 successMessageDiv.style.display = 'block';
-                createInboxForm.reset(); // Clear form on success
+                createInboxForm.reset();
             } else {
                 displayErrors(result.errors || ["An unknown error occurred."]);
             }
@@ -164,27 +112,18 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // Helper function to display errors
     function displayErrors(errors) {
         if (errorMessagesDiv && errorListUl) {
-            errorListUl.innerHTML = ''; // Clear previous list items
-            errors.forEach(e => {
-                const li = document.createElement('li');
-                li.textContent = e;
-                errorListUl.appendChild(li);
-            });
-            errorMessagesDiv.style.display = 'block'; // Show the error div
+            let errorHtml = '<strong>Errors:</strong><ul>';
+            errors.forEach(e => { errorHtml += `<li>${e}</li>`; });
+            errorHtml += '</ul>';
+            errorMessagesDiv.innerHTML = errorHtml;
+            errorMessagesDiv.style.display = 'block';
         }
     }
 
-    // Helper function to clear all feedback messages
     function clearFeedback() {
-        if (errorMessagesDiv) {
-            errorMessagesDiv.style.display = 'none';
-            if (errorListUl) errorListUl.innerHTML = '';
-        }
-        if (successMessageDiv) {
-            successMessageDiv.style.display = 'none';
-        }
+        if (errorMessagesDiv) { errorMessagesDiv.style.display = 'none'; if (errorListUl) errorListUl.innerHTML = ''; }
+        if (successMessageDiv) { successMessageDiv.style.display = 'none'; }
     }
 });

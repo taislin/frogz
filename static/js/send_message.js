@@ -1,165 +1,207 @@
 // static/js/send_message.js
 
-document.addEventListener('DOMContentLoaded', () => {
-    const sendMessageForm = document.getElementById('sendMessageForm');
-    const messageContentInput = document.getElementById('messageContent');
-    const charCountSpan = document.getElementById('charCount');
-    const sendButton = document.getElementById('sendButton');
-    const loadingSpinner = document.getElementById('loadingSpinner');
-    const successMessageDiv = document.getElementById('success-message');
-    const errorMessagesDiv = document.getElementById('error-messages');
-    const errorList = document.getElementById('error-list');
+document.addEventListener("DOMContentLoaded", () => {
+	const sendMessageForm = document.getElementById("sendMessageForm");
+	const messageContentInput = document.getElementById("messageContent");
+	const charCountSpan = document.getElementById("charCount");
+	const sendButton = document.getElementById("sendButton");
+	const loadingSpinner = document.getElementById("loadingSpinner");
+	const successMessageDiv = document.getElementById("success-message");
+	const errorMessagesDiv = document.getElementById("error-messages");
+	const errorList = document.getElementById("error-list");
 
-    const publicKeyJwkElement = document.getElementById('publicKeyJwk');
-    if (!publicKeyJwkElement) {
-        displayErrors(["Critical Error: Public key not found. Cannot encrypt message."]);
-        sendButton.disabled = true;
-        return;
-    }
-    const recipientPublicKeyJwk = JSON.parse(publicKeyJwkElement.textContent);
+	if (errorMessagesDiv) errorMessagesDiv.style.display = "none";
+	if (successMessageDiv) successMessageDiv.style.display = "none";
 
-    let recipientPublicKey = null; // Will store the imported public key
+	const publicKeyJwkElement = document.getElementById("publicKeyJwk");
 
-    // === Character Count Update ===
-    messageContentInput.addEventListener('input', () => {
-        charCountSpan.textContent = `${messageContentInput.value.length} / ${messageContentInput.maxLength} characters`;
-    });
-    // Initial count
-    charCountSpan.textContent = `${messageContentInput.value.length} / ${messageContentInput.maxLength} characters`;
+	let recipientPublicKeyJwk;
+	let recipientPublicKey = null; // Will store the imported public key
 
-    // === Initialize Public Key ===
-    async function importPublicKey() {
-        try {
-            recipientPublicKey = await window.crypto.subtle.importKey(
-                "jwk",
-                recipientPublicKeyJwk,
-                { name: "RSA-OAEP", hash: "SHA-256" },
-                false, // not extractable
-                ["encrypt"]
-            );
-        } catch (error) {
-            console.error("Error importing recipient public key:", error);
-            displayErrors(["Failed to load encryption key. Message cannot be sent."]);
-            sendButton.disabled = true;
-        }
-    }
-    importPublicKey();
+	// === Client-side Public Key Parsing and Importing ===
+	// This runs immediately on load to prepare the key for encryption
+	async function initializePublicKey() {
+		if (!publicKeyJwkElement) {
+			displayErrors([
+				"Critical Error: Public key container not found in HTML. Cannot encrypt message.",
+			]);
+			sendButton.disabled = true;
+			return;
+		}
 
-    // === Form Submission Handler ===
-    sendMessageForm.addEventListener('submit', async (event) => {
-        event.preventDefault();
+		try {
+			const jwkString = publicKeyJwkElement.textContent.trim(); // Trim any whitespace
+			if (!jwkString || jwkString === "null") {
+				// Check for empty or literal 'null' string
+				// This means the mailbox ID likely doesn't exist, or the server failed to provide the key
+				displayErrors([
+					"Critical Error: Mailbox not found or public key data is missing. Cannot send message.",
+				]);
+				sendButton.disabled = true;
+				return;
+			}
+			recipientPublicKeyJwk = JSON.parse(jwkString); // Parse the JSON string
 
-        // Clear previous messages
-        clearMessages();
+			recipientPublicKey = await window.crypto.subtle.importKey(
+				"jwk",
+				recipientPublicKeyJwk,
+				{ name: "RSA-OAEP", hash: "SHA-256" },
+				false, // not extractable
+				["encrypt"] // only need encrypt usage for public key
+			);
+		} catch (error) {
+			console.error(
+				"Error parsing or importing recipient public key:",
+				error
+			);
+			displayErrors([
+				"Critical Error: Failed to load encryption key. Message cannot be sent. (Technical: " +
+					error.message +
+					")",
+			]);
+			sendButton.disabled = true;
+			return;
+		}
+		console.log("Recipient public key successfully loaded."); // Debugging confirmation
+	}
+	initializePublicKey(); // Call this function on DOM load
 
-        const messageContent = messageContentInput.value;
-        const clientErrors = [];
+	// === Character Count Update ===
+	messageContentInput.addEventListener("input", () => {
+		charCountSpan.textContent = `${messageContentInput.value.length} / ${messageContentInput.maxLength} characters`;
+	});
+	charCountSpan.textContent = `${messageContentInput.value.length} / ${messageContentInput.maxLength} characters`;
 
-        if (messageContent.length < 5) {
-            clientErrors.push("Message is too short (minimum 5 characters).");
-        }
-        if (messageContent.length > 5000) {
-            clientErrors.push("Message is too long (maximum 5000 characters).");
-        }
+	// === Form Submission Handler ===
+	sendMessageForm.addEventListener("submit", async (event) => {
+		event.preventDefault();
 
-        if (clientErrors.length > 0) {
-            displayErrors(clientErrors);
-            return;
-        }
+		clearFeedback();
 
-        if (!recipientPublicKey) {
-            displayErrors(["Encryption key not ready. Please wait a moment and try again."]);
-            return;
-        }
+		const messageContent = messageContentInput.value;
+		const clientErrors = [];
 
-        // Show loading state
-        sendButton.disabled = true;
-        sendButton.textContent = 'Sending...';
-        loadingSpinner.style.display = 'inline-block';
+		if (messageContent.length < 5) {
+			clientErrors.push("Message is too short (minimum 5 characters).");
+		}
+		if (messageContent.length > 5000) {
+			clientErrors.push("Message is too long (maximum 5000 characters).");
+		}
 
-        try {
-            const encoder = new TextEncoder();
-            const messageBuffer = encoder.encode(messageContent);
+		if (clientErrors.length > 0) {
+			displayErrors(clientErrors);
+			return;
+		}
 
-            // === STEP 1: Generate a random, single-use Symmetric Key (AES-GCM) ===
-            const symmetricKey = await window.crypto.subtle.generateKey(
-                { name: "AES-GCM", length: 256 },
-                true, // extractable (because we need to encrypt it)
-                ["encrypt", "decrypt"]
-            );
+		if (!recipientPublicKey) {
+			// Ensure key is actually loaded before trying to use it
+			displayErrors([
+				"Encryption key not ready. Please wait a moment and try again. (If issue persists, refresh page).",
+			]);
+			return;
+		}
 
-            // === STEP 2: Encrypt the Message Content with the Symmetric Key ===
-            const messageIv = window.crypto.getRandomValues(new Uint8Array(12)); // 12 bytes IV for AES-GCM
-            const encryptedContentBuffer = await window.crypto.subtle.encrypt(
-                { name: "AES-GCM", iv: messageIv },
-                symmetricKey,
-                messageBuffer
-            );
+		sendButton.disabled = true;
+		sendButton.textContent = "Sending...";
+		loadingSpinner.style.display = "inline-block";
 
-            // === STEP 3: Encrypt the Symmetric Key itself with the Recipient's Public Key (RSA-OAEP) ===
-            const exportedSymmetricKey = await window.crypto.subtle.exportKey("raw", symmetricKey); // Export raw bytes
-            const encryptedSymmetricKeyBuffer = await window.crypto.subtle.encrypt(
-                { name: "RSA-OAEP" },
-                recipientPublicKey,
-                exportedSymmetricKey
-            );
+		try {
+			const encoder = new TextEncoder();
+			const messageBuffer = encoder.encode(messageContent);
 
-            // Convert ArrayBuffers to Base64 strings for storage/transmission
-            const encryptedContent = btoa(String.fromCharCode(...new Uint8Array(encryptedContentBuffer)));
-            const messageIvBase64 = btoa(String.fromCharCode(...new Uint8Array(messageIv)));
-            const encryptedSymmetricKeyBase64 = btoa(String.fromCharCode(...new Uint8Array(encryptedSymmetricKeyBuffer)));
+			// === STEP 1: Generate a random, single-use Symmetric Key (AES-GCM) ===
+			const symmetricKey = await window.crypto.subtle.generateKey(
+				{ name: "AES-GCM", length: 256 },
+				true,
+				["encrypt", "decrypt"]
+			);
 
-            // === STEP 4: Send Encrypted Data to Server ===
-            const mailboxId = window.location.pathname.split('/')[1]; // Extract mailboxId from URL
+			// === STEP 2: Encrypt the Message Content with the Symmetric Key ===
+			const messageIv = window.crypto.getRandomValues(new Uint8Array(12));
+			const encryptedContentBuffer = await window.crypto.subtle.encrypt(
+				{ name: "AES-GCM", iv: messageIv },
+				symmetricKey,
+				messageBuffer
+			);
 
-            const response = await fetch(`/${mailboxId}/send-message`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    encryptedContent: encryptedContent,
-                    messageIv: messageIvBase64,
-                    encryptedSymmetricKey: encryptedSymmetricKeyBase64
-                }),
-            });
+			// === STEP 3: Encrypt the Symmetric Key itself with the Recipient's Public Key (RSA-OAEP) ===
+			const exportedSymmetricKey = await window.crypto.subtle.exportKey(
+				"raw",
+				symmetricKey
+			);
+			const encryptedSymmetricKeyBuffer =
+				await window.crypto.subtle.encrypt(
+					{ name: "RSA-OAEP" },
+					recipientPublicKey,
+					exportedSymmetricKey
+				);
 
-            const result = await response.json();
+			// Convert ArrayBuffers to Base64 strings for storage/transmission
+			const encryptedContent = btoa(
+				String.fromCharCode(...new Uint8Array(encryptedContentBuffer))
+			);
+			const messageIvBase64 = btoa(
+				String.fromCharCode(...new Uint8Array(messageIv))
+			);
+			const encryptedSymmetricKeyBase64 = btoa(
+				String.fromCharCode(
+					...new Uint8Array(encryptedSymmetricKeyBuffer)
+				)
+			);
 
-            if (result.success) {
-                successMessageDiv.style.display = 'block';
-                sendMessageForm.reset(); // Clear form on success
-            } else {
-                displayErrors(result.errors || ["An unknown error occurred."]);
-            }
+			const mailboxId = window.location.pathname.split("/")[2];
 
-        } catch (error) {
-            console.error("Error during message encryption or sending:", error);
-            displayErrors(["Failed to send message securely. Please try again. Technical error: " + error.message]);
-        } finally {
-            sendButton.disabled = false;
-            sendButton.textContent = 'Send Message';
-            loadingSpinner.style.display = 'none';
-        }
-    });
+			const response = await fetch(`/inbox/${mailboxId}/send-message`, {
+				method: "POST",
+				headers: { "Content-Type": "application/json" },
+				body: JSON.stringify({
+					encryptedContent: encryptedContent,
+					messageIv: messageIvBase64,
+					encryptedSymmetricKey: encryptedSymmetricKeyBase64,
+				}),
+			});
 
-    function displayErrors(errors) {
-        if (errorMessagesDiv && errorList) {
-            errorList.innerHTML = '';
-            errors.forEach(e => {
-                const li = document.createElement('li');
-                li.textContent = e;
-                errorList.appendChild(li);
-            });
-            errorMessagesDiv.style.display = 'block';
-        }
-    }
+			const result = await response.json();
 
-    function clearMessages() {
-        if (errorMessagesDiv) {
-            errorMessagesDiv.style.display = 'none';
-            errorList.innerHTML = '';
-        }
-        successMessageDiv.style.display = 'none';
-    }
+			if (result.success) {
+				successMessageDiv.style.display = "block";
+				sendMessageForm.reset();
+				charCountSpan.textContent = `${messageContentInput.value.length} / ${messageContentInput.maxLength} characters`;
+			} else {
+				displayErrors(result.errors || ["An unknown error occurred."]);
+			}
+		} catch (error) {
+			console.error("Error during message encryption or sending:", error);
+			displayErrors([
+				"Failed to send message securely. Please try again. Technical error: " +
+					error.message,
+			]);
+		} finally {
+			sendButton.disabled = false;
+			sendButton.textContent = "Send Message";
+			loadingSpinner.style.display = "none";
+		}
+	});
+
+	function displayErrors(errors) {
+		if (errorMessagesDiv && errorList) {
+			errorList.innerHTML = "";
+			errors.forEach((e) => {
+				const li = document.createElement("li");
+				li.textContent = e;
+				errorList.appendChild(li);
+			});
+			errorMessagesDiv.style.display = "block";
+		}
+	}
+
+	function clearFeedback() {
+		if (errorMessagesDiv) {
+			errorMessagesDiv.style.display = "none";
+			errorList.innerHTML = "";
+		}
+		if (successMessageDiv) {
+			successMessageDiv.style.display = "none";
+		}
+	}
 });

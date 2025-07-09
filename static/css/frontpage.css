@@ -274,12 +274,17 @@ a:active {
 }
 
 .mailbox-icon {
-	background-image: url("/mailbox.png"); /* Use the generated mailbox icon */
+	background-image: url("./mailbox.png"); /* Use the generated mailbox icon */
 	background-size: contain;
 	background-repeat: no-repeat;
 	background-position: center;
 }
-
+.pages-icon {
+	background-image: url("./pages.png"); /* Use the generated mailbox icon */
+	background-size: contain;
+	background-repeat: no-repeat;
+	background-position: center;
+}
 .page-footer {
 	text-align: right;
 	font-size: 0.75em;
@@ -334,8 +339,8 @@ a:active {
 
 /* Intro section */
 .intro-section {
-	margin-bottom: var(--spacing-xl);
-	padding: var(--spacing-lg);
+	margin-bottom: var(--spacing-md);
+	padding: var(--spacing-md);
 	background-color: rgba(
 		0,
 		0,
@@ -362,8 +367,8 @@ a:active {
 .tagline {
 	font-size: 1.2em; /* Slightly larger, more impactful */
 	color: var(--heading3-color); /* A bit more vibrant color */
-	margin-top: var(--spacing-md);
-	margin-bottom: var(--spacing-lg);
+	margin-top: var(--spacing-sm);
+	margin-bottom: var(--spacing-sm);
 }
 
 /* Action Buttons Container */
@@ -390,14 +395,14 @@ a:active {
 /* Action Section - Grid Layout */
 .action-section {
 	margin-bottom: var(--spacing-xl);
-	padding: var(--spacing-lg);
+	padding: var(--spacing-md);
 	background-color: rgba(0, 0, 0, 0.15); /* Slightly darker background */
 	border-radius: var(--border-radius-md);
 	box-shadow: var(--box-shadow-subtle);
 	text-align: center;
 }
 .action-section .section-heading {
-	margin-bottom: var(--spacing-lg);
+	margin-bottom: var(--spacing-md);
 }
 
 .action-buttons-grid {
@@ -701,7 +706,7 @@ a:active {
 	.action-section,
 	.info-features-grid {
 		padding: var(--spacing-md); /* Reduce padding on mobile sections */
-		margin-bottom: var(--spacing-lg);
+		margin-bottom: var(--spacing-md);
 	}
 	.action-buttons-grid,
 	.info-features-grid {

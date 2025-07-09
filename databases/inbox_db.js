@@ -1,4 +1,4 @@
-// databases.js (for the new Anti-Email Inbox service)
+// databases.js (for the new FrogPost service)
 
 const pool = require("./../postgres.js");
 const bcrypt = require("bcryptjs");
@@ -82,13 +82,17 @@ async function createMailbox(
 }
 
 async function getMailboxPublicKey(mailboxId) {
+	console.log("[DB DEBUG] Fetching public key for mailbox ID:", mailboxId); // ADD THIS
 	try {
 		const result = await pool.query(
 			"SELECT public_key_jwk FROM mailboxes WHERE id = $1",
 			[mailboxId]
 		);
-		return result.rows[0] ? result.rows[0].public_key_jwk : null;
+		let publicKey = result.rows[0] ? result.rows[0].public_key_jwk : null;
+		console.log("[DB DEBUG] Fetched public key from DB:", publicKey); // ADD THIS
+		return publicKey;
 	} catch (err) {
+		console.error("[DB ERROR] Error fetching mailbox public key:", err); // ADD THIS
 		console.error("Error fetching mailbox public key:", err);
 		throw new Error("Failed to retrieve mailbox public key.");
 	}
@@ -134,6 +138,18 @@ async function storeMessage(
 	messageIv,
 	encryptedSymmetricKey
 ) {
+	console.log(
+		"[DB DEBUG storeMessage] Attempting to store message for Mailbox ID:",
+		mailboxId
+	);
+	// Add logging of the data *about to be inserted*
+	console.log("[DB DEBUG storeMessage] Data to insert:", {
+		mailboxId,
+		encryptedContent: encryptedContent.substring(0, 50) + "...", // Log truncated content
+		messageIv,
+		encryptedSymmetricKey: encryptedSymmetricKey.substring(0, 50) + "...",
+	});
+
 	try {
 		const createdAt = new Date().getTime();
 		const query = `
@@ -148,10 +164,19 @@ async function storeMessage(
 			encryptedSymmetricKey,
 			createdAt,
 		]);
+		console.log(
+			"[DB DEBUG storeMessage] SQL INSERT successful. New Message ID:",
+			result.rows[0].message_id
+		);
 		return result.rows[0].message_id;
 	} catch (err) {
-		console.error("Error storing message:", err);
-		throw new Error("Failed to store message.");
+		// CRITICAL: This is where the database error message will be detailed.
+		console.error(
+			"[DB ERROR storeMessage] Error executing SQL INSERT into messages table:",
+			err
+		);
+		// Re-throw a specific error that app.js can catch and report as a 500
+		throw new Error(`Database insert failed: ${err.message || err}`);
 	}
 }
 
