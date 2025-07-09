@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -8,40 +9,43 @@
   <link rel="stylesheet" type="text/css" href="/css/basic.css">
   <link rel="stylesheet" type="text/css" href="/css/mailbox.css">
   <link rel="icon" type="image/png" href="/favicon.png">
-  
-  <!-- Public Key will be injected here by the server for client-side use -->
-  <!-- This script tag should ONLY contain the Eta output, nothing else -->
-  <script type="application/json" id="publicKeyJwk">
-    <%- it.escapeHtml(it.publicKeyJwk || 'null') %>
-  </script>
 
-  <!-- REMOVED: TEMPORARY DEBUGGING SCRIPT. It should NOT be in the final file. -->
-  <!-- REMOVED: Any stray HTML comments or text inside the script tag. -->
+  <!-- REMOVED: The problematic <script type="application/json"> tag AND the <div> data-attribute -->
+  <!-- The public key will now be fetched directly by JavaScript -->
+
+  <!-- TEMPORARY DEBUGGING SCRIPT (Client-side) - REMOVE THIS AFTER IT WORKS -->
+  <script>
+    // This script block should only contain debugging for this specific file,
+    // not attempts to parse the public key. The key parsing will be in send_message.js.
+    document.addEventListener('DOMContentLoaded', () => {
+      console.log("CLIENT-SIDE DEBUG: send_message.eta loaded. Public key will be fetched by JS.");
+    });
+  </script>
 </head>
+
 <body>
   <main class="page-main">
     <h1 class="page-title">Send a Message to <span class="mailbox-id-display"><%= it.mailboxId %></span></h1>
 
     <div class="message-box message-info">
-        <p>Your message will be end-to-end encrypted in your browser before it leaves your device. The recipient's private key (which only they have) is needed to decrypt it.</p>
-        <p>We do not store your IP address or any identifying information. Messages will automatically expire after one week.</p>
+      <p>Your message will be end-to-end encrypted in your browser before it leaves your device. The recipient's private key (which only they have) is needed to decrypt it.</p>
+      <p>We do not store your IP address or any identifying information. Messages will automatically expire after one week.</p>
     </div>
 
     <div class="message-box message-error" id="error-messages" style="display:none;">
-        <strong>Errors:</strong>
-        <ul id="error-list"></ul>
+      <strong>Errors:</strong>
+      <ul id="error-list"></ul>
     </div>
     <div class="message-box message-success" id="success-message" style="display:none;">
-        <h2>Message Sent!</h2>
-        <p>Your message has been securely sent to the inbox. Thank you for your anonymous feedback.</p>
-        <p>You will not receive a reply from this service.</p>
+      <h2>Message Sent!</h2>
+      <p>Your message has been securely sent to the inbox.</p>
+      <p>You will not receive a reply from this service.</p>
     </div>
 
     <form id="sendMessageForm" class="mailbox-form">
       <div class="form-group">
         <label for="messageContent">Your Message:</label>
-        <textarea id="messageContent" name="messageContent" required minlength="5" maxlength="5000" rows="10" 
-                  placeholder="Type your anonymous message here (e.g., feedback, suggestion, question)..."></textarea>
+        <textarea id="messageContent" name="messageContent" required minlength="5" maxlength="5000" rows="10" placeholder="Type your anonymous message here (e.g., feedback, suggestion, question)..."></textarea>
         <small id="charCount">0 / 5000 characters</small>
       </div>
 
@@ -54,10 +58,11 @@
     </form>
 
     <div class="return-home">
-        <p><a href="/">Return to Homepage</a></p>
+      <p><a href="/">Return to Homepage</a></p>
     </div>
   </main>
 
   <script src="/js/send_message.js"></script>
 </body>
+
 </html>

@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -10,21 +9,20 @@
   <link rel="stylesheet" type="text/css" href="/css/mailbox.css">
   <link rel="icon" type="image/png" href="/favicon.png">
 </head>
-
 <body>
   <main class="page-main">
     <h1 class="page-title">Access Inbox <span class="mailbox-id-display"><%= it.mailboxId %></span></h1>
 
     <div class="message-box message-info" id="initial-info">
-      <p>To view your encrypted messages, please enter the password you set when creating this inbox.</p>
-      <p class="final-warning">Remember: We don't store your private key. If this password is lost, your messages become permanently unreadable.</p>
+        <p>To view your encrypted messages, please enter the password you set when creating this inbox.</p>
+        <p class="final-warning">Remember: We don't store your private key. If this password is lost, your messages become permanently unreadable.</p>
     </div>
 
     <div class="message-box message-error" id="error-messages" style="display:none;">
-      <strong>Errors:</strong>
-      <ul id="error-list"></ul>
+        <strong>Errors:</strong>
+        <ul id="error-list"></ul>
     </div>
-
+    
     <form id="accessInboxForm" class="mailbox-form">
       <div class="form-group">
         <label for="password">Your Inbox Password:</label>
@@ -45,16 +43,18 @@
         <!-- Messages will be injected here by JavaScript -->
       </ul>
       <p id="noMessages" class="message-box message-info" style="display:none;">
-        No messages in this inbox yet.
+          No messages in this inbox yet.
       </p>
+      <div class="messages-actions">
+        <button id="deleteAllButton" class="btn btn-danger" style="display:none;">Delete All Messages</button>
+      </div>
     </section>
 
     <div class="return-home">
-      <p><a href="/">Return to Homepage</a></p>
+        <p><a href="/">Return to Homepage</a></p>
     </div>
   </main>
 
   <script src="/js/read_messages.js"></script>
 </body>
-
 </html>

@@ -229,3 +229,53 @@
 .return-home p {
 	margin-bottom: 0; /* Remove extra margin */
 }
+/* Button for deleting single message */
+.btn-delete {
+	background-color: #dc3545; /* Red color */
+	color: white;
+	border: 1px solid #dc3545;
+	padding: 0.2em 0.5em; /* Smaller padding */
+	font-size: 0.7em; /* Smaller font */
+	margin-left: var(--spacing-xs);
+	border-radius: var(--border-radius-sm);
+	float: right; /* Align to the right in message-meta */
+	line-height: 1; /* For better vertical alignment with text */
+}
+
+.btn-delete:hover {
+	background-color: #c82333;
+	border-color: #bd2130;
+	transform: none; /* No lift for small buttons */
+	box-shadow: none;
+}
+
+/* Button for deleting all messages */
+.btn-danger {
+	background-color: #dc3545; /* Red color */
+	color: white;
+	border: 1px solid #dc3545;
+	padding: var(--spacing-sm) var(--spacing-md);
+	margin-top: var(--spacing-md);
+	font-size: 1em;
+}
+
+.btn-danger:hover {
+	background-color: #c82333;
+	border-color: #bd2130;
+}
+
+/* Container for messages actions (e.g., Delete All button) */
+.messages-actions {
+	text-align: center;
+	margin-top: var(--spacing-lg);
+}
+
+/* Style for expired messages */
+.message-item.message-expired {
+	background-color: rgba(255, 0, 0, 0.1); /* Light red background */
+	border-color: #dc3545; /* Red border */
+}
+.message-item.message-expired .message-meta {
+	color: #cc0000; /* Red text for meta info */
+	font-weight: var(--font-weight-bold);
+}
